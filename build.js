@@ -241,6 +241,13 @@ if (search) {
   return js.replace(navSearchRegex, multiPageNavSearch);
 }
 
+// ─── Console noise suppression (extension logs) ──────────────────
+function getConsoleSuppression() {
+  return `<script>
+(function(){var _e=console.error,_w=console.warn,_r=[/AdUnit/i,/("sentence"|'sentence')/i,/message channel closed/i];function _s(a){return _r.some(function(p){return p.test(String(a[0]))})}console.error=function(){for(var _len=arguments.length,a=new Array(_len),_key=0;_key<_len;_key++){a[_key]=arguments[_key]}return _s(a)?void 0:_e.apply(console,a)};console.warn=function(){for(var _len2=arguments.length,a=new Array(_len2),_key2=0;_key2<_len2;_key2++){a[_key2]=arguments[_key2]}return _s(a)?void 0:_w.apply(console,a)}})();
+<\/script>`;
+}
+
 // ─── Meta description generator ──────────────────────────────────
 function generateMeta(module) {
   const title = module.title;
@@ -333,6 +340,7 @@ ${css}
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+  ${getConsoleSuppression()}
 </head>
 <body>
   <!-- Sidebar toggle button -->
@@ -385,6 +393,7 @@ ${css}
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+  ${getConsoleSuppression()}
 </head>
 <body>
   <!-- Sidebar toggle button -->
