@@ -7,7 +7,7 @@
 
 ## 📖 About
 
-This is a **multi-page static website** built from the [Playwright SDET Ebook](https://github.com/Yash-Pandey07/playwright-sdet-mastery) — a comprehensive single-file HTML ebook that is split into **72+ standalone pages** for superior SEO, faster loading, premium readability, and Google AdSense optimization.
+This is a **multi-page static website** built from the [Playwright SDET Ebook](https://github.com/Yash-Pandey07/playwright-sdet-mastery) — a comprehensive single-file HTML ebook that is split into **72+ standalone pages** for superior SEO, faster loading, and premium readability.
 
 ## 🚀 Deployment
 
