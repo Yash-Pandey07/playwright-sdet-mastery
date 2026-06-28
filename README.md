@@ -1,60 +1,54 @@
-# 🎭 Playwright SDET Mastery
+# Playwright SDET Mastery
 
-> **Free, open-source ebook for SDETs and QA engineers** — 72+ modules covering Playwright, API testing, CI/CD, system design, and interview prep.
+**Free, open-source ebook for SDETs and QA engineers** — 72+ modules covering Playwright, API testing, CI/CD, system design, and interview prep.
 
-[![GitHub Pages](https://img.shields.io/badge/hosted-GitHub%20Pages-blue)](https://playwright-sdet-mastery.pages.dev)
+[![Vercel](https://img.shields.io/badge/hosted-Vercel-black)](https://playwright-sdet-mastery.vercel.app)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-## 📖 About
+## Live Site
 
-This is a **multi-page static website** built from the [Playwright SDET Ebook](https://github.com/your-username/playwright-sdet-mastery) — a comprehensive single-file HTML ebook that has been split into **72+ standalone pages** for better SEO, readability, and monetization (Google AdSense ready).
+**https://playwright-sdet-mastery.vercel.app**
 
-## 🚀 Deployment
+## About
 
-The site uses **GitHub Pages** (free, zero-cost hosting):
+A multi-page static website built from the [Playwright SDET Ebook](https://github.com/Yash-Pandey07/playwright-sdet-mastery) — a comprehensive single-file HTML ebook split into **72+ standalone pages** for better SEO, readability, and performance.
+
+## Tech Stack
+
+- **Hosting:** Vercel (automatic deploys from `main` branch)
+- **Analytics:** @vercel/analytics
+- **Build:** Zero-dependency Node.js script (`build.js`)
+- **Output:** Static HTML files in `docs/`
+
+## Directory Structure
 
 ```
-📁 docs/            ← GitHub Pages publish directory
-├── index.html      ← Home page
+playwright-sdet-ebook.html   ← Source of truth (single-file HTML)
+build.js                     ← Build script (pure Node.js, no deps)
+docs/                        ← Generated output (deployed to Vercel)
+├── index.html
 ├── architecture.html
 ├── locators.html
-├── api-testing.html
 ├── ...
 ├── sitemap.xml
 └── robots.txt
+vercel.json                  ← Vercel config (output: docs/, clean URLs)
+package.json                 ← Only @vercel/analytics
 ```
 
-**Live at:** `https://playwright-sdet-mastery.pages.dev/`
+## How to Update
 
-## 🛠 How to Update
-
-1. Edit the **source file** (`playwright-sdet-ebook.html`) — this is the single source of truth
-2. Run the build script to regenerate the site:
+1. Edit the source file `playwright-sdet-ebook.html`
+2. Run the build script:
 
 ```bash
-node ../playwright-mastery/build.js
+node build.js
 ```
 
-3. The `docs/` folder is updated — just commit and push to GitHub
+3. The `docs/` folder is regenerated — commit and push to deploy
 
-## 📦 Requirements
-
-- **Zero** — no npm, no dependencies. Pure Node.js.
-- The build script is a single file: `build.js`
-
-## 🔍 SEO & Monetization
-
-Each page includes:
-- `<title>` and `<meta name="description">` for each module
-- Open Graph tags (`og:title`, `og:description`, `og:type`)
-- `link rel="canonical"` for proper indexing
-- `sitemap.xml` and `robots.txt`
-- Google AdSense ready (placeholder `<ins>` tags — just add your AdSense client ID)
-
-## 📄 License
+## License
 
 MIT — open source, free to use, modify, and share.
 
----
-
-Built with ❤️ for the SDET community.
+Built for the SDET community.

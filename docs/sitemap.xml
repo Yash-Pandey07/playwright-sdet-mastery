@@ -1,362 +1,362 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/nodejs-sdet.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/nodejs-sdet.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/javascript.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/javascript.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/typescript.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/typescript.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/architecture.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/architecture.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/cdp-internals.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/cdp-internals.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/locators.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/locators.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/fixtures.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/fixtures.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/network.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/network.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/locator-playground.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/locator-playground.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/popups.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/popups.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/visual-regression.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/visual-regression.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/accessibility.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/accessibility.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/performance.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/performance.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/mobile.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/mobile.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/python.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/python.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/cheat-sheet.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/cheat-sheet.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/api-testing.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/api-testing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/http-status.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/http-status.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/api-chaining.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/api-chaining.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/postman.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/postman.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/database.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/database.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/graphql-grpc.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/graphql-grpc.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/contract-testing.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/contract-testing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/rest-assured.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/rest-assured.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/git.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/git.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/ci-cd.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/ci-cd.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/docker.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/docker.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/kubernetes.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/kubernetes.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/linux-shell.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/linux-shell.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/jenkins.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/jenkins.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/cloud-execution.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/cloud-execution.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/flakiness.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/flakiness.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/manual-testing.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/manual-testing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/test-automation.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/test-automation.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/bdd.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/bdd.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/sdet-system-design.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/sdet-system-design.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/shift-testing.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/shift-testing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/tdm.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/tdm.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/mocking.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/mocking.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/reporting.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/reporting.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/allure.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/allure.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/opentelemetry.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/opentelemetry.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/ai-testing.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/ai-testing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/selenium.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/selenium.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/cypress.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/cypress.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/appium.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/appium.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/java.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/java.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/vitest.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/vitest.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/karate.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/karate.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/xpath.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/xpath.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/kafka-testing.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/kafka-testing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/security.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/security.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/jmeter.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/jmeter.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/k6-gatling.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/k6-gatling.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/chaos.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/chaos.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/react.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/react.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/nextjs.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/nextjs.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/mongodb.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/mongodb.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/jira.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/jira.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/blockchain.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/blockchain.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/dsa.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/dsa.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/coding-round.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/coding-round.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/extended-coding.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/extended-coding.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/dsa-pro.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/dsa-pro.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/system-design.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/system-design.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/system-design-pro.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/system-design-pro.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/behavioral.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/behavioral.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/scenario-masterclass.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/scenario-masterclass.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/interview-qa.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/interview-qa.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/interview-mega-bank.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/interview-mega-bank.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/final-review.html</loc>
+    <loc>https://playwright-sdet-mastery.vercel.app/final-review.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

@@ -21,7 +21,8 @@ const SCRIPT_DIR = __dirname;
 const DEFAULT_SOURCE = path.join(SCRIPT_DIR, '..', 'playwright-sdet-ebook.html');
 const SOURCE_FILE = process.argv[2] || DEFAULT_SOURCE;
 const OUT_DIR = path.join(SCRIPT_DIR, 'docs');
-const SITE_BASE = '/'; // GitHub Pages root — adjust if using subpath
+const SITE_BASE = '/';
+const SITE_URL = 'https://playwright-sdet-mastery.vercel.app';
 
 // ═══════════════════════════════════════════════════════════════════
 // MODULE REGISTRY — Map all 72 modules from the sidebar nav
@@ -370,11 +371,11 @@ function generatePage(moduleContent, module, css, js) {
   <meta property="og:title" content="${module.title} — Playwright SDET">
   <meta property="og:description" content="${meta.description}">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/${module.slug}.html">
+  <meta property="og:url" content="${SITE_URL}/${module.slug}.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${module.title}">
   <meta name="twitter:description" content="${meta.description}">
-  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/${module.slug}.html">
+  <link rel="canonical" href="${SITE_URL}/${module.slug}.html">
 
   <style>
 ${css}
@@ -453,9 +454,9 @@ function generateIndexPage(moduleContent, css, js) {
   <meta property="og:title" content="Playwright SDET Mastery — Open Source Ebook">
   <meta property="og:description" content="Complete Playwright SDET mastery ebook — 72+ modules, free and open source">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/">
+  <meta property="og:url" content="${SITE_URL}/">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/">
+  <link rel="canonical" href="${SITE_URL}/">
 
   <style>
 ${css}
@@ -578,12 +579,12 @@ function build() {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/</loc>
+    <loc>${SITE_URL}/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 ${NAV_ORDER.filter(m => m.slug !== 'index').map(m => `  <url>
-    <loc>https://playwright-sdet-mastery.pages.dev/${m.slug}.html</loc>
+    <loc>${SITE_URL}/${m.slug}.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>`).join('\n')}
@@ -595,7 +596,7 @@ ${NAV_ORDER.filter(m => m.slug !== 'index').map(m => `  <url>
   const robots = `User-agent: *
 Allow: /
 
-Sitemap: https://playwright-sdet-mastery.pages.dev/sitemap.xml`;
+Sitemap: ${SITE_URL}/sitemap.xml`;
   fs.writeFileSync(path.join(OUT_DIR, 'robots.txt'), robots, 'utf-8');
   console.log('  ✅ robots.txt');
 
@@ -605,7 +606,7 @@ Sitemap: https://playwright-sdet-mastery.pages.dev/sitemap.xml`;
   console.log(`📄 Pages: ${generated.length}`);
   const totalSize = generated.reduce((s, g) => s + g.size, 0);
   console.log(`📦 Total: ${(totalSize / 1024 / 1024).toFixed(1)} MB`);
-  console.log('\n✨ Done! Deploy docs/ to GitHub Pages or Vercel.');
+  console.log('\n✨ Done! Deploy docs/ to Vercel.');
 }
 
 build();
