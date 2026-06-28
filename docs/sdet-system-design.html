@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDET System Design | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn SDET System Design — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, sdet-system-design, testing, automation, playwright sdet system design">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="SDET System Design — Playwright SDET">
+  <meta property="og:description" content="Learn SDET System Design — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/sdet-system-design.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SDET System Design">
+  <meta name="twitter:description" content="Learn SDET System Design — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/sdet-system-design.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=" active"><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">26</span>SDET System Design</h2>
+
+<div class="toc">
+<h4>What you will master here</h4>
+<ul>
+<li>How to approach an SDET system-design interview</li>
+<li>Designing a test execution platform at scale</li>
+<li>Test data service architecture</li>
+<li>Distributed test runner with smart sharding</li>
+<li>Reporting and analytics backbone</li>
+<li>Self-healing tests / AI-assisted automation</li>
+<li>Trade-offs and capacity estimation</li>
+</ul>
+</div>
+
+<h3>26.1 How interviewers grade this round</h3>
+<p>SDET system design at 5+ years experience asks: <em>"Design a Y at scale for an org with N tests / N devs / N envs."</em> They look for:</p>
+<ul>
+<li>You ask clarifying questions before drawing — scale, constraints, who uses it</li>
+<li>You separate <strong>functional</strong> requirements (what it does) from <strong>non-functional</strong> (latency, throughput, availability)</li>
+<li>You sketch components and APIs explicitly</li>
+<li>You discuss trade-offs (queue vs sync; SQL vs key-value; push vs poll)</li>
+<li>You estimate capacity (back-of-envelope numbers)</li>
+<li>You spot bottlenecks and propose mitigations</li>
+</ul>
+
+<h3>26.2 Common SDET system-design prompts</h3>
+<ol>
+<li>"Design a test execution platform for 10K tests across 50 microservices, running on every PR within 10 minutes."</li>
+<li>"Design a test data management service that gives each test isolated, realistic data on demand."</li>
+<li>"Design a flaky-test detection and quarantine pipeline."</li>
+<li>"Design a self-healing locator system."</li>
+<li>"Design a unified test results dashboard across teams."</li>
+</ol>
+
+<h3>26.3 Worked example — distributed test execution platform</h3>
+
+<h4>(1) Clarify</h4>
+<ul>
+<li>How many tests total? (10,000 UI + 50,000 API)</li>
+<li>How many PRs per day? (500)</li>
+<li>SLA for feedback? (PR feedback &lt; 10 min)</li>
+<li>Browsers / OSes? (Chromium / Firefox / WebKit on Linux)</li>
+<li>Cloud or self-hosted? (AWS, can use spot instances)</li>
+<li>Who runs it? (Platform team, ~5 SDETs)</li>
+</ul>
+
+<h4>(2) Functional requirements</h4>
+<ul>
+<li>Trigger on PR / push / cron / manual</li>
+<li>Select which tests to run for a given diff (test selection)</li>
+<li>Distribute across N workers (smart sharding)</li>
+<li>Collect results, traces, screenshots</li>
+<li>Merge into one unified report</li>
+<li>Gate PR merge on result</li>
+<li>Detect and quarantine flakes automatically</li>
+</ul>
+
+<h4>(3) Non-functional</h4>
+<ul>
+<li>p95 feedback time &lt; 10 min</li>
+<li>5000 tests/PR × 500 PRs/day = 2.5M test runs/day. Burst capacity at peak hours.</li>
+<li>Availability: 99.9% (downtime blocks all merges)</li>
+<li>Cost: target &lt; $X per PR run</li>
+</ul>
+
+<h4>(4) Architecture sketch</h4>
+<div class="diagram">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr9" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <g font-size="11" fill="#e6edf3">
+    <rect x="20"  y="20" width="140" height="50" rx="6" fill="#1f2630" stroke="#7ee787"/>
+    <text x="90"  y="45" text-anchor="middle" font-weight="700">PR webhook</text>
+    <text x="90"  y="62" text-anchor="middle" fill="#9da7b3">GitHub / GitLab</text>
+
+    <rect x="200" y="20" width="160" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="280" y="45" text-anchor="middle" font-weight="700">Orchestrator API</text>
+    <text x="280" y="62" text-anchor="middle" fill="#9da7b3">accepts run jobs</text>
+
+    <rect x="400" y="20" width="160" height="50" rx="6" fill="#1f2630" stroke="#d2a8ff"/>
+    <text x="480" y="45" text-anchor="middle" font-weight="700">Test Selector</text>
+    <text x="480" y="62" text-anchor="middle" fill="#9da7b3">diff → tests</text>
+
+    <rect x="600" y="20" width="140" height="50" rx="6" fill="#1f2630" stroke="#ffa657"/>
+    <text x="670" y="45" text-anchor="middle" font-weight="700">Job Queue</text>
+    <text x="670" y="62" text-anchor="middle" fill="#9da7b3">SQS / Kafka</text>
+
+    <rect x="40"  y="120" width="160" height="60" rx="6" fill="#1f2630" stroke="#7ee787"/>
+    <text x="120" y="145" text-anchor="middle" font-weight="700">Worker fleet</text>
+    <text x="120" y="162" text-anchor="middle" fill="#9da7b3">N containers</text>
+    <text x="120" y="176" text-anchor="middle" fill="#9da7b3">Playwright runner</text>
+
+    <rect x="220" y="120" width="160" height="60" rx="6" fill="#1f2630" stroke="#7ee787"/>
+    <text x="300" y="145" text-anchor="middle" font-weight="700">Worker fleet</text>
+    <text x="300" y="176" text-anchor="middle" fill="#9da7b3">autoscaling</text>
+
+    <rect x="400" y="120" width="160" height="60" rx="6" fill="#1f2630" stroke="#7ee787"/>
+    <text x="480" y="145" text-anchor="middle" font-weight="700">Test Data svc</text>
+    <text x="480" y="176" text-anchor="middle" fill="#9da7b3">tenant per shard</text>
+
+    <rect x="580" y="120" width="160" height="60" rx="6" fill="#1f2630" stroke="#7ee787"/>
+    <text x="660" y="145" text-anchor="middle" font-weight="700">Artifact store</text>
+    <text x="660" y="176" text-anchor="middle" fill="#9da7b3">S3 (traces, video)</text>
+
+    <rect x="80"  y="220" width="200" height="60" rx="6" fill="#1f2630" stroke="#d2a8ff"/>
+    <text x="180" y="245" text-anchor="middle" font-weight="700">Result aggregator</text>
+    <text x="180" y="262" text-anchor="middle" fill="#9da7b3">merge blob reports</text>
+
+    <rect x="310" y="220" width="200" height="60" rx="6" fill="#1f2630" stroke="#d2a8ff"/>
+    <text x="410" y="245" text-anchor="middle" font-weight="700">Flake detector</text>
+    <text x="410" y="262" text-anchor="middle" fill="#9da7b3">history + score</text>
+
+    <rect x="540" y="220" width="200" height="60" rx="6" fill="#1f2630" stroke="#d2a8ff"/>
+    <text x="640" y="245" text-anchor="middle" font-weight="700">Reports DB</text>
+    <text x="640" y="262" text-anchor="middle" fill="#9da7b3">Postgres + S3 links</text>
+
+    <rect x="200" y="310" width="360" height="40" rx="6" fill="#1f2630" stroke="#ffa657"/>
+    <text x="380" y="335" text-anchor="middle" font-weight="700">Dashboard / GitHub status checks</text>
+
+    <line x1="160" y1="45" x2="200" y2="45" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="360" y1="45" x2="400" y2="45" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="560" y1="45" x2="600" y2="45" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="670" y1="70" x2="120" y2="120" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="670" y1="70" x2="300" y2="120" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="120" y1="180" x2="180" y2="220" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="300" y1="180" x2="180" y2="220" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="180" y1="280" x2="380" y2="310" stroke="#58a6ff" marker-end="url(#arr9)"/>
+    <line x1="660" y1="280" x2="380" y2="310" stroke="#58a6ff" marker-end="url(#arr9)"/>
+  </g>
+</svg>
+<div class="caption">Figure 15 — Components of a distributed test execution platform.</div>
+</div>
+
+<h4>(5) Key design decisions</h4>
+<table>
+<tr><th>Decision</th><th>Why</th></tr>
+<tr><td>Queue (SQS / Kafka) between API and workers</td><td>Backpressure during peak hours; workers scale independently</td></tr>
+<tr><td>Smart test selection (file-touched mapping)</td><td>10K tests / PR is wasteful; map diff to affected tests</td></tr>
+<tr><td>Autoscaling worker fleet on spot instances</td><td>Cost — 70% savings vs on-demand</td></tr>
+<tr><td>Blob report per shard, merged centrally</td><td>Parallel shards write independently, no contention</td></tr>
+<tr><td>Artifacts to S3, metadata to Postgres</td><td>Binary big, queries small — split storage</td></tr>
+<tr><td>Test Data Service tenants per worker slot</td><td>Isolation + reuse — no data collisions</td></tr>
+<tr><td>Flake detector queries result history</td><td>Test that fails 5% of times = quarantine candidate</td></tr>
+</table>
+
+<h4>(6) Capacity estimate</h4>
+<ul>
+<li>2.5M tests/day. Peak ~10× average over 1 hour = 700 tests/sec.</li>
+<li>Each test = ~30 s in browser. So ~21,000 concurrent worker slots at peak.</li>
+<li>~700 worker pods × 30 slots/pod (40 GB nodes). Manageable on EKS spot fleet.</li>
+<li>Queue throughput: SQS handles 700/sec trivially; Kafka if we need ordering / replay.</li>
+<li>Artifact store: ~10 MB trace/video per test × 2.5M = 25 TB/day. Set 14-day retention.</li>
+</ul>
+
+<h4>(7) Trade-offs to discuss</h4>
+<ul>
+<li><strong>SQS vs Kafka</strong> — SQS simpler, no ordering. Kafka if we need replay or strict ordering.</li>
+<li><strong>Diff-based selection vs run-all</strong> — selection risks missing affected tests; combine with nightly full regression.</li>
+<li><strong>Spot vs on-demand</strong> — spot cheaper, can be reclaimed mid-test. Build retry/redispatch.</li>
+<li><strong>Synchronous result vs polling</strong> — GitHub status check polls; webhooks on result table can push updates.</li>
+</ul>
+
+<h3>26.4 Smart test selection</h3>
+<p>Run only tests likely affected by the diff. Several approaches:</p>
+<ul>
+<li><strong>Path-based</strong> — file change in <code class="inline">/checkout/</code> triggers tests tagged <code class="inline">@checkout</code>. Static mapping, simple, brittle.</li>
+<li><strong>Coverage-based</strong> — at last green run, capture coverage per test. Map line changes to tests. Accurate but heavy infrastructure.</li>
+<li><strong>ML-based</strong> — train on historical PR → broken-test pairs. Probabilistic. Powerful but needs data.</li>
+<li><strong>Test impact analysis (TIA)</strong> — combination above + safety net of full regression nightly.</li>
+</ul>
+
+<h3>26.5 Test Data Service</h3>
+<p>Goal: every test gets isolated, realistic data, in milliseconds. Options:</p>
+<table>
+<tr><th>Pattern</th><th>Pros</th><th>Cons</th></tr>
+<tr><td>Fresh seed per test</td><td>Pure isolation</td><td>Slow if seed is heavy</td></tr>
+<tr><td>Snapshot / restore per worker</td><td>Fast restore</td><td>Snapshot maintenance</td></tr>
+<tr><td>Tenant pool per worker slot</td><td>Reuse + isolation</td><td>Stuck tests can corrupt slot</td></tr>
+<tr><td>Synthetic data on the fly</td><td>Flexible</td><td>Hard to ensure realism</td></tr>
+</table>
+
+<h3>26.6 Self-healing locators (AI-assisted)</h3>
+<p>When a locator breaks because the DOM changed, the system tries to find the best alternative automatically. Approach:</p>
+<ol>
+<li>Capture a rich snapshot per locator on green runs (role, name, neighbours, text, position, attributes).</li>
+<li>On failure, query the current DOM for candidates that score highly against the snapshot.</li>
+<li>Suggest top match in the report; allow auto-apply if confidence &gt; 0.9.</li>
+<li>Surface healed locators in PR for human review — never silently change tests.</li>
+</ol>
+
+<h3>26.7 Reporting analytics</h3>
+<ul>
+<li>Time-series of pass rate, retry rate, mean run time per test</li>
+<li>Top flaky tests this week</li>
+<li>Top slowest tests</li>
+<li>Coverage trend</li>
+<li>PR feedback latency histogram</li>
+<li>Cost per PR</li>
+</ul>
+
+<h3>26.8 Common follow-up questions</h3>
+<ul>
+<li>"What if a worker crashes mid-test?" — retry on a different worker, mark the original as failed/retried.</li>
+<li>"How do you handle test data tied to a specific tenant?" — tenant pool with leases; expire stale leases.</li>
+<li>"How do you keep auth tokens fresh across thousands of tests?" — central token service issues short-lived tokens; cache per worker.</li>
+<li>"How do you handle a flaky third-party API in tests?" — proxy with HAR cache; replay if upstream slow.</li>
+<li>"How do you debug a single failing test in this system?" — trace stored per test, URL surfaced in PR comment.</li>
+</ul>
+
+<div class="qa-bank">
+<h3>Module 26 — SDET System Design Q&amp;A</h3>
+
+<details class="qa"><summary>How do you approach an SDET system-design interview?</summary>
+<div class="answer">Ask clarifying questions about scale, SLA, environments. List functional + non-functional requirements explicitly. Sketch components with arrows. Discuss trade-offs (queue vs sync, push vs poll, SQL vs KV). Estimate capacity with rough numbers. Identify bottlenecks and mitigations.</div></details>
+
+<details class="qa"><summary>How would you cut a 30-min test suite to 5 min?</summary>
+<div class="answer">Combine: (1) smart test selection (only affected tests), (2) parallel sharding (10× workers), (3) move UI assertions to API where possible, (4) storageState auth instead of UI login, (5) mock unstable third-party services, (6) cache browser binaries. Each is multiplicative.</div></details>
+
+<details class="qa"><summary>What's smart test selection?</summary>
+<div class="answer">Running only the subset of tests likely affected by a diff. Path-based mapping (folder → test tag), coverage-based (per-test line coverage), or ML-based (historical PR-to-failure correlation). Combine with nightly full regression as safety net.</div></details>
+
+<details class="qa"><summary>How do you isolate test data at scale?</summary>
+<div class="answer">Per-worker tenant pool — each parallel slot owns a tenant. Or per-test seeding via API with cleanup. For very heavy fixtures, snapshot-and-restore DB between tests. Always reset between tests; never share.</div></details>
+
+<details class="qa"><summary>What is self-healing locator and what's the risk?</summary>
+<div class="answer">When a locator stops matching, the system tries to find the closest match in the new DOM using captured context (role, neighbours, attributes). Risk: silently masking bugs (the page changed in a meaningful way, not just markup). Mitigation: report healed locators in PR for review, never auto-merge.</div></details>
+
+<details class="qa"><summary>How do you keep auth tokens fresh across thousands of tests?</summary>
+<div class="answer">Central token service that issues short-lived tokens on request. Workers cache them; refresh on 401. Avoids hammering the auth provider with login flows from every test.</div></details>
+
+<details class="qa"><summary>Why use a queue between API and workers?</summary>
+<div class="answer">Decouples submission rate from processing rate. Burst-friendly — API stays fast even when workers are saturated. Workers scale independently based on queue depth. Failed jobs can be retried automatically.</div></details>
+
+<details class="qa"><summary>How do you store and retrieve test artifacts?</summary>
+<div class="answer">Traces, videos, screenshots are large — store in S3 (or equivalent object storage). Metadata (which test, status, duration, link) in a SQL DB for queries. PR comment shows a link to the artifact in S3.</div></details>
+
+<details class="qa"><summary>What's the right back-end for the reports DB?</summary>
+<div class="answer">Postgres for normalised data (test runs, status, duration). ClickHouse or a TSDB for high-volume time-series analytics (pass rate trends, flakiness scores). Use both; route reads to whichever is suited.</div></details>
+
+<details class="qa"><summary>How do you handle network flakiness in tests at scale?</summary>
+<div class="answer">HAR-based replay for third-party APIs in CI. Retry with exponential backoff on transient errors. Health-check upstream before starting a shard. Quarantine tests that depend on known-flaky upstreams.</div></details>
+
+<details class="qa"><summary>What KPIs would you put on the SDET dashboard?</summary>
+<div class="answer">PR feedback p95 latency, pass rate, retry rate, top 10 flaky tests, top 10 slowest tests, escaped defect rate (bugs that reached prod), test maintenance time per dev. Numbers, not just charts — tied to business outcomes.</div></details>
+
+<details class="qa"><summary>How would you design a multi-tenant test data service?</summary>
+<div class="answer">Tenant per parallel slot (parallelIndex). Each tenant has its own DB schema or namespace. API: <code class="inline">POST /tenants/lease</code> returns a tenant id with TTL. Tests use it; release on teardown. Stale leases auto-expire. Catches "noisy neighbour" bugs.</div></details>
+
+<details class="qa"><summary>How would you design a self-healing locator service?</summary>
+<div class="answer">On green runs, snapshot each locator's neighbourhood (role, name, neighbours' tags/text, position). Store keyed by test+selector. On failure: query current DOM, score candidates against snapshot, return top match. Auto-apply only if confidence &gt; 0.9; otherwise suggest in PR for human review.</div></details>
+
+<details class="qa"><summary>How would you build cross-team test result visibility?</summary>
+<div class="answer">Every test run pushes results to a central event bus → reports DB. Per-team dashboard (Grafana). Global dashboard: flakiness leaderboard, slowest tests, escaped defects per service. Email digest weekly. Quarterly review with eng leadership.</div></details>
+
+<details class="qa"><summary>How would you scale test execution across 50 microservices?</summary>
+<div class="answer">Per-service contract tests (Pact) verified independently in each service's CI. A small set of cross-service E2E in a global pipeline (synthetic monitoring against staging). Service-mesh / preview environments per PR to scope blast radius.</div></details>
+
+<details class="qa"><summary>How would you migrate from a 30-min E2E suite to a 5-min one?</summary>
+<div class="answer">Audit + categorize (kill, migrate to API, migrate to unit, keep as E2E). Implement smart test selection (only tests touching changed code) for PRs; full nightly. Parallelise via sharding + worker count tuning. Auth via storageState. Mock unstable third-parties. Profile slowest tests and refactor. Expect 60-80% reduction.</div></details>
+
+<details class="qa"><summary>How would you design a flaky-test detector that doesn't lie?</summary>
+<div class="answer">Capture every retry, not just the final result. Compute failure rate per test over rolling 7d window weighted by total runs. Threshold + auto-open JIRA. Quarantine after N consecutive flake days. Nightly job to re-run quarantined tests; auto-lift if green for K runs.</div></details>
+
+<details class="qa"><summary>How would you design a perf-test gate in CI?</summary>
+<div class="answer">Per-PR: synthetic Lighthouse on critical routes; compare against main baseline; fail if regression &gt; threshold (e.g. LCP +200 ms). Nightly: full k6 load test with budgets. Production: RUM with web-vitals → alerts on p95 degradation.</div></details>
+</div>
+
+<h3>26.4 Implementation Patterns</h3>
+
+<h4>Test Execution Queue — Python + Redis</h4>
+<pre data-lang="python">
+import redis
+import json
+import uuid
+from dataclasses import dataclass, field
+from typing import List
+
+r = redis.Redis(host="localhost", port=6379)
+
+@dataclass
+class TestJob:
+    job_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    spec_file: str = ""
+    browser: str = "chromium"
+    shard: int = 1
+    total_shards: int = 1
+    env: str = "staging"
+
+def enqueue_test_run(specs: List[str], browsers: List[str], total_shards: int = 4) -&gt; str:
+    run_id = str(uuid.uuid4())
+    jobs = []
+    for spec in specs:
+        for browser in browsers:
+            for shard in range(1, total_shards + 1):
+                job = TestJob(spec_file=spec, browser=browser,
+                              shard=shard, total_shards=total_shards)
+                jobs.append(job)
+    pipe = r.pipeline()
+    for job in jobs:
+        pipe.lpush("test:queue", json.dumps(job.__dict__))
+    pipe.set(f"run:{run_id}:total", len(jobs))
+    pipe.set(f"run:{run_id}:pending", len(jobs))
+    pipe.execute()
+    return run_id
+
+def worker_loop():
+    while True:
+        raw = r.brpop("test:queue", timeout=30)
+        if raw is None:
+            break
+        job = TestJob(**json.loads(raw[1]))
+        run_playwright_shard(job)
+
+def run_playwright_shard(job: TestJob):
+    import subprocess
+    cmd = [
+        "npx", "playwright", "test", job.spec_file,
+        "--project", job.browser,
+        f"--shard={job.shard}/{job.total_shards}",
+        "--reporter=json"
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+    r.lpush(f"run:results", json.dumps({
+        "job_id": job.job_id,
+        "spec": job.spec_file,
+        "browser": job.browser,
+        "exit_code": result.returncode,
+        "stdout": result.stdout[-2000:],
+    }))
+</pre>
+
+<h4>Test Data Service — FastAPI</h4>
+<pre data-lang="python">
+from fastapi import FastAPI, HTTPException
+import psycopg2, uuid, json
+from contextlib import contextmanager
+
+app = FastAPI()
+DB_DSN = "postgresql://user:pass@localhost/testdb"
+
+@contextmanager
+def get_conn():
+    conn = psycopg2.connect(DB_DSN)
+    try:
+        yield conn
+        conn.commit()
+    finally:
+        conn.close()
+
+@app.post("/v1/test-data/user")
+def create_test_user(template: str = "standard"):
+    uid = str(uuid.uuid4())[:8]
+    user = {
+        "email": f"test_{uid}@example.com",
+        "password": "TestPass123!",
+        "role": "user" if template == "standard" else "admin",
+    }
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO users(email,password,role,test_session_id) VALUES(%s,%s,%s,%s) RETURNING id",
+            (user["email"], user["password"], user["role"], uid)
+        )
+        user["id"] = cur.fetchone()[0]
+    return user
+
+@app.delete("/v1/test-data/cleanup/{session_id}")
+def cleanup_session(session_id: str):
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("DELETE FROM users WHERE test_session_id = %s", (session_id,))
+        deleted = cur.rowcount
+    return {"deleted": deleted}
+</pre>
+
+<h4>Self-Healing Locator — TypeScript</h4>
+<pre data-lang="typescript">
+import { Page, Locator } from "@playwright/test";
+
+interface LocatorStrategy {
+  strategy: string;
+  value: string;
+  score: number;
+}
+
+export async function selfHealingLocator(
+  page: Page,
+  strategies: LocatorStrategy[]
+): Promise&lt;Locator&gt; {
+  const sorted = strategies.sort((a, b) =&gt; b.score - a.score);
+  for (const s of sorted) {
+    let loc: Locator;
+    if (s.strategy === "data-testid") loc = page.locator(`[data-testid="${s.value}"]`);
+    else if (s.strategy === "role") loc = page.getByRole(s.value as any);
+    else if (s.strategy === "text") loc = page.getByText(s.value);
+    else loc = page.locator(s.value);
+
+    if ((await loc.count()) &gt; 0) {
+      console.log(`Healed via ${s.strategy}: ${s.value}`);
+      return loc;
+    }
+  }
+  throw new Error(`All locator strategies failed: ${JSON.stringify(strategies)}`);
+}
+
+// Usage in test
+// const btn = await selfHealingLocator(page, [
+//   { strategy: "data-testid", value: "submit-btn", score: 100 },
+//   { strategy: "role",        value: "button",     score:  80 },
+//   { strategy: "text",        value: "Submit",      score:  60 },
+// ]);
+</pre>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP Status Codes | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn HTTP Status Codes — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, http-status, testing, automation, playwright http status codes">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="HTTP Status Codes — Playwright SDET">
+  <meta property="og:description" content="Learn HTTP Status Codes — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/http-status.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HTTP Status Codes">
+  <meta name="twitter:description" content="Learn HTTP Status Codes — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/http-status.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=" active"><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">25</span>HTTP Status Codes — full reference</h2>
+
+<div class="toc">
+<h4>What you will master here</h4>
+<ul>
+<li>Every status class (1xx, 2xx, 3xx, 4xx, 5xx) and the codes that matter</li>
+<li>Methods (GET / POST / PUT / PATCH / DELETE / HEAD / OPTIONS) and idempotency</li>
+<li>The headers SDETs actually use</li>
+<li>Caching: ETag, Cache-Control, If-None-Match, If-Modified-Since</li>
+<li>CORS preflight (OPTIONS) — what triggers it and how to debug</li>
+</ul>
+</div>
+
+<h3>25.1 1xx — Informational</h3>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>Notes</th></tr>
+<tr><td>100 Continue</td><td>Server received headers, send the body</td><td>Used with Expect: 100-continue for large uploads</td></tr>
+<tr><td>101 Switching Protocols</td><td>Upgrading to WebSocket / HTTP/2</td><td>Returned during WS handshake</td></tr>
+<tr><td>103 Early Hints</td><td>Preload hints before final response</td><td>Modern perf optimization</td></tr>
+</table>
+
+<h3>25.2 2xx — Success</h3>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>Common usage</th></tr>
+<tr><td>200 OK</td><td>Generic success</td><td>GET response with body, PUT/PATCH success</td></tr>
+<tr><td>201 Created</td><td>New resource created</td><td>POST that creates; often returns Location header</td></tr>
+<tr><td>202 Accepted</td><td>Request accepted, processing async</td><td>Returns job id; client polls for completion</td></tr>
+<tr><td>204 No Content</td><td>Success, no body</td><td>DELETE response, PUT without body</td></tr>
+<tr><td>206 Partial Content</td><td>Range request fulfilled</td><td>Video streaming, resumable downloads</td></tr>
+</table>
+
+<h3>25.3 3xx — Redirection</h3>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>SDET notes</th></tr>
+<tr><td>301 Moved Permanently</td><td>URL changed forever</td><td>SEO + browser caches the redirect</td></tr>
+<tr><td>302 Found</td><td>Temporary redirect</td><td>Login → dashboard, classic flow</td></tr>
+<tr><td>303 See Other</td><td>POST-redirect-GET pattern</td><td>Tells client to use GET on the new URL</td></tr>
+<tr><td>304 Not Modified</td><td>Cached version still valid</td><td>Returned when If-None-Match matches ETag</td></tr>
+<tr><td>307 Temporary Redirect</td><td>Like 302 but preserves the method</td><td>POST stays POST after redirect</td></tr>
+<tr><td>308 Permanent Redirect</td><td>Like 301 but preserves method</td><td>Newer, replaces 301 in REST APIs</td></tr>
+</table>
+
+<h3>25.4 4xx — Client error</h3>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>Test scenarios</th></tr>
+<tr><td>400 Bad Request</td><td>Malformed request</td><td>Bad JSON, missing required field</td></tr>
+<tr><td>401 Unauthorized</td><td>No or invalid credentials</td><td>Missing token, expired token</td></tr>
+<tr><td>402 Payment Required</td><td>Reserved (some APIs use it)</td><td>Stripe-style billing errors</td></tr>
+<tr><td>403 Forbidden</td><td>Authenticated, not allowed</td><td>RBAC failure, user hitting /admin</td></tr>
+<tr><td>404 Not Found</td><td>Resource doesn't exist</td><td>Bad id, deleted resource</td></tr>
+<tr><td>405 Method Not Allowed</td><td>Wrong HTTP verb for this URL</td><td>POST to a GET-only endpoint</td></tr>
+<tr><td>406 Not Acceptable</td><td>Server can't satisfy Accept header</td><td>Client asked for XML, server only does JSON</td></tr>
+<tr><td>408 Request Timeout</td><td>Client didn't finish sending</td><td>Slow client or network</td></tr>
+<tr><td>409 Conflict</td><td>State conflict</td><td>Duplicate email signup, version conflict (ETag)</td></tr>
+<tr><td>410 Gone</td><td>Resource permanently removed</td><td>Used for deprecated endpoints</td></tr>
+<tr><td>411 Length Required</td><td>Missing Content-Length</td><td>Rare; some APIs strict on it</td></tr>
+<tr><td>413 Payload Too Large</td><td>Body bigger than server allows</td><td>File upload size limit</td></tr>
+<tr><td>414 URI Too Long</td><td>URL exceeds server limit</td><td>Massive query strings</td></tr>
+<tr><td>415 Unsupported Media Type</td><td>Wrong Content-Type</td><td>Sending XML to a JSON-only endpoint</td></tr>
+<tr><td>418 I'm a teapot</td><td>April Fools' joke</td><td>Real RFC; some APIs use it as easter egg</td></tr>
+<tr><td>422 Unprocessable Entity</td><td>Validation failed on parsed body</td><td>Body parsed but fields invalid (Rails default)</td></tr>
+<tr><td>425 Too Early</td><td>Server unwilling to risk replay attack</td><td>0-RTT TLS edge case</td></tr>
+<tr><td>426 Upgrade Required</td><td>Must use a different protocol</td><td>HTTP/1.1 →HTTP/2 forced</td></tr>
+<tr><td>428 Precondition Required</td><td>Server requires conditional headers</td><td>Forces If-Match / If-Unmodified-Since</td></tr>
+<tr><td>429 Too Many Requests</td><td>Rate limited</td><td>Returns Retry-After, X-RateLimit-Remaining</td></tr>
+<tr><td>431 Request Header Fields Too Large</td><td>Headers exceed limit</td><td>Bloated cookies / auth headers</td></tr>
+<tr><td>451 Unavailable For Legal Reasons</td><td>Censorship / DMCA</td><td>Geo / content block</td></tr>
+</table>
+
+<h3>25.5 5xx — Server error</h3>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>Common cause</th></tr>
+<tr><td>500 Internal Server Error</td><td>Unhandled exception</td><td>The bug you file. Server should not show stack to client.</td></tr>
+<tr><td>501 Not Implemented</td><td>Server doesn't support method</td><td>TRACE on locked-down APIs</td></tr>
+<tr><td>502 Bad Gateway</td><td>Upstream service returned bad response</td><td>Microservice chain failure, proxy issue</td></tr>
+<tr><td>503 Service Unavailable</td><td>Temporarily down / overloaded</td><td>Maintenance, autoscaler scaling up</td></tr>
+<tr><td>504 Gateway Timeout</td><td>Upstream took too long</td><td>Slow downstream, network partition</td></tr>
+<tr><td>505 HTTP Version Not Supported</td><td>Client sent unsupported HTTP version</td><td>Very rare</td></tr>
+<tr><td>507 Insufficient Storage</td><td>Server out of disk</td><td>Storage backend full</td></tr>
+<tr><td>508 Loop Detected</td><td>Infinite redirect / proxy loop</td><td>Misconfigured CDN</td></tr>
+<tr><td>511 Network Authentication Required</td><td>Captive portal</td><td>Wi-Fi needs sign-in</td></tr>
+</table>
+
+<h3>25.6 HTTP Methods + idempotency</h3>
+<table>
+<tr><th>Method</th><th>Purpose</th><th>Safe</th><th>Idempotent</th><th>Cacheable</th></tr>
+<tr><td>GET</td><td>Retrieve resource</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>HEAD</td><td>Headers only, no body</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>OPTIONS</td><td>Discover allowed methods, CORS preflight</td><td>✓</td><td>✓</td><td>—</td></tr>
+<tr><td>POST</td><td>Create / submit</td><td>✗</td><td>✗</td><td>only if explicit</td></tr>
+<tr><td>PUT</td><td>Replace</td><td>✗</td><td>✓</td><td>✗</td></tr>
+<tr><td>PATCH</td><td>Partial update</td><td>✗</td><td>not required</td><td>✗</td></tr>
+<tr><td>DELETE</td><td>Remove</td><td>✗</td><td>✓</td><td>✗</td></tr>
+<tr><td>TRACE</td><td>Echo for diagnostics</td><td>✓</td><td>✓</td><td>—</td></tr>
+<tr><td>CONNECT</td><td>Set up tunnel (HTTPS via proxy)</td><td>—</td><td>—</td><td>—</td></tr>
+</table>
+
+<p><strong>Safe</strong>: doesn't modify server state. <strong>Idempotent</strong>: calling N times has same effect as 1 time. Idempotent methods can be safely retried by clients on network errors — non-idempotent (POST) can't without an idempotency key.</p>
+
+<h3>25.7 Headers SDETs actually use</h3>
+
+<h4>Request headers</h4>
+<table>
+<tr><th>Header</th><th>Purpose</th></tr>
+<tr><td>Accept</td><td>What content types the client wants back (<code class="inline">application/json</code>)</td></tr>
+<tr><td>Accept-Language</td><td>Preferred languages (<code class="inline">en-US,en;q=0.9</code>)</td></tr>
+<tr><td>Accept-Encoding</td><td>Compression accepted (<code class="inline">gzip, br</code>)</td></tr>
+<tr><td>Authorization</td><td>Credentials — Bearer, Basic, etc.</td></tr>
+<tr><td>Content-Type</td><td>What format the request body is in</td></tr>
+<tr><td>Content-Length</td><td>Body size in bytes</td></tr>
+<tr><td>Cookie</td><td>Cookies sent to server</td></tr>
+<tr><td>If-None-Match</td><td>ETag — return 304 if unchanged</td></tr>
+<tr><td>If-Modified-Since</td><td>Time-based conditional GET</td></tr>
+<tr><td>Origin</td><td>Origin of cross-origin request (CORS)</td></tr>
+<tr><td>Referer</td><td>The page that initiated the request</td></tr>
+<tr><td>User-Agent</td><td>Browser / client identifier</td></tr>
+<tr><td>X-Requested-With</td><td>Conventional "XMLHttpRequest" marker</td></tr>
+<tr><td>Idempotency-Key</td><td>Client-generated, lets server dedupe retries</td></tr>
+</table>
+
+<h4>Response headers</h4>
+<table>
+<tr><th>Header</th><th>Purpose</th></tr>
+<tr><td>Content-Type</td><td>Format of the response body</td></tr>
+<tr><td>Content-Length</td><td>Body size</td></tr>
+<tr><td>Cache-Control</td><td>Cache rules (<code class="inline">no-store</code>, <code class="inline">public, max-age=3600</code>)</td></tr>
+<tr><td>ETag</td><td>Opaque version id of the resource</td></tr>
+<tr><td>Last-Modified</td><td>When the resource was last changed</td></tr>
+<tr><td>Location</td><td>URL to redirect to / location of created resource</td></tr>
+<tr><td>Set-Cookie</td><td>Cookies for the browser to store</td></tr>
+<tr><td>Retry-After</td><td>Seconds (or HTTP date) until client should retry</td></tr>
+<tr><td>X-RateLimit-Limit / Remaining / Reset</td><td>Rate limit window state</td></tr>
+<tr><td>WWW-Authenticate</td><td>How to authenticate (returned with 401)</td></tr>
+<tr><td>Strict-Transport-Security</td><td>HSTS — force HTTPS</td></tr>
+<tr><td>Content-Security-Policy</td><td>What resources the page may load</td></tr>
+<tr><td>X-Frame-Options</td><td>Prevent embedding in iframe</td></tr>
+<tr><td>Access-Control-Allow-Origin</td><td>CORS — who can access</td></tr>
+</table>
+
+<h3>25.8 Caching with ETag</h3>
+<pre data-lang="bash"># First request
+GET /api/products/42
+&lt;-- 200 OK
+    ETag: "v3"
+    Cache-Control: max-age=60
+    {... body ...}
+
+# Second request, within max-age
+GET /api/products/42
+    If-None-Match: "v3"
+&lt;-- 304 Not Modified
+    (no body — client uses cached version)</pre>
+
+<h3>25.9 CORS preflight (OPTIONS)</h3>
+<p>Browsers send a preflight OPTIONS request before a "non-simple" cross-origin request (custom headers, non-GET/HEAD/POST, etc.). The server's response decides whether the actual request is allowed.</p>
+
+<pre data-lang="bash">OPTIONS /api/orders HTTP/1.1
+    Origin: https://app.example.com
+    Access-Control-Request-Method: POST
+    Access-Control-Request-Headers: authorization, content-type
+
+&lt;-- 204
+    Access-Control-Allow-Origin: https://app.example.com
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+    Access-Control-Allow-Headers: authorization, content-type
+    Access-Control-Max-Age: 600</pre>
+
+<div class="warn"><b>Common bug</b>Misconfigured CORS = "fetch failed in browser" but works in Postman. Postman doesn't enforce CORS — only browsers do. Always test from a real origin.</div>
+
+<div class="qa-bank">
+<h3>Module 25 — HTTP Q&amp;A bank</h3>
+
+<details class="qa"><summary>200 vs 201 vs 204?</summary>
+<div class="answer">200 — generic success with body (GET, PUT). 201 — new resource created (POST), often returns Location. 204 — success with no body (DELETE, no-body PUT).</div></details>
+
+<details class="qa"><summary>301 vs 302 vs 307 vs 308?</summary>
+<div class="answer">301 permanent (cached forever, method may change to GET). 302 temporary (method may change). 307 temporary, preserves method. 308 permanent, preserves method. Use 307/308 for REST APIs to keep POST as POST.</div></details>
+
+<details class="qa"><summary>What is 304 Not Modified?</summary>
+<div class="answer">Response to a conditional GET (If-None-Match with ETag, or If-Modified-Since). Server says "your cached copy is still valid, here are no bytes". Saves bandwidth.</div></details>
+
+<details class="qa"><summary>401 vs 403?</summary>
+<div class="answer">401 — server doesn't know who you are (no/expired/invalid credentials). 403 — server knows who you are, but you're not allowed (RBAC denied).</div></details>
+
+<details class="qa"><summary>400 vs 422?</summary>
+<div class="answer">400 — request couldn't be parsed (malformed JSON, missing required header). 422 — parsed fine but the data is semantically invalid (email field is not an email). Rails/Django often use 422; others may use 400 for both.</div></details>
+
+<details class="qa"><summary>What does 429 mean and what headers come with it?</summary>
+<div class="answer">429 Too Many Requests — rate limited. Server typically returns <code class="inline">Retry-After</code> (seconds until you can retry) and <code class="inline">X-RateLimit-Limit/Remaining/Reset</code>. Honour them; don't retry tight-loop.</div></details>
+
+<details class="qa"><summary>502 vs 504?</summary>
+<div class="answer">502 Bad Gateway — upstream service returned an invalid response. 504 Gateway Timeout — upstream didn't respond within the gateway's timeout. Both point to issues behind your direct server.</div></details>
+
+<details class="qa"><summary>What is idempotency?</summary>
+<div class="answer">Calling an operation N times has the same effect as calling it once. GET, PUT, DELETE are idempotent; POST is not (each POST may create a new resource). Idempotent calls are safe to retry on network errors.</div></details>
+
+<details class="qa"><summary>How do you make POST idempotent?</summary>
+<div class="answer">Idempotency-Key header — client generates a UUID, sends it with each retry of the same logical operation. Server caches the response under that key; retries return the cached response instead of duplicating the side effect.</div></details>
+
+<details class="qa"><summary>What is PUT vs PATCH?</summary>
+<div class="answer">PUT replaces the resource entirely with the body (missing fields become null/default). PATCH applies a partial change — only fields in the body are updated.</div></details>
+
+<details class="qa"><summary>What's a CORS preflight?</summary>
+<div class="answer">An OPTIONS request the browser sends before a "non-simple" cross-origin request to check if the server allows it. Server returns Access-Control-Allow-Origin / Methods / Headers; if those match the intended request, browser sends the real request.</div></details>
+
+<details class="qa"><summary>Why does my fetch fail in the browser but work in Postman?</summary>
+<div class="answer">CORS. Browsers enforce same-origin policy and refuse cross-origin requests unless the server explicitly allows them. Postman is not a browser and doesn't enforce CORS. Configure CORS on the server (Access-Control-Allow-Origin) for the browser origin.</div></details>
+
+<details class="qa"><summary>What's HEAD for?</summary>
+<div class="answer">Like GET but server returns only headers, no body. Useful for checking existence, content-length, last-modified, or content-type without downloading.</div></details>
+
+<details class="qa"><summary>What's the difference between Cookie and Set-Cookie?</summary>
+<div class="answer">Set-Cookie is a server response header telling the browser to store a cookie. Cookie is a request header where the browser sends previously-stored cookies back. Sessions ride on this pair.</div></details>
+
+<details class="qa"><summary>What's Cache-Control: no-store vs no-cache?</summary>
+<div class="answer">no-store: don't cache at all (sensitive data). no-cache: may cache but must revalidate with the server before using. Often confused — no-cache still allows caching, just with a freshness check.</div></details>
+
+<details class="qa"><summary>What's an ETag?</summary>
+<div class="answer">Opaque version identifier (string) the server attaches to a resource. Client sends it back in If-None-Match on subsequent requests; server returns 304 if unchanged. Enables efficient cache validation without timestamps.</div></details>
+
+<details class="qa"><summary>HTTP/1.1 vs HTTP/2 — key difference for SDETs?</summary>
+<div class="answer">HTTP/2 multiplexes many requests over one TCP connection — no head-of-line blocking, lower latency on busy pages. Most production sites use HTTP/2 today. Tests rarely care, but slow-network simulation should reflect realistic behaviour.</div></details>
+
+<details class="qa"><summary>What is HSTS?</summary>
+<div class="answer">HTTP Strict Transport Security — server response header that tells browsers "always use HTTPS for this domain for the next N seconds". Prevents downgrade attacks. Use <code class="inline">Strict-Transport-Security: max-age=31536000; includeSubDomains; preload</code>.</div></details>
+</div>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

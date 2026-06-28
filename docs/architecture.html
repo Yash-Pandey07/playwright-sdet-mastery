@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture & Internals | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn Architecture & Internals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, architecture, testing, automation, playwright architecture internals">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="Architecture & Internals — Playwright SDET">
+  <meta property="og:description" content="Learn Architecture & Internals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/architecture.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Architecture & Internals">
+  <meta name="twitter:description" content="Learn Architecture & Internals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/architecture.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=" active"><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">01</span>Playwright Architecture &amp; Internals</h2>
+
+<div class="toc">
+<h4>What you will master here</h4>
+<ul>
+<li>The client–server model of Playwright and why it exists</li>
+<li>WebSocket + Chrome DevTools Protocol (CDP) vs Selenium's HTTP/WebDriver</li>
+<li>Why Playwright is faster and less flaky than older tools</li>
+<li>The <code class="inline">Browser → BrowserContext → Page</code> hierarchy</li>
+<li>How auto-wait works under the hood</li>
+<li>Honest comparison: Playwright vs Selenium vs Cypress</li>
+</ul>
+</div>
+
+<div class="note">
+<b>Node.js Connection — Read this first</b>
+<p>Before diving into protocols and diagrams, it helps to understand <em>why Node.js is in the picture at all</em>.</p>
+
+<h4 style="margin-top:14px;">Why Node.js?</h4>
+<p>Playwright's test runner and driver are both written in Node.js. The browser is a completely separate process — Node.js does <strong>not</strong> run inside the browser. Instead, Node.js is the coordinator that sits between your test code and the browser, speaking CDP (Chrome DevTools Protocol) over a WebSocket.</p>
+<p>Think of it this way:</p>
+<ul>
+  <li><strong>Node.js</strong> is like a phone.</li>
+  <li><strong>Playwright</strong> is the app running on that phone.</li>
+  <li><strong>CDP / WebSocket</strong> is the cellular network.</li>
+  <li><strong>The browser</strong> is the server you're calling.</li>
+</ul>
+<p>Your test code "dials" the browser through Playwright, sends commands, and listens for responses — all through Node.js.</p>
+
+<h4 style="margin-top:14px;">The event loop in plain English</h4>
+<p>Node.js uses a single-threaded <em>event loop</em>. Imagine a very efficient waiter at a busy restaurant:</p>
+<ol>
+  <li>The waiter takes your order (your test calls <code class="inline">page.click()</code>).</li>
+  <li>The waiter hands it to the kitchen (Playwright sends a command to the browser via CDP).</li>
+  <li>The waiter doesn't stand there doing nothing — they take other orders or handle other tasks.</li>
+  <li>When the kitchen rings the bell (browser fires an event saying "done"), the waiter brings your food (the Promise resolves).</li>
+</ol>
+<p>This is why Playwright is non-blocking and can handle multiple tasks efficiently. The event loop keeps things moving without needing multiple threads.</p>
+
+<h4 style="margin-top:14px;">Why does <code class="inline">await</code> exist?</h4>
+<p>Because Playwright is talking to a browser that takes real time to respond. When you write:</p>
+<pre><span class="lang">typescript</span>await page.click('#submit');</pre>
+<p>…you are telling Node.js: <strong>"Send the click command to the browser, then pause here and wait for the browser to confirm the click happened before you run the next line."</strong></p>
+<p>Without <code class="inline">await</code>, Node.js would fire off the command and immediately continue to the next line — before the browser has done anything. Your test would read stale state, assert on things that haven't happened yet, and produce wildly unpredictable results.</p>
+<p>A simple rule: <strong>every Playwright API call that returns a Promise must be awaited.</strong></p>
+
+<div class="tip"><b>Analogy recap</b>
+<ul style="margin-top:6px;">
+  <li>Node.js = phone</li>
+  <li>Playwright = your app on the phone</li>
+  <li>CDP over WebSocket = cellular network</li>
+  <li>Browser = the server you're talking to</li>
+  <li><code class="inline">await</code> = "hold on, wait for them to pick up and answer before saying the next thing"</li>
+</ul>
+</div>
+</div>
+
+<h3>1.1 The big picture: client and server</h3>
+<p>Playwright is split into two pieces that talk to each other over a single, persistent connection:</p>
+<ol>
+<li><strong>The Playwright client (your test code)</strong> — a Node.js / Python / Java / .NET library that exposes a friendly API (<code class="inline">page.click()</code>, <code class="inline">expect(locator).toBeVisible()</code>, etc.).</li>
+<li><strong>The Playwright server (the driver)</strong> — a Node.js process bundled inside the same install that knows how to drive Chromium, Firefox and WebKit. It speaks each browser's own remote-debugging protocol.</li>
+</ol>
+<p>When you write <code class="inline">await page.click('#submit')</code>, the client serialises that command and sends it to the server, which translates it into the browser's native protocol and waits for the result.</p>
+
+<div class="diagram">
+<svg viewBox="0 0 760 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <rect x="20" y="40" width="160" height="80" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+  <text x="100" y="70" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="700">Test Code</text>
+  <text x="100" y="92" text-anchor="middle" fill="#9da7b3" font-size="11">page.click('#go')</text>
+  <text x="100" y="108" text-anchor="middle" fill="#9da7b3" font-size="11">(client library)</text>
+  <rect x="280" y="40" width="200" height="80" rx="10" fill="#161b22" stroke="#ffa657" stroke-width="2"/>
+  <text x="380" y="70" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="700">Playwright Driver</text>
+  <text x="380" y="92" text-anchor="middle" fill="#9da7b3" font-size="11">(Node.js server)</text>
+  <text x="380" y="108" text-anchor="middle" fill="#9da7b3" font-size="11">protocol translator</text>
+  <rect x="580" y="40" width="160" height="80" rx="10" fill="#161b22" stroke="#7ee787" stroke-width="2"/>
+  <text x="660" y="70" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="700">Browser</text>
+  <text x="660" y="92" text-anchor="middle" fill="#9da7b3" font-size="11">Chromium / Firefox / WebKit</text>
+  <line x1="180" y1="80" x2="280" y2="80" stroke="#58a6ff" stroke-width="2" marker-end="url(#arr1)"/>
+  <line x1="280" y1="80" x2="180" y2="80" stroke="#9da7b3" stroke-width="1" marker-end="url(#arr1)"/>
+  <line x1="480" y1="80" x2="580" y2="80" stroke="#58a6ff" stroke-width="2" marker-end="url(#arr1)"/>
+  <line x1="580" y1="80" x2="480" y2="80" stroke="#9da7b3" stroke-width="1" marker-end="url(#arr1)"/>
+  <text x="230" y="155" text-anchor="middle" fill="#9da7b3" font-size="12">single WebSocket</text>
+  <text x="230" y="170" text-anchor="middle" fill="#9da7b3" font-size="12">(bi-directional, persistent)</text>
+  <text x="530" y="155" text-anchor="middle" fill="#9da7b3" font-size="12">CDP / Juggler / WK</text>
+  <text x="530" y="170" text-anchor="middle" fill="#9da7b3" font-size="12">(bi-directional)</text>
+  <text x="380" y="230" text-anchor="middle" fill="#f2cc60" font-size="13" font-weight="700">One persistent connection, many commands and events stream both ways</text>
+</svg>
+<div class="caption">Figure 1 — Playwright sends commands to the driver, which speaks each browser's native debug protocol.</div>
+</div>
+
+<h3>1.2 WebSocket + CDP vs Selenium's HTTP/JSON Wire</h3>
+<p>This is the single most important architecture point an interviewer will probe.</p>
+
+<div class="cmp">
+<div class="col">
+<h5>Selenium WebDriver</h5>
+<ul>
+<li>Communicates with the browser via the <strong>W3C WebDriver protocol</strong> over <strong>HTTP</strong>.</li>
+<li>Every command (<code class="inline">click</code>, <code class="inline">findElement</code>) is a separate HTTP request/response.</li>
+<li>HTTP is <em>stateless</em> and <em>one-way</em>: client asks, server replies. Server cannot push events back without polling.</li>
+<li>A "browser driver" binary (<code class="inline">chromedriver</code>, <code class="inline">geckodriver</code>) sits between Selenium and the browser, translating WebDriver to the browser's internal protocol.</li>
+</ul>
+</div>
+<div class="col">
+<h5>Playwright</h5>
+<ul>
+<li>Communicates with the browser over a <strong>persistent WebSocket</strong>, using each browser's <strong>native debug protocol</strong> (Chrome DevTools Protocol for Chromium, Juggler for Firefox, WebKit Inspector Protocol for WebKit).</li>
+<li>Bidirectional: commands go out, <em>events</em> (network requests, console logs, DOM changes) stream back in real time.</li>
+<li>No extra driver binary — Playwright bundles patched browser builds and talks straight to them.</li>
+<li>Many commands can be batched on the same socket without a new handshake.</li>
+</ul>
+</div>
+</div>
+
+<h4>Why this matters for speed and flakiness</h4>
+<ul>
+<li><strong>Speed:</strong> No per-command TCP+HTTP handshake. A WebSocket frame is tiny (often &lt; 100 bytes overhead).</li>
+<li><strong>Real-time events:</strong> Playwright knows the instant a network request finishes, a DOM mutates, or a navigation starts — so its auto-wait has perfect information. Selenium has to poll the DOM.</li>
+<li><strong>No mid-tier driver:</strong> Fewer moving parts = fewer version-mismatch failures (<code class="inline">chromedriver</code> too old, etc.).</li>
+<li><strong>Isolation:</strong> Playwright creates a fresh <em>BrowserContext</em> per test in milliseconds — Selenium typically launches a whole new browser process, taking seconds.</li>
+</ul>
+
+<h3>1.3 The Browser → BrowserContext → Page hierarchy</h3>
+<p>This three-level model is what makes Playwright fast <em>and</em> isolated.</p>
+
+<div class="diagram">
+<svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="20" width="640" height="280" rx="12" fill="none" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="60" y="50" fill="#58a6ff" font-size="14" font-weight="700">Browser  (1 OS process)</text>
+  <g>
+    <rect x="60" y="70" width="290" height="210" rx="10" fill="#1f2630" stroke="#ffa657" stroke-width="2"/>
+    <text x="80" y="98" fill="#ffa657" font-size="13" font-weight="700">BrowserContext A  (incognito-like)</text>
+    <text x="80" y="116" fill="#9da7b3" font-size="11">own cookies · own cache · own storage</text>
+    <rect x="80" y="135" width="120" height="60" rx="6" fill="#0d1117" stroke="#7ee787"/>
+    <text x="140" y="160" text-anchor="middle" fill="#7ee787" font-size="12" font-weight="700">Page (tab)</text>
+    <text x="140" y="178" text-anchor="middle" fill="#9da7b3" font-size="10">login.html</text>
+    <rect x="210" y="135" width="120" height="60" rx="6" fill="#0d1117" stroke="#7ee787"/>
+    <text x="270" y="160" text-anchor="middle" fill="#7ee787" font-size="12" font-weight="700">Page (tab)</text>
+    <text x="270" y="178" text-anchor="middle" fill="#9da7b3" font-size="10">dashboard.html</text>
+    <text x="80" y="225" fill="#9da7b3" font-size="11">user-a@test.com</text>
+    <text x="80" y="245" fill="#9da7b3" font-size="11">sessionToken: ABC123</text>
+  </g>
+  <g>
+    <rect x="370" y="70" width="290" height="210" rx="10" fill="#1f2630" stroke="#ffa657" stroke-width="2"/>
+    <text x="390" y="98" fill="#ffa657" font-size="13" font-weight="700">BrowserContext B  (incognito-like)</text>
+    <text x="390" y="116" fill="#9da7b3" font-size="11">own cookies · own cache · own storage</text>
+    <rect x="390" y="135" width="120" height="60" rx="6" fill="#0d1117" stroke="#7ee787"/>
+    <text x="450" y="160" text-anchor="middle" fill="#7ee787" font-size="12" font-weight="700">Page (tab)</text>
+    <text x="450" y="178" text-anchor="middle" fill="#9da7b3" font-size="10">checkout.html</text>
+    <text x="390" y="225" fill="#9da7b3" font-size="11">user-b@test.com</text>
+    <text x="390" y="245" fill="#9da7b3" font-size="11">sessionToken: XYZ789</text>
+  </g>
+</svg>
+<div class="caption">Figure 2 — One browser process hosts many isolated contexts; each context can host many pages (tabs).</div>
+</div>
+
+<ul>
+<li><strong>Browser</strong> — the real OS process (Chromium etc.). You usually launch one per test worker. Heavy to start (~1 s).</li>
+<li><strong>BrowserContext</strong> — a lightweight, fully isolated "profile" inside that browser. Like an incognito window: its own cookies, localStorage, cache, permissions, geolocation, viewport. <strong>Cheap to create (~10–50 ms)</strong> — Playwright spins one per test by default. This is why tests don't bleed into each other.</li>
+<li><strong>Page</strong> — a single tab inside a context. A test can have multiple pages (multi-tab, popups). Each page has its own frame tree, console, network events.</li>
+</ul>
+
+<div class="tip"><b>Mental model</b>One Chrome on your laptop with two incognito windows open, each window has tabs. The window is a <em>context</em>, the tab is a <em>page</em>.</div>
+
+<h4>Code: see the hierarchy</h4>
+<pre data-lang="ts">import { chromium } from '@playwright/test';
+
+(async () => {
+  // 1. Browser — one OS process, expensive to start
+  const browser = await chromium.launch({ headless: false });
+
+  // 2. Two isolated contexts — cheap, parallel-safe
+  const userContext  = await browser.newContext({ storageState: 'auth/user.json' });
+  const adminContext = await browser.newContext({ storageState: 'auth/admin.json' });
+
+  // 3. Pages inside each context — each is a tab
+  const userPage  = await userContext.newPage();
+  const adminPage = await adminContext.newPage();
+
+  await Promise.all([
+    userPage.goto('https://app.example.com/dashboard'),
+    adminPage.goto('https://app.example.com/admin'),
+  ]);
+
+  // Cookies / localStorage of the two users never collide.
+  await browser.close();
+})();</pre>
+
+<h3>1.4 Auto-wait internals</h3>
+<p>"Playwright auto-waits" is the headline feature. Here is what actually happens when you call <code class="inline">await page.click('#buy')</code>:</p>
+
+<ol>
+<li><strong>Resolve the locator.</strong> Playwright re-queries the DOM (not a stale cached element) until exactly one matching element is found.</li>
+<li><strong>Run actionability checks</strong> on that element, in a tight loop, until all pass — or the action timeout (default 30 s) expires:
+  <ul>
+    <li>Element is <em>attached</em> to the DOM</li>
+    <li>Element is <em>visible</em> (non-zero size, not <code class="inline">display:none</code> or <code class="inline">visibility:hidden</code>)</li>
+    <li>Element is <em>stable</em> (not animating — same bounding box for two consecutive frames)</li>
+    <li>Element <em>receives events</em> (no other element on top via hit-testing)</li>
+    <li>Element is <em>enabled</em> (no <code class="inline">disabled</code> attribute on form controls)</li>
+  </ul>
+</li>
+<li><strong>Scroll into view</strong> if needed.</li>
+<li><strong>Perform the action</strong> at the element's center using real input events (CDP <code class="inline">Input.dispatchMouseEvent</code> — not JS click).</li>
+<li><strong>Wait for the event loop to settle</strong> (no pending navigation triggered by the click).</li>
+</ol>
+
+<div class="diagram">
+<svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <g font-size="11" fill="#e6edf3">
+    <rect x="20"  y="80" width="100" height="60" rx="6" fill="#161b22" stroke="#58a6ff"/>
+    <text x="70"  y="105" text-anchor="middle">attached?</text>
+    <text x="70"  y="125" text-anchor="middle" fill="#9da7b3">in DOM</text>
+    <rect x="150" y="80" width="100" height="60" rx="6" fill="#161b22" stroke="#58a6ff"/>
+    <text x="200" y="105" text-anchor="middle">visible?</text>
+    <text x="200" y="125" text-anchor="middle" fill="#9da7b3">size &gt; 0</text>
+    <rect x="280" y="80" width="100" height="60" rx="6" fill="#161b22" stroke="#58a6ff"/>
+    <text x="330" y="105" text-anchor="middle">stable?</text>
+    <text x="330" y="125" text-anchor="middle" fill="#9da7b3">2 frames same</text>
+    <rect x="410" y="80" width="100" height="60" rx="6" fill="#161b22" stroke="#58a6ff"/>
+    <text x="460" y="105" text-anchor="middle">enabled?</text>
+    <text x="460" y="125" text-anchor="middle" fill="#9da7b3">not disabled</text>
+    <rect x="540" y="80" width="100" height="60" rx="6" fill="#161b22" stroke="#58a6ff"/>
+    <text x="590" y="105" text-anchor="middle">receives</text>
+    <text x="590" y="120" text-anchor="middle">events?</text>
+    <text x="590" y="135" text-anchor="middle" fill="#9da7b3">hit-test</text>
+    <rect x="670" y="80" width="80" height="60" rx="6" fill="#161b22" stroke="#7ee787"/>
+    <text x="710" y="115" text-anchor="middle" fill="#7ee787">CLICK</text>
+    <line x1="120" y1="110" x2="150" y2="110" stroke="#58a6ff" marker-end="url(#arr2)"/>
+    <line x1="250" y1="110" x2="280" y2="110" stroke="#58a6ff" marker-end="url(#arr2)"/>
+    <line x1="380" y1="110" x2="410" y2="110" stroke="#58a6ff" marker-end="url(#arr2)"/>
+    <line x1="510" y1="110" x2="540" y2="110" stroke="#58a6ff" marker-end="url(#arr2)"/>
+    <line x1="640" y1="110" x2="670" y2="110" stroke="#7ee787" marker-end="url(#arr2)"/>
+    <text x="380" y="35" text-anchor="middle" fill="#f2cc60" font-weight="700" font-size="13">Actionability loop — retries every ~50 ms until all pass or timeout</text>
+    <text x="380" y="190" text-anchor="middle" fill="#9da7b3" font-size="12">Failure produces a single clear error: "element is not visible" / "element intercepts pointer events"</text>
+  </g>
+</svg>
+<div class="caption">Figure 3 — Five actionability checks done in a retry loop before any action fires.</div>
+</div>
+
+<div class="warn"><b>Common myth</b>"Auto-wait waits for the page to load." No — it waits for <em>actionability</em> of the specific element you targeted. If you wait for a network response or specific state, use <code class="inline">page.waitForResponse</code> / <code class="inline">expect(...).toBeVisible()</code>, not <code class="inline">page.waitForTimeout</code>.</div>
+
+<h3>1.5 Why Playwright is faster and less flaky</h3>
+<table>
+<tr><th>Cause</th><th>Effect</th></tr>
+<tr><td>Persistent WebSocket vs HTTP-per-command</td><td>~5–10× lower per-command overhead</td></tr>
+<tr><td>Auto-wait with actionability checks</td><td>No need for <code class="inline">sleep()</code> or explicit waits — fewer race conditions</td></tr>
+<tr><td>BrowserContext per test (ms to create)</td><td>True parallelism without spawning new browsers</td></tr>
+<tr><td>Real input events via CDP, not JS <code class="inline">.click()</code></td><td>Triggers real UI side-effects (focus, blur, hover) the browser would actually fire</td></tr>
+<tr><td>Network events streamed in real time</td><td>Can wait for / mock specific responses reliably</td></tr>
+<tr><td>Built-in retries + trace viewer</td><td>When a test does fail, you can replay every step</td></tr>
+</table>
+
+<h3>1.6 Playwright vs Selenium vs Cypress (honest)</h3>
+<table>
+<tr><th>Dimension</th><th>Playwright</th><th>Selenium</th><th>Cypress</th></tr>
+<tr><td>Architecture</td><td>Out-of-process driver, WebSocket+CDP</td><td>Out-of-process, HTTP+WebDriver</td><td>In-browser, runs alongside app</td></tr>
+<tr><td>Languages</td><td>JS/TS, Python, Java, .NET</td><td>Almost everything</td><td>JS/TS only</td></tr>
+<tr><td>Browser support</td><td>Chromium, Firefox, WebKit</td><td>All major browsers</td><td>Chromium-family, Firefox (limited WebKit via experimental)</td></tr>
+<tr><td>Multi-tab / multi-origin</td><td>Native (multi-page, multi-context)</td><td>Yes</td><td>Limited (one tab, same-origin assumed)</td></tr>
+<tr><td>iframes</td><td><code class="inline">frameLocator</code> — first-class</td><td>Supported</td><td>Workarounds needed</td></tr>
+<tr><td>Auto-wait</td><td>Yes, deep</td><td>Manual / explicit waits</td><td>Yes, command queue</td></tr>
+<tr><td>Parallel execution</td><td>Per-test contexts, free</td><td>Selenium Grid / external</td><td>Paid dashboard for parallelism</td></tr>
+<tr><td>Network mocking</td><td>Built-in <code class="inline">page.route</code></td><td>Via BiDi / proxies</td><td>Built-in <code class="inline">cy.intercept</code></td></tr>
+<tr><td>Trace / time-travel debug</td><td>Trace Viewer (DOM snapshots per action)</td><td>None built-in</td><td>Time-travel debugger in app</td></tr>
+<tr><td>API testing</td><td>Built-in <code class="inline">request</code> fixture</td><td>External libs</td><td>Built-in <code class="inline">cy.request</code></td></tr>
+</table>
+
+<div class="tip"><b>One-line interview answer</b>"Playwright runs out-of-process like Selenium, but speaks each browser's native debug protocol over a persistent WebSocket, so commands are cheaper and events stream back in real time — that's how auto-wait can be precise. Cypress runs <em>inside</em> the browser, which is fast but constrains it to one tab and one origin."</div>
+
+<h3>1.7 First test — proves the architecture</h3>
+<pre data-lang="ts">// tests/architecture.spec.ts
+import { test, expect } from '@playwright/test';
+
+test('one browser, two isolated users at once', async ({ browser }) => {
+  // Two contexts share the same browser process — fast
+  const ctxA = await browser.newContext();
+  const ctxB = await browser.newContext();
+  const pageA = await ctxA.newPage();
+  const pageB = await ctxB.newPage();
+
+  await pageA.goto('https://example.com');
+  await pageB.goto('https://example.com');
+
+  // Set cookies independently — they don't collide
+  await ctxA.addCookies([{ name: 't', value: 'A', url: 'https://example.com' }]);
+  await ctxB.addCookies([{ name: 't', value: 'B', url: 'https://example.com' }]);
+
+  expect((await ctxA.cookies())[0].value).toBe('A');
+  expect((await ctxB.cookies())[0].value).toBe('B');
+
+  await ctxA.close();
+  await ctxB.close();
+});</pre>
+
+<div class="qa-bank">
+<h3>Module 1 — Interview Q&amp;A bank</h3>
+
+<details class="qa"><summary>Explain Playwright's architecture in one minute.</summary>
+<div class="answer">Playwright is a client–server library. Your test code uses the client (a thin language binding). Commands are sent over a persistent WebSocket to a Node.js driver, which in turn talks to each browser using its native debug protocol — Chrome DevTools Protocol for Chromium, Juggler for Firefox, the WebKit Inspector Protocol for WebKit. Because the connection is persistent and bidirectional, commands have low overhead and browser events stream back in real time, which is what lets auto-wait be precise.</div></details>
+
+<details class="qa"><summary>Why is Playwright faster than Selenium?</summary>
+<div class="answer">Three big reasons. <b>(1)</b> Persistent WebSocket vs HTTP-per-command — Selenium opens a new HTTP request for every action; Playwright reuses one socket. <b>(2)</b> Real-time events — Playwright is told when a request finishes or DOM mutates, so it doesn't poll. <b>(3)</b> BrowserContext isolation — creating an isolated session takes ~10 ms vs spawning a whole new browser in Selenium.</div></details>
+
+<details class="qa"><summary>What is CDP and why does Playwright use it?</summary>
+<div class="answer">Chrome DevTools Protocol — the same protocol Chrome's DevTools panel speaks to its browser engine. It exposes deep capabilities (DOM mutation events, network interception, input synthesis, JS evaluation in any frame) that the W3C WebDriver protocol doesn't. Playwright uses CDP directly for Chromium, and equivalent protocols for Firefox (Juggler) and WebKit.</div></details>
+
+<details class="qa"><summary>What is a BrowserContext and why does it matter?</summary>
+<div class="answer">It's an isolated "incognito profile" inside a single browser process. Each context has its own cookies, localStorage, cache, permissions and storage. Creating one is fast (~10–50 ms), so Playwright uses one context per test — that's how tests stay isolated without paying the cost of launching a new browser. Multiple contexts in the same browser also let one test simulate multiple users (e.g. seller and buyer) at the same time.</div></details>
+
+<details class="qa"><summary>How does auto-wait actually work?</summary>
+<div class="answer">For every action, Playwright runs an <em>actionability</em> loop on the target element until checks pass or the timeout expires: attached, visible, stable (not animating), enabled, and receives pointer events (hit-test). Each check re-queries the DOM, so the element reference is never stale. If timeout hits, you get a precise error like "element is not visible" — you don't have to guess.</div></details>
+
+<details class="qa"><summary>Does auto-wait wait for the page to "fully load"?</summary>
+<div class="answer">No — it waits for the <em>specific element you're acting on</em> to be actionable. Page load is a separate concept: <code class="inline">page.goto()</code> awaits <code class="inline">load</code> by default, but for SPA flows you usually wait on a meaningful element (e.g. <code class="inline">expect(page.getByText('Dashboard')).toBeVisible()</code>) or a network response (<code class="inline">page.waitForResponse</code>).</div></details>
+
+<details class="qa"><summary>Why does Playwright not need a separate driver binary?</summary>
+<div class="answer">It ships its own patched browser builds and talks to them directly over each browser's debug protocol. There's no <code class="inline">chromedriver</code> in the middle, so version-mismatch failures effectively go away — Playwright and the browser are released together.</div></details>
+
+<details class="qa"><summary>Compare Playwright and Cypress at the architecture level.</summary>
+<div class="answer">Cypress runs <em>inside</em> the browser, alongside the application, using a Node.js helper for things the browser can't do (like file system access). That makes it very fast and gives a time-travel debugger, but it constrains it to a single tab and historically the same origin. Playwright runs <em>outside</em> the browser, driving it remotely — slightly higher per-command cost, but it can drive multiple tabs, multiple origins, multiple browser engines, all in parallel.</div></details>
+
+<details class="qa"><summary>Can you have multiple pages in one BrowserContext?</summary>
+<div class="answer">Yes — every tab or popup window opened inside a context becomes a <code class="inline">Page</code>. They share cookies and storage. To capture a popup you use the promise-first pattern: <code class="inline">const [popup] = await Promise.all([context.waitForEvent('page'), page.click('a')]);</code>.</div></details>
+
+<details class="qa"><summary>How does Playwright simulate user input — JS click() or real events?</summary>
+<div class="answer">Real input events, dispatched via the browser's input API (<code class="inline">Input.dispatchMouseEvent</code> in CDP). This means hover, focus, blur, pointerdown/up all fire as a real user would cause them. Calling element.click() in JS skips most of that and can miss UI side-effects.</div></details>
+
+<details class="qa"><summary>What happens if two elements match a locator?</summary>
+<div class="answer">Playwright is in <em>strict mode</em> by default: it throws a clear error listing the matches and asking you to narrow with <code class="inline">.first()</code>, <code class="inline">.nth(n)</code>, <code class="inline">.filter()</code>, or a more specific locator. Selenium would silently pick the first match — a common flakiness source.</div></details>
+
+<details class="qa"><summary>Is Playwright synchronous or asynchronous?</summary>
+<div class="answer">Asynchronous — every command returns a <code class="inline">Promise</code> and you <code class="inline">await</code> it. This matches the underlying WebSocket protocol where commands and responses are paired by id. Python bindings additionally expose a sync API that wraps the async one for convenience.</div></details>
+
+<details class="qa"><summary>Why is creating a new BrowserContext per test better than launching a new Browser?</summary>
+<div class="answer">Speed and isolation together. Launching a browser is ~1 s (process startup, GPU init). Creating a context is ~10 ms — just allocating a fresh storage partition inside the running browser. You get full isolation (no cookies/localStorage bleed) without paying the cost on every test.</div></details>
+
+<details class="qa"><summary>How do Selenium 4 BiDi and Playwright compare?</summary>
+<div class="answer">Selenium 4 added BiDi (Bidirectional) support, which is conceptually similar to what Playwright already does — a persistent WebSocket with event streaming. It closes part of the gap but BiDi support is still maturing and not all WebDriver clients use it by default. Playwright was built around that model from day one and integrates it with auto-wait, trace viewer, and built-in test runner.</div></details>
+
+<details class="qa"><summary>What's the difference between a Page and a Frame?</summary>
+<div class="answer">A Page is a tab. A Frame is any browsing context inside a page — the main frame plus any iframes. <code class="inline">page.mainFrame()</code> gives the top frame; <code class="inline">page.frameLocator(selector)</code> gives you a locator scoped inside an iframe. You don't usually need to drop down to frame objects manually.</div></details>
+
+<details class="qa"><summary>How does Playwright handle navigation safely?</summary>
+<div class="answer">Actions that may trigger navigation (e.g. clicking a link) automatically wait for the navigation to complete to a stable state before resolving. If you need to wait for a specific URL or event, use <code class="inline">page.waitForURL</code> or pair the action with <code class="inline">page.waitForResponse</code> in a <code class="inline">Promise.all</code>.</div></details>
+
+<details class="qa"><summary>One-sentence pitch for choosing Playwright over Selenium.</summary>
+<div class="answer">"It's faster per command, more reliable per assertion, and the same code drives Chromium, Firefox and WebKit with built-in parallelism, network mocking, and a time-travel trace viewer — features that in Selenium-land are separate libraries you have to glue together yourself."</div></details>
+
+<details class="qa"><summary>What happens when you forget <code class="inline">await</code> before a Playwright action?</summary>
+<div class="answer">
+<p>Node.js fires the command and moves on to the next line <em>immediately</em>, before the browser has done anything. This leads to three common failure modes:</p>
+<ol>
+  <li><strong>Assertion on stale state</strong> — you assert before the click/fill has occurred, so the test either passes incorrectly or fails with a confusing error.</li>
+  <li><strong>Unhandled Promise rejection</strong> — if the command eventually fails (e.g. element not found), the error gets thrown after the test has already ended, polluting the next test or producing a mysterious crash.</li>
+  <li><strong>Race conditions</strong> — subsequent awaited actions may run fine, but they'll be operating on an earlier application state than you intended.</li>
+</ol>
+<p>TypeScript helps here: if you use the <code class="inline">@playwright/test</code> types, the compiler will warn you about unawaited Promises in many cases. Always <code class="inline">await</code> every call that returns a <code class="inline">Promise</code>.</p>
+<pre><span class="lang">typescript — wrong vs right</span>// WRONG — no await, test races ahead
+page.click('#submit');
+expect(page.url()).toBe('/success'); // URL hasn't changed yet!
+
+// CORRECT
+await page.click('#submit');
+await expect(page).toHaveURL('/success');</pre>
+</div></details>
+
+<details class="qa"><summary>Why does Playwright test in Chromium by default when my users use Chrome?</summary>
+<div class="answer">
+<p>Chromium and Chrome share the same rendering engine (Blink) and JavaScript engine (V8). The difference is that Chrome adds a layer of Google branding, proprietary codecs (MP4, AAC), and DRM on top. For the vast majority of web UI testing purposes, Chromium is functionally identical to Chrome.</p>
+<p>Playwright ships its own <strong>patched Chromium build</strong> specifically so it can speak CDP more reliably and get a deterministic version. If you need to run on the actual installed Chrome binary (for codec/DRM testing, or to match a specific version), you can point Playwright at it:</p>
+<pre><span class="lang">playwright.config.ts</span>use: {
+  channel: 'chrome',   // uses installed Google Chrome
+  // or:
+  channel: 'msedge',   // uses installed Edge
+}</pre>
+<p>For regression and functional testing, Chromium is preferred — it starts faster, has no auto-update surprises, and is guaranteed to match the Playwright version you installed.</p>
+</div></details>
+
+<details class="qa"><summary>What is the difference between <code class="inline">page.evaluate()</code> and a regular Playwright locator action?</summary>
+<div class="answer">
+<p>The key distinction is <strong>where the code runs</strong>:</p>
+<table>
+  <tr><th></th><th><code class="inline">page.evaluate()</code></th><th>Locator action (e.g. <code class="inline">locator.click()</code>)</th></tr>
+  <tr><td><strong>Runs in</strong></td><td>Browser JavaScript context</td><td>Node.js via CDP commands</td></tr>
+  <tr><td><strong>Auto-wait?</strong></td><td>No — executes immediately</td><td>Yes — full actionability checks</td></tr>
+  <tr><td><strong>Use case</strong></td><td>Read DOM state, call browser APIs, manipulate JS objects</td><td>Simulate real user interactions</td></tr>
+  <tr><td><strong>Flakiness risk</strong></td><td>Higher — bypasses auto-wait</td><td>Lower — built-in retry loop</td></tr>
+</table>
+<pre><span class="lang">typescript</span>// page.evaluate — runs in the browser, returns a serialisable value
+const title = await page.evaluate(() =&gt; document.title);
+
+// locator action — runs via CDP, with actionability checks
+await page.getByRole('button', { name: 'Submit' }).click();</pre>
+<p>Use <code class="inline">page.evaluate()</code> when you need to read or manipulate the DOM in a way Playwright's API doesn't expose (e.g. reading a custom property on a JS object). Prefer locator actions for everything a user would do — they're safer and more realistic.</p>
+</div></details>
+
+<details class="qa"><summary>Why do Playwright tests sometimes fail on CI but pass locally?</summary>
+<div class="answer">
+<p>This is one of the most common SDET interview traps. The causes fall into a few buckets:</p>
+<ol>
+  <li><strong>Slower machines on CI</strong> — animations, fonts, or network requests take longer, causing timeouts that never trigger on a fast laptop. Fix: increase <code class="inline">actionTimeout</code> in config, or use <code class="inline">expect(...).toBeVisible()</code> instead of hardcoded delays.</li>
+  <li><strong>Different viewport / resolution</strong> — elements that are visible on a 1920-wide monitor may be hidden behind a hamburger menu on the 1280-wide CI default. Fix: set <code class="inline">viewport</code> explicitly in config.</li>
+  <li><strong>No GPU / headless differences</strong> — some CSS animations, WebGL, or canvas rendering behaves differently in headless mode. Fix: use <code class="inline">--disable-gpu</code> flags or screenshot comparisons with generous thresholds.</li>
+  <li><strong>Race conditions with async setup</strong> — local dev server starts instantly; CI spins it up in a global setup that can be slow. Fix: use <code class="inline">webServer</code> config option with a <code class="inline">waitUntil</code> probe.</li>
+  <li><strong>Missing environment variables or secrets</strong> — test relies on a <code class="inline">.env</code> file that only exists locally. Fix: add secrets to CI environment and use <code class="inline">dotenv</code> in config.</li>
+  <li><strong>Font rendering differences</strong> — visual snapshot tests fail because Linux CI uses different fonts. Fix: use Docker with a fixed font set, or avoid pixel-perfect snapshots for text-heavy areas.</li>
+</ol>
+<p>The golden debugging approach: run with <code class="inline">--headed</code> locally to watch, and attach a <strong>Playwright trace</strong> on CI failures (<code class="inline">trace: 'on-first-retry'</code>) so you can replay every step in the Trace Viewer.</p>
+</div></details>
+
+<details class="qa"><summary>What does <code class="inline">test.use({ baseURL })</code> do and why is it useful?</summary>
+<div class="answer">
+<p><code class="inline">test.use()</code> overrides fixture values for a specific test file or <code class="inline">describe</code> block. When used with <code class="inline">baseURL</code>, it tells Playwright the root URL to prepend to relative paths passed to <code class="inline">page.goto()</code>.</p>
+<pre><span class="lang">playwright.config.ts — global default</span>use: {
+  baseURL: 'https://staging.example.com',
+}</pre>
+<pre><span class="lang">tests/admin.spec.ts — override for this file only</span>import { test, expect } from '@playwright/test';
+
+test.use({ baseURL: 'https://admin.example.com' });
+
+test('admin dashboard loads', async ({ page }) =&gt; {
+  await page.goto('/dashboard'); // resolves to https://admin.example.com/dashboard
+  await expect(page).toHaveURL(/dashboard/);
+});</pre>
+<p>Why it's useful:</p>
+<ul>
+  <li><strong>Environment switching</strong> — point your whole suite at staging vs production by changing one config value, without touching test files.</li>
+  <li><strong>Multi-domain tests</strong> — use <code class="inline">test.use()</code> per describe block to test different sub-domains (API, admin, app) without duplicating the URL in every <code class="inline">goto()</code>.</li>
+  <li><strong>Cleaner test code</strong> — relative paths (<code class="inline">'/login'</code>) are more readable and portable than absolute URLs.</li>
+</ul>
+<p>Other commonly overridden fixtures with <code class="inline">test.use()</code>: <code class="inline">viewport</code>, <code class="inline">locale</code>, <code class="inline">storageState</code>, <code class="inline">colorScheme</code>, <code class="inline">permissions</code>.</p>
+</div></details>
+</div>
+
+<h3>1.9 Playwright versioning, release cadence &amp; what's new (interview-ready)</h3>
+
+<div class="note">
+<b>Why this section matters for interviews</b>
+<p>Senior interviewers love asking "which version are you on and why?" — it surfaces whether you treat Playwright as a black box or as a dependency you actively manage. Be ready to discuss your <em>exact</em> version, your upgrade cadence, and at least 2–3 features tied to specific releases.</p>
+</div>
+
+<h4>1.9.1 Your version — 1.61.0 (Nov 2025)</h4>
+<p>Across this workspace, every Playwright project resolves <code class="inline">@playwright/test</code> to <strong>1.61.0</strong>. Some <code class="inline">package.json</code> files declare older minimums (<code class="inline">^1.43.0</code>, <code class="inline">^1.45.0</code>) but the caret allows minor/patch upgrades, so the lock files all settle on 1.61.0.</p>
+
+<pre data-lang="bash"><span class="tok-comment"># Verify quickly</span>
+npx playwright --version          <span class="tok-comment"># Version 1.61.0</span>
+npm ls @playwright/test           <span class="tok-comment"># shows resolved version</span>
+node -p "require('@playwright/test/package.json').version"</pre>
+
+<h4>1.9.2 Release cadence</h4>
+<ul>
+  <li><strong>Minor releases</strong> roughly every 4–6 weeks (1.40, 1.41, 1.42 …). Each ships features + browser-binary updates.</li>
+  <li><strong>Patch releases</strong> (1.61.x) come for bug fixes / security only — safe to take automatically.</li>
+  <li><strong>No LTS branch</strong> — Playwright doesn't backport. If you find a bug, upgrade to the latest minor or use a workaround.</li>
+  <li><strong>Browser binaries are pinned</strong> to a Playwright version. <code class="inline">npx playwright install</code> downloads the exact Chromium/Firefox/WebKit builds the library was tested against.</li>
+</ul>
+
+<h4>1.9.3 Feature timeline (memorise the headline features per version)</h4>
+<table>
+<tr><th>Version</th><th>Released</th><th>Headline features (interview-grade)</th></tr>
+<tr><td>1.30</td><td>Jan 2023</td><td><code class="inline">page.getByRole/getByLabel/...</code> stable, <code class="inline">test.step</code></td></tr>
+<tr><td>1.31</td><td>Feb 2023</td><td><strong>Project dependencies</strong> (<code class="inline">dependencies: ['setup']</code>) — replaces global setup for many use-cases</td></tr>
+<tr><td>1.32</td><td>Mar 2023</td><td><strong>UI Mode</strong> (<code class="inline">--ui</code>) — the modern dev loop</td></tr>
+<tr><td>1.35</td><td>Jun 2023</td><td><strong>Component testing</strong> for React/Vue/Svelte (experimental → stable in stages)</td></tr>
+<tr><td>1.37</td><td>Aug 2023</td><td><strong>Blob reports</strong> + <code class="inline">npx playwright merge-reports</code> — proper sharded CI reporting</td></tr>
+<tr><td>1.38</td><td>Sep 2023</td><td>UI Mode in <code class="inline">--debug</code>, <code class="inline">test.fail()</code> on <code class="inline">expect.soft</code></td></tr>
+<tr><td>1.40</td><td>Nov 2023</td><td>AI-assisted matcher suggestions in trace viewer</td></tr>
+<tr><td>1.41</td><td>Jan 2024</td><td><code class="inline">page.unroute()</code> async, network controls</td></tr>
+<tr><td>1.42</td><td>Mar 2024</td><td><code class="inline">page.addLocatorHandler()</code> — auto-dismiss surprise dialogs / cookie banners</td></tr>
+<tr><td>1.43</td><td>Apr 2024</td><td><code class="inline">APIRequestContext</code> can route requests; <code class="inline">test.step.skip()</code></td></tr>
+<tr><td>1.44</td><td>May 2024</td><td><code class="inline">expect(locator).toHaveAccessibleName/Description/Role</code></td></tr>
+<tr><td>1.45</td><td>Jul 2024</td><td>Tag-based test filtering: <code class="inline">--grep "@smoke"</code> as first-class</td></tr>
+<tr><td>1.46</td><td>Aug 2024</td><td><code class="inline">testConfig.tsconfig</code>, clock API for time-mocking (<code class="inline">page.clock</code>)</td></tr>
+<tr><td>1.47</td><td>Sep 2024</td><td><code class="inline">test.step</code> can be marked <code class="inline">box: true</code> (hides internals in trace)</td></tr>
+<tr><td>1.48</td><td>Oct 2024</td><td>WebSocket route mocking (<code class="inline">page.routeWebSocket</code>)</td></tr>
+<tr><td>1.49</td><td>Dec 2024</td><td><strong>Aria snapshots</strong> — <code class="inline">expect(locator).toMatchAriaSnapshot()</code></td></tr>
+<tr><td>1.50</td><td>Feb 2025</td><td><code class="inline">test.describe.configure({ retries: N })</code> per-block retries</td></tr>
+<tr><td>1.51</td><td>Mar 2025</td><td>Stable component testing, improved CDP-relay performance</td></tr>
+<tr><td>1.55</td><td>Aug 2025</td><td><strong>Playwright Agents &amp; MCP server</strong> — <code class="inline">npx playwright init-agents</code></td></tr>
+<tr><td>1.60</td><td>Oct 2025</td><td>Improved trace viewer, faster headless mode</td></tr>
+<tr><td><strong>1.61</strong></td><td><strong>Nov 2025</strong></td><td><strong>← Your version.</strong> Latest stable. Mature Agents/MCP, refined aria snapshots, hardened sharding</td></tr>
+</table>
+
+<h4>1.9.4 What to do <em>before</em> upgrading (the checklist)</h4>
+<ol>
+  <li><strong>Read the release notes</strong> — <code class="inline">github.com/microsoft/playwright/releases</code>. Most upgrades are zero-change; some (1.40 → 1.41) tweaked default timeouts.</li>
+  <li><strong>Match the Docker tag</strong> — bump <code class="inline">mcr.microsoft.com/playwright:v1.61.0-jammy</code> in your CI <em>and</em> the npm version in the same PR. Mismatched versions cause "works locally, breaks in CI" failures.</li>
+  <li><strong>Pin exact in CI</strong> — drop the caret: <code class="inline">"@playwright/test": "1.61.0"</code> in <code class="inline">package.json</code>. Use <code class="inline">npm ci</code>, not <code class="inline">npm install</code>.</li>
+  <li><strong>Re-run <code class="inline">npx playwright install --with-deps</code></strong> — browser binaries are version-locked.</li>
+  <li><strong>Re-record visual baselines</strong> if you have <code class="inline">toHaveScreenshot</code> snapshots — browser binaries changing pixel-shift fonts slightly is the most common silent breakage.</li>
+  <li><strong>Run on one CI shard first</strong>, not all 8 simultaneously — to spot version-incompatibility before you waste a full pipeline.</li>
+</ol>
+
+<h4>1.9.5 Common interview prompts about version (and how to answer)</h4>
+
+<details class="qa"><summary>"What Playwright version are you using and why?"</summary>
+<div class="answer">
+"<strong>1.61.0</strong>, the November 2025 stable. We pin it exactly in CI so browser binaries and library code never drift. We chose to stay on the current latest because (a) Playwright doesn't backport fixes so older versions accrue known issues, (b) features like aria snapshots and the Agents MCP server fit our roadmap, and (c) the Docker image <code class="inline">v1.61.0-jammy</code> matches our base image. We upgrade roughly every 2–3 minors after the .0 release has had two weeks in the wild — keeps us current without chasing every release."
+</div></details>
+
+<details class="qa"><summary>"How do you handle the Playwright upgrade process?"</summary>
+<div class="answer">
+"A PR that bumps three things together: <code class="inline">@playwright/test</code> in <code class="inline">package.json</code>, the Docker image tag, and re-runs <code class="inline">npx playwright install</code> in the workflow. I run the full suite on one shard first to catch breakage early. Visual snapshots get re-baselined intentionally — never blindly. The PR description links the relevant release notes so reviewers can sanity-check the diff."
+</div></details>
+
+<details class="qa"><summary>"You're on 1.61. Pick one feature you genuinely use day-to-day."</summary>
+<div class="answer">
+"<code class="inline">page.addLocatorHandler()</code> (added 1.42). We had a cookie banner that sporadically intercepted clicks on production but not staging. Instead of adding <code class="inline">if banner is visible</code> guards in every spec, I register a handler once in a fixture — Playwright auto-dismisses the banner whenever a locator action is blocked by it. Removed ~40 lines of guard code and ~12 flaky failures/week."
+</div></details>
+
+<details class="qa"><summary>"Why not use Playwright 2.0 / the newest release?"</summary>
+<div class="answer">
+"There is no Playwright 2.x — the project has stayed on 1.x semver for years to avoid unnecessary breakage. The team treats minors as the upgrade unit. As for the absolute latest minor: we wait two weeks after the .0 release so the .1 patch has shipped, which is typically when any regressions surface."
+</div></details>
+
+<details class="qa"><summary>"How do you know which features need a specific version?"</summary>
+<div class="answer">
+"Two habits. First, every Playwright doc page has a 'Since version' badge — I scan that before adopting an API. Second, the release notes are tagged on GitHub by version. For team consumption I keep a short internal doc that maps the features <em>we use</em> to their minimum version, so a junior bumping the lock file knows what's at risk."
+</div></details>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

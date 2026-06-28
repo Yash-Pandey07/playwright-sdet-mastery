@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright SDET Mastery — Open Source Ebook</title>
+  <meta name="description" content="Free, open-source Playwright SDET ebook covering 72+ modules: architecture, locators, API testing, CI/CD, system design, and interview prep for QA engineers.">
+  <meta name="keywords" content="playwright, sdet, ebook, testing, automation, open source, api testing, ci-cd, system design">
+  <meta property="og:title" content="Playwright SDET Mastery — Open Source Ebook">
+  <meta property="og:description" content="Complete Playwright SDET mastery ebook — 72+ modules, free and open source">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=" active"><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">★</span>Welcome — Ultimate SDET Ebook</h2>
+
+<p style="font-size:18px;color:var(--fg);margin-bottom:24px">
+This is a single, offline, self-contained reference for becoming a strong SDET specialising in Playwright. Every concept has explanation, code, diagram and an interview Q&amp;A bank. Open in any browser; no install required.
+</p>
+
+<div class="note" style="border-left-color:var(--green);background:rgba(126,231,135,.06);font-size:15px;line-height:1.7">
+<b style="color:var(--green)">📌 Your Playwright Version — 1.61.0</b>
+<p style="margin-top:8px">Across every project in this workspace (<code class="inline">Manual QA Test Plan</code>, <code class="inline">Playwright BDD E2E Suite</code>, <code class="inline">Playwright API Test Suite</code>, <code class="inline">Playwright Component Test Suite</code>, <code class="inline">Playwright Accessibility Test Suite</code>), the resolved <code class="inline">@playwright/test</code> version is <strong>1.61.0</strong> (released <strong>November 2025</strong>). Most <code class="inline">package.json</code> files declare <code class="inline">^1.61.0</code>, and a few legacy ones (<code class="inline">^1.43.0</code>, <code class="inline">^1.45.0</code>) still resolve up to 1.61.0 via the caret range.</p>
+
+<h4 style="margin-top:14px">Why 1.61.0 specifically?</h4>
+<table style="margin-top:6px">
+<tr><th style="width:32%">Reason</th><th>What it gives you</th></tr>
+<tr><td><strong>Stable LTS-grade release</strong></td><td>1.61 is the November-2025 stable line, well past its breaking-bug shakeout. Safe for CI and production test suites.</td></tr>
+<tr><td><strong>Project dependencies (1.31+)</strong></td><td>You can chain projects (<code class="inline">dependencies: ['setup']</code>) — used in your BDD &amp; auth-state patterns.</td></tr>
+<tr><td><strong>Blob reports + merge-reports (1.37+)</strong></td><td>Required for the <code class="inline">--shard</code> + merged HTML report flow in your GitHub Actions QA Pipeline.</td></tr>
+<tr><td><strong>UI Mode (1.32+) &amp; Trace Viewer v2</strong></td><td><code class="inline">npx playwright test --ui</code> — the dev-loop you actually use day-to-day.</td></tr>
+<tr><td><strong><code class="inline">test.step.skip</code> &amp; soft assertions (1.38+)</strong></td><td>Used in your accessibility suite to mark known-broken steps without failing the run.</td></tr>
+<tr><td><strong>Component Testing (experimental, 1.43+)</strong></td><td>Powers your <code class="inline">Playwright Component Test Suite</code> via <code class="inline">@playwright/experimental-ct-react</code>.</td></tr>
+<tr><td><strong>Locator handlers (1.42+)</strong></td><td><code class="inline">page.addLocatorHandler()</code> for auto-dismissing surprise dialogs/cookie banners.</td></tr>
+<tr><td><strong>Aria snapshots (1.49+)</strong></td><td><code class="inline">expect(locator).toMatchAriaSnapshot()</code> — feeds your accessibility-first assertion style.</td></tr>
+<tr><td><strong>Agents &amp; MCP server (1.55+)</strong></td><td><code class="inline">npx playwright init-agents</code> — wires Claude/Cursor into Playwright; matches your AI-in-Testing module.</td></tr>
+<tr><td><strong>Node.js 18+ requirement</strong></td><td>Modern async, native fetch, structuredClone — your existing Node version is already compatible.</td></tr>
+</table>
+
+<h4 style="margin-top:14px">How to verify on your machine</h4>
+<pre data-lang="bash">npx playwright --version            <span class="tok-comment"># prints: Version 1.61.0</span>
+npm ls @playwright/test             <span class="tok-comment"># shows resolved version + tree</span>
+cat node_modules/@playwright/test/package.json | grep '"version"'</pre>
+
+<h4 style="margin-top:14px">Upgrade guidance for interviews</h4>
+<ul>
+  <li><strong>Pin in CI</strong> — <code class="inline">"@playwright/test": "1.61.0"</code> (exact, no caret) so CI is reproducible and browser binaries match.</li>
+  <li><strong>Match the Docker image</strong> — <code class="inline">mcr.microsoft.com/playwright:v1.61.0-jammy</code>. Mismatch between library version and image is the #1 cause of CI-only failures.</li>
+  <li><strong>Always run <code class="inline">npx playwright install --with-deps</code> after a version bump</strong> — browser binaries are version-locked to the library.</li>
+  <li><strong>Read the release notes</strong> before each bump — <a href="https://github.com/microsoft/playwright/releases" style="color:var(--accent)">github.com/microsoft/playwright/releases</a>.</li>
+</ul>
+</div>
+
+<div class="tip" style="font-size:15px;line-height:1.7">
+<b>How to use this book</b>
+<ol style="margin-top:10px">
+  <li><strong>Left sidebar</strong> is grouped by category. Click any topic to jump.</li>
+  <li><strong>Search box</strong> at the top of the sidebar filters topics by keyword.</li>
+  <li><strong>Q&amp;A blocks</strong> are collapsible — try to answer in your head before opening the answer.</li>
+  <li><strong>Code blocks</strong> are syntax-highlighted offline; copy-paste freely.</li>
+  <li><strong>Bookmark</strong> the page in your browser (Cmd/Ctrl+D). It works without internet.</li>
+</ol>
+</div>
+
+<h3>Suggested reading paths</h3>
+
+<div class="cmp">
+<div class="col">
+<h5>Path A · Beginner → Job-ready (8–12 weeks)</h5>
+<ol>
+<li>Manual Testing Foundations (24)</li>
+<li>JavaScript Masterclass (18)</li>
+<li>TypeScript Crash Course (19)</li>
+<li>Playwright Architecture (1)</li>
+<li>Locators &amp; UI (2) + Playground (11)</li>
+<li>Fixtures &amp; Config (3)</li>
+<li>Network &amp; Advanced (4)</li>
+<li>API Testing (5) + HTTP Codes (25) + Postman (17)</li>
+<li>CI/CD (8) + Flakiness (32)</li>
+<li>DB Testing (7)</li>
+<li>Behavioral (10) + Coding Round (9)</li>
+<li>Interview by Experience (33) + Cheat Sheet (34)</li>
+</ol>
+</div>
+<div class="col">
+<h5>Path B · Senior / 5+ years interview prep (2–3 weeks)</h5>
+<ol>
+<li>Architecture (1) — be sharp on internals</li>
+<li>Locators / Strict / Narrowing (2)</li>
+<li>Fixtures (3) + Architecture (20)</li>
+<li>API Chaining (12) + REST Assured (6)</li>
+<li>System Design (26) — the differentiator</li>
+<li>Test Data Management (31)</li>
+<li>BDD/Cucumber (27) + AI testing (28)</li>
+<li>Cloud Execution (29)</li>
+<li>Flakiness deep-dive (32)</li>
+<li>Extended Coding Round (23)</li>
+<li>Interview Q&amp;A by Experience (33)</li>
+<li>Behavioral &amp; Scenario (10)</li>
+</ol>
+</div>
+</div>
+
+<div class="cmp">
+<div class="col">
+<h5>Path C · Already-know-Playwright, going broad</h5>
+<ol>
+<li>API Chaining (12)</li>
+<li>Visual (13) + A11y (14) + Performance (15) + Mobile (16)</li>
+<li>Popups deep-dive (22)</li>
+<li>Postman (17) + HTTP Codes (25)</li>
+<li>AI &amp; MCP (28)</li>
+<li>System Design (26)</li>
+</ol>
+</div>
+<div class="col">
+<h5>Path D · Coding round only</h5>
+<ol>
+<li>Coding Round (9) — patterns + 12 problems</li>
+<li>Extended Coding Round (23) — 24 more problems</li>
+<li>JavaScript (18) — language pitfalls in interviews</li>
+<li>TypeScript (19) — types for solutions</li>
+<li>Behavioral (10) — soft skill</li>
+</ol>
+</div>
+</div>
+
+<h3>What's in this book (full index)</h3>
+
+<table>
+<tr><th>#</th><th>Module</th><th>What it covers</th></tr>
+<tr><td>★</td><td>Home</td><td>This page — orientation + reading paths</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">PLAYWRIGHT CORE</td></tr>
+<tr><td>1</td><td>Architecture &amp; Internals</td><td>Client–server, CDP vs WebDriver, Browser/Context/Page, auto-wait</td></tr>
+<tr><td>2</td><td>Locators &amp; UI Testing</td><td>All locators, strict mode, narrowing, every UI interaction, web-first assertions</td></tr>
+<tr><td>3</td><td>Fixtures, Parallelism, Config</td><td>Custom fixtures, workers, storageState, projects, full config</td></tr>
+<tr><td>4</td><td>Network &amp; Advanced</td><td>page.route, mocking, HAR, Trace Viewer, debugging tools</td></tr>
+<tr><td>11</td><td>Locator Playground</td><td>Interactive — paste HTML, try locators live</td></tr>
+<tr><td>13</td><td>Visual Regression</td><td>toHaveScreenshot, baselines, masking, CI diffs</td></tr>
+<tr><td>14</td><td>Accessibility Testing</td><td>axe-core, role checks, keyboard, CI gating</td></tr>
+<tr><td>15</td><td>Performance Testing</td><td>Web Vitals, Lighthouse, throttling, budgets</td></tr>
+<tr><td>16</td><td>Mobile &amp; Device Emulation</td><td>Profiles, touch, geo, orientation, dark mode</td></tr>
+<tr><td>22</td><td>Popups, Alerts, Windows</td><td>Every event, dialog edge cases, tab-with-waiting-alert</td></tr>
+<tr><td>34</td><td>Playwright Cheat Sheet</td><td>Quick reference of all APIs</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">API &amp; BACKEND</td></tr>
+<tr><td>5</td><td>API Testing</td><td>REST principles, APIRequestContext, schema, hybrid tests</td></tr>
+<tr><td>6</td><td>REST Assured (Java)</td><td>Given/When/Then, JSONPath, OAuth, POJO, vs Playwright</td></tr>
+<tr><td>12</td><td>API Chaining</td><td>Sequential vs DAG chains, fixtures, cleanup, idempotency</td></tr>
+<tr><td>17</td><td>Postman Deep-Dive</td><td>Every auth type, JWT, OAuth1 vs OAuth2, Newman, mocks</td></tr>
+<tr><td>25</td><td>HTTP Status Codes</td><td>Every 1xx-5xx, headers, methods, caching, idempotency</td></tr>
+<tr><td>7</td><td>Database Testing</td><td>JDBC, Node pg, SQL essentials, data integrity assertions</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">LANGUAGES</td></tr>
+<tr><td>18</td><td>JavaScript Masterclass</td><td>Scope, closures, this, event loop, async, modules, pitfalls</td></tr>
+<tr><td>19</td><td>TypeScript Crash Course</td><td>Types, generics, narrowing, utility types, tsconfig</td></tr>
+<tr><td>21</td><td>Playwright with Python</td><td>Sync/async API, pytest fixtures, parity with TS</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">CI / DEVOPS / CLOUD</td></tr>
+<tr><td>8</td><td>CI/CD with GitHub Actions</td><td>Full pipeline, sharding, caching, artifacts, retries</td></tr>
+<tr><td>29</td><td>Cloud Execution &amp; BrowserStack</td><td>Remote runners, cloud parallelism, cross-device farms</td></tr>
+<tr><td>32</td><td>Flakiness: Local vs CI</td><td>Diagnostic playbook — why tests pass locally and fail on CI</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">SDET FOUNDATIONS</td></tr>
+<tr><td>24</td><td>Manual Testing Foundations</td><td>SDLC/STLC, test types, defect lifecycle, agile testing</td></tr>
+<tr><td>30</td><td>Left-Shift &amp; Right-Shift</td><td>Shift-left in dev, contract tests, prod observability</td></tr>
+<tr><td>31</td><td>Test Data Management</td><td>Strategies, synthetic data, PII masking, env separation</td></tr>
+<tr><td>20</td><td>Test Automation Architecture</td><td>Framework layers, POM, patterns, anti-patterns</td></tr>
+<tr><td>26</td><td>SDET System Design</td><td>Designing a test platform end-to-end</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">ADVANCED &amp; MODERN</td></tr>
+<tr><td>27</td><td>BDD with Cucumber</td><td>Gherkin, steps, hooks, Cucumber + Playwright</td></tr>
+<tr><td>28</td><td>AI in Testing · MCP · Agents</td><td>LLM testing, MCP, Playwright Agents, AI-assisted authoring</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">INTERVIEW PREP</td></tr>
+<tr><td>9</td><td>Coding Round (DSA)</td><td>Patterns + 12 worked TS problems with explanations</td></tr>
+<tr><td>23</td><td>Extended Coding Round</td><td>24 more problems including SDET-flavoured (debounce, retry, deep-equal)</td></tr>
+<tr><td>10</td><td>Behavioral &amp; Scenario</td><td>OOP-in-POM, flaky-test answers, "how would you test X"</td></tr>
+<tr><td>33</td><td>Interview Q&amp;A by Experience</td><td>1y / 3y / 5y / 8y questions tiered with answers</td></tr>
+<tr><td>35</td><td>Final Review &amp; Gaps</td><td>Self-review notes, what's missing, where to go next</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">DEEP-DIVES &amp; EXTRAS</td></tr>
+<tr><td>36</td><td>Blockchain &amp; DLT</td><td>Bitcoin, Ethereum, EVM, smart contracts, ERC standards, testing dApps</td></tr>
+<tr><td>37</td><td>DSA Fundamentals</td><td>Complexity, data structures, sorting, recursion, DP</td></tr>
+<tr><td>38</td><td>System Design Fundamentals</td><td>Scaling, sharding, caching, CAP, queues, consistency</td></tr>
+<tr><td>39</td><td>Mocking Strategies</td><td>Mock vs stub vs fake vs spy, network/DB/time mocking</td></tr>
+<tr><td>40</td><td>Reporting &amp; Observability</td><td>All reporters, dashboards, KPIs</td></tr>
+<tr><td>41</td><td>Git for SDETs</td><td>Branches, rebase, bisect, stash, hooks</td></tr>
+<tr><td>42</td><td>XPath Deep-Dive Practice</td><td>Every axis, function, edge case with code</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">OTHER TOOLS &amp; FRAMEWORKS</td></tr>
+<tr><td>43</td><td>Selenium WebDriver</td><td>Architecture, Selenium 4, locators, waits, Grid</td></tr>
+<tr><td>44</td><td>Java for SDET</td><td>OOP, collections, generics, streams, threading</td></tr>
+<tr><td>45</td><td>Cypress (full)</td><td>In-browser architecture, cy.intercept, cy.session</td></tr>
+<tr><td>46</td><td>Appium / Mobile Native</td><td>UiAutomator2, XCUITest, gestures, contexts</td></tr>
+<tr><td>47</td><td>Karate Framework</td><td>Feature-file API testing, match operator, parallel</td></tr>
+<tr><td>48</td><td>GraphQL &amp; gRPC Testing</td><td>Queries, mutations, schemas, Protobuf, grpcurl</td></tr>
+<tr><td>49</td><td>Contract Testing (Pact)</td><td>Consumer-driven contracts, broker, can-i-deploy</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">INFRA &amp; PERFORMANCE</td></tr>
+<tr><td>50</td><td>Docker for Testing</td><td>Containers, Dockerfile, compose, Testcontainers</td></tr>
+<tr><td>51</td><td>Linux &amp; Shell for SDET</td><td>find, grep, sed, awk, processes, ssh, scripting</td></tr>
+<tr><td>52</td><td>Kubernetes for Testers</td><td>Pods, services, jobs, helm, port-forward</td></tr>
+<tr><td>53</td><td>Security Testing (OWASP)</td><td>Top 10, XSS, SQLi, CSRF, ZAP, Burp, sqlmap</td></tr>
+<tr><td>54</td><td>JMeter</td><td>Thread groups, load profiles, CSV, distributed runs</td></tr>
+<tr><td>55</td><td>k6 &amp; Gatling (full)</td><td>Modern load testing, scenarios, thresholds</td></tr>
+<tr><td>56</td><td>Microservices &amp; Kafka Testing</td><td>Event-driven flows, schema registry, idempotency</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">FRAMEWORKS &amp; STACK</td></tr>
+<tr><td>57</td><td>Vitest</td><td>Modern unit testing, mocks, fake timers, snapshots</td></tr>
+<tr><td>58</td><td>Jira for SDET</td><td>Issue hierarchy, bug reports, JQL, sprints</td></tr>
+<tr><td>59</td><td>React for SDET</td><td>Hooks, reconciliation, RTL, common bugs</td></tr>
+<tr><td>60</td><td>Node.js for SDET</td><td>Event loop, modules, async, Express, workers</td></tr>
+<tr><td>61</td><td>Next.js for SDET</td><td>App Router, Server Components, Server Actions</td></tr>
+<tr><td>62</td><td>Jenkins</td><td>Pipelines, agents, credentials, shared libraries</td></tr>
+<tr><td>63</td><td>MongoDB</td><td>Documents, queries, aggregation, indexes</td></tr>
+<tr><td>64</td><td>Allure Reports (deep)</td><td>Annotations, history, categories, hosting</td></tr>
+<tr><td>65</td><td>Chaos Engineering</td><td>Failure injection, steady-state, game days</td></tr>
+<tr><td>66</td><td>OpenTelemetry &amp; Grafana</td><td>Logs/metrics/traces, OTLP, SLO/SLI/error budget</td></tr>
+
+<tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">PRO MASTERY</td></tr>
+<tr><td>67</td><td>DSA Pro (complete)</td><td>Full algorithm code, all patterns, sort/search/strings/graphs/DP/backtracking/greedy/bits/math/geometry, 50+ problems</td></tr>
+<tr><td>68</td><td>System Design Pro (complete)</td><td>Building blocks deep, DB internals, distributed systems, networking, 15+ end-to-end designs, real-world case studies, 40+ Q&amp;A</td></tr>
+</table>
+
+<h3>Pro tips while you read</h3>
+<ul>
+<li><strong>Don't speed-read.</strong> The Q&amp;A blocks are the most interview-relevant content — try to answer before opening.</li>
+<li><strong>Code every example.</strong> Set up a tiny Playwright project, paste and run. Concepts don't stick from reading alone.</li>
+<li><strong>Skip what you know.</strong> The book is reference, not a course. Jump to the gaps.</li>
+<li><strong>Re-read after first interview.</strong> Things that felt theoretical the first time make sense once you've been asked them live.</li>
+<li><strong>Pick one path</strong> from above. Don't try to read top-to-bottom; you'll drown.</li>
+</ul>
+
+<div class="note"><b>Honest scope note</b>This book covers the most common Playwright-SDET interview surface area for 1–8 years experience. It will NOT make you an expert in every technology mentioned (REST Assured, Cucumber, Lighthouse, BrowserStack) — for those, you'd take a dedicated deep-dive. It WILL give you enough to discuss them intelligently in interviews and decide where to invest further.</div>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+</body>
+</html>

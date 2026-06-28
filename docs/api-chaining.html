@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Chaining | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn API Chaining — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, api-chaining, testing, automation, playwright api chaining">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="API Chaining — Playwright SDET">
+  <meta property="og:description" content="Learn API Chaining — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/api-chaining.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="API Chaining">
+  <meta name="twitter:description" content="Learn API Chaining — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/api-chaining.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=" active"><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">12</span>API Chaining</h2>
+
+<div class="toc">
+<h4>What you will master here</h4>
+<ul>
+<li>What "chaining" means and when interviewers ask about it</li>
+<li>Sequential (linear) chains: A → B → C, passing ids forward</li>
+<li>DAG / tree chains: one parent forks into parallel children</li>
+<li>State holders: in-test variables vs fixtures vs context objects</li>
+<li>Cleanup ordering (LIFO — reverse of creation)</li>
+<li>Negative chains: failure in step N skips N+1</li>
+<li>Common pitfalls and idempotency keys</li>
+</ul>
+</div>
+
+<h3>12.1 What is API chaining?</h3>
+<p>Most real backend flows are a <strong>sequence of dependent calls</strong>: create a resource, take its id, use it in the next call. Each step depends on data produced by an earlier step. An "API chain test" is a single test that exercises that sequence end-to-end at the API layer (no UI).</p>
+
+<p>Example chain:</p>
+<ol>
+<li>POST /users → returns <code class="inline">{ id, email }</code></li>
+<li>POST /users/{id}/cart/items → returns <code class="inline">{ cartId, items }</code></li>
+<li>POST /orders with <code class="inline">{ cartId }</code> → returns <code class="inline">{ orderId, status: 'pending' }</code></li>
+<li>POST /orders/{orderId}/pay → returns <code class="inline">{ status: 'paid' }</code></li>
+<li>GET /orders/{orderId} → final assertion: status is paid, total correct</li>
+</ol>
+
+<h3>12.2 Sequential (linear) chain</h3>
+<div class="diagram">
+<svg viewBox="0 0 760 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <g font-size="11" fill="#e6edf3">
+    <rect x="20"  y="40" width="120" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="80"  y="62" text-anchor="middle">POST /users</text>
+    <text x="80"  y="80" text-anchor="middle" fill="#9da7b3">→ userId</text>
+    <rect x="170" y="40" width="120" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="230" y="62" text-anchor="middle">POST /cart</text>
+    <text x="230" y="80" text-anchor="middle" fill="#9da7b3">uses userId → cartId</text>
+    <rect x="320" y="40" width="120" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="380" y="62" text-anchor="middle">POST /orders</text>
+    <text x="380" y="80" text-anchor="middle" fill="#9da7b3">uses cartId → orderId</text>
+    <rect x="470" y="40" width="120" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="530" y="62" text-anchor="middle">POST /pay</text>
+    <text x="530" y="80" text-anchor="middle" fill="#9da7b3">uses orderId</text>
+    <rect x="620" y="40" width="120" height="50" rx="6" fill="#1f2630" stroke="#7ee787"/>
+    <text x="680" y="62" text-anchor="middle">GET /orders</text>
+    <text x="680" y="80" text-anchor="middle" fill="#9da7b3">verify state</text>
+    <line x1="140" y1="65" x2="170" y2="65" stroke="#58a6ff" marker-end="url(#arr6)"/>
+    <line x1="290" y1="65" x2="320" y2="65" stroke="#58a6ff" marker-end="url(#arr6)"/>
+    <line x1="440" y1="65" x2="470" y2="65" stroke="#58a6ff" marker-end="url(#arr6)"/>
+    <line x1="590" y1="65" x2="620" y2="65" stroke="#58a6ff" marker-end="url(#arr6)"/>
+  </g>
+</svg>
+<div class="caption">Figure 9 — Linear chain: each step takes a value the previous step produced.</div>
+</div>
+
+<pre data-lang="ts">test('full checkout chain', async ({ request }) =&gt; {
+  // 1. Create user
+  const user = await (await request.post('/api/users', {
+    data: { email: `qa+${Date.now()}@test.com`, password: 'p4ssw0rd' },
+  })).json();
+  expect(user.id).toBeTruthy();
+
+  // 2. Login → token (depends on user.email)
+  const login = await (await request.post('/api/auth/login', {
+    data: { email: user.email, password: 'p4ssw0rd' },
+  })).json();
+  const auth = { Authorization: `Bearer ${login.token}` };
+
+  // 3. Add item to cart (depends on user + token)
+  const cart = await (await request.post(`/api/users/${user.id}/cart/items`, {
+    headers: auth,
+    data: { sku: 'SHOE-42', qty: 1 },
+  })).json();
+  expect(cart.items).toHaveLength(1);
+
+  // 4. Create order (depends on cart.id)
+  const order = await (await request.post('/api/orders', {
+    headers: auth, data: { cartId: cart.id },
+  })).json();
+  expect(order.status).toBe('pending');
+
+  // 5. Pay (depends on order.id)
+  await request.post(`/api/orders/${order.id}/pay`, {
+    headers: auth, data: { method: 'card', token: 'tok_test' },
+  });
+
+  // 6. Verify final state
+  const final = await (await request.get(`/api/orders/${order.id}`, { headers: auth })).json();
+  expect(final.status).toBe('paid');
+  expect(final.total).toBe(99.00);
+});</pre>
+
+<h3>12.3 DAG / tree chain — one parent, many children</h3>
+<p>Sometimes the chain isn't linear. A single creation step produces an id that's used by several independent follow-ups. Run them in parallel for speed.</p>
+
+<div class="diagram">
+<svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <g font-size="11" fill="#e6edf3">
+    <rect x="320" y="20" width="140" height="50" rx="6" fill="#1f2630" stroke="#ffa657" stroke-width="2"/>
+    <text x="390" y="42" text-anchor="middle" font-weight="700">POST /users</text>
+    <text x="390" y="60" text-anchor="middle" fill="#9da7b3">→ userId</text>
+
+    <rect x="40"  y="110" width="160" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="120" y="132" text-anchor="middle">POST /users/:id/addresses</text>
+    <rect x="220" y="110" width="160" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="300" y="132" text-anchor="middle">POST /users/:id/cards</text>
+    <rect x="400" y="110" width="160" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="480" y="132" text-anchor="middle">POST /users/:id/cart</text>
+    <rect x="580" y="110" width="160" height="50" rx="6" fill="#1f2630" stroke="#58a6ff"/>
+    <text x="660" y="132" text-anchor="middle">GET /users/:id/profile</text>
+
+    <line x1="380" y1="70" x2="180" y2="110" stroke="#58a6ff" marker-end="url(#arr7)"/>
+    <line x1="390" y1="70" x2="290" y2="110" stroke="#58a6ff" marker-end="url(#arr7)"/>
+    <line x1="400" y1="70" x2="450" y2="110" stroke="#58a6ff" marker-end="url(#arr7)"/>
+    <line x1="410" y1="70" x2="620" y2="110" stroke="#58a6ff" marker-end="url(#arr7)"/>
+
+    <rect x="240" y="180" width="280" height="32" rx="6" fill="#1f2630" stroke="#7ee787"/>
+    <text x="380" y="200" text-anchor="middle" fill="#7ee787" font-weight="700">JOIN — verify combined state</text>
+  </g>
+</svg>
+<div class="caption">Figure 10 — DAG chain: parent creates id, children run in parallel, all join for the final assertion.</div>
+</div>
+
+<pre data-lang="ts">test('user onboarding fans out then joins', async ({ request }) =&gt; {
+  // 1. Parent step
+  const user = await (await request.post('/api/users', {
+    data: { email: `qa+${Date.now()}@test.com` },
+  })).json();
+  const headers = { Authorization: `Bearer ${user.token}` };
+
+  // 2. Parallel children — independent of each other, all depend on user.id
+  const [addr, card, cart] = await Promise.all([
+    request.post(`/api/users/${user.id}/addresses`, { headers, data: { line1: '1 Test St', city: 'BLR' } }),
+    request.post(`/api/users/${user.id}/cards`,     { headers, data: { token: 'tok_test_visa' } }),
+    request.post(`/api/users/${user.id}/cart`,      { headers, data: { items: [{ sku: 'A', qty: 2 }] } }),
+  ]);
+  expect(addr.status()).toBe(201);
+  expect(card.status()).toBe(201);
+  expect(cart.status()).toBe(201);
+
+  // 3. Join — verify the combined state
+  const profile = await (await request.get(`/api/users/${user.id}/profile`, { headers })).json();
+  expect(profile.addresses).toHaveLength(1);
+  expect(profile.paymentMethods).toHaveLength(1);
+  expect(profile.cart.items).toHaveLength(1);
+});</pre>
+
+<div class="tip"><b>Why parallelise children</b>If three calls each take 200 ms, serial takes 600 ms; parallel takes 200 ms. For a suite of 50 tests that's a ~20-second win per run.</div>
+
+<h3>12.4 Holding state across the chain</h3>
+
+<h4>(a) In-test variables — simplest</h4>
+<p>Already shown above. Good for a single-test chain. Variables (<code class="inline">user</code>, <code class="inline">cart</code>, <code class="inline">order</code>) flow top to bottom.</p>
+
+<h4>(b) Fixture-based — shared across tests</h4>
+<p>If the chain produces state needed by multiple tests, lift it into a fixture so the runner builds it once and tears it down once.</p>
+
+<pre data-lang="ts">export const test = base.extend&lt;{
+  paidOrder: { orderId: string; userId: string; token: string };
+}&gt;({
+  paidOrder: async ({ request }, use) =&gt; {
+    /* setup chain */
+    const u = await (await request.post('/api/users', { data: {/* ... */} })).json();
+    const c = await (await request.post(`/api/users/${u.id}/cart`, { data: {/* ... */} })).json();
+    const o = await (await request.post('/api/orders', { data: { cartId: c.id } })).json();
+    await request.post(`/api/orders/${o.id}/pay`, { data: { method: 'card' } });
+    await use({ orderId: o.id, userId: u.id, token: u.token });
+    /* teardown — reverse order */
+    await request.delete(`/api/orders/${o.id}`);
+    await request.delete(`/api/users/${u.id}`);
+  },
+});
+
+test('refund a paid order', async ({ request, paidOrder }) =&gt; {
+  const r = await request.post(`/api/orders/${paidOrder.orderId}/refund`, {
+    headers: { Authorization: `Bearer ${paidOrder.token}` },
+  });
+  expect(r.status()).toBe(200);
+});</pre>
+
+<h4>(c) Context-object pattern — readable for long chains</h4>
+<p>For chains with 8+ steps, accumulate state in one object so the flow reads as steps acting on shared state.</p>
+<pre data-lang="ts">type Ctx = { userId?: string; token?: string; cartId?: string; orderId?: string };
+
+async function step1(ctx: Ctx, request: APIRequestContext) {
+  const u = await (await request.post('/api/users', { data: {/* ... */} })).json();
+  ctx.userId = u.id; ctx.token = u.token;
+}
+async function step2(ctx: Ctx, request: APIRequestContext) {
+  const c = await (await request.post(`/api/users/${ctx.userId}/cart`, {
+    headers: { Authorization: `Bearer ${ctx.token}` }, data: {/* ... */}
+  })).json();
+  ctx.cartId = c.id;
+}
+/* ...stepN... */
+
+test('long checkout chain', async ({ request }) =&gt; {
+  const ctx: Ctx = {};
+  await step1(ctx, request);
+  await step2(ctx, request);
+  /* ... */
+  expect(ctx.orderId).toBeTruthy();
+});</pre>
+
+<h3>12.5 Cleanup ordering — LIFO</h3>
+<p>Created in order A → B → C → D. Delete in order D → C → B → A. Foreign keys often require it; ignoring causes 409 Conflict.</p>
+
+<pre data-lang="ts">test('chain with proper teardown', async ({ request }) =&gt; {
+  const created: { url: string }[] = [];
+  try {
+    const u  = await postAndTrack(request, '/api/users',  { /* ... */ }, created);
+    const c  = await postAndTrack(request, `/api/users/${u.id}/cart`, { /* ... */ }, created);
+    const o  = await postAndTrack(request, '/api/orders', { cartId: c.id }, created);
+    expect(o.status).toBe('pending');
+  } finally {
+    /* reverse-order delete; ignore individual failures so we attempt all */
+    for (const { url } of created.reverse()) {
+      try { await request.delete(url); } catch {}
+    }
+  }
+});
+
+async function postAndTrack(request: APIRequestContext, url: string, data: any, list: any[]) {
+  const r = await request.post(url, { data });
+  const body = await r.json();
+  list.push({ url: `${url}/${body.id}` });
+  return body;
+}</pre>
+
+<h3>12.6 Negative chains — fail fast on intermediate failure</h3>
+<p>If step 2 fails, step 3 has nothing to act on. Assertions on each step make the test stop at the right place with a clear message — instead of confusing cascading failures three steps later.</p>
+
+<pre data-lang="ts">test('failure surfaces at the right step', async ({ request }) =&gt; {
+  const user = await (await request.post('/api/users', { data: { email: 'qa@test.com' } })).json();
+  expect(user.id, 'user creation failed').toBeTruthy();
+
+  const dup = await request.post('/api/users', { data: { email: 'qa@test.com' } });
+  expect(dup.status(), 'expected 409 on duplicate email').toBe(409);
+  /* No further steps — they'd be meaningless */
+});</pre>
+
+<div class="tip"><b>Custom message in expect</b><code class="inline">expect(value, 'message').toBe(x)</code> attaches a label to the assertion. Saves debug time on long chains.</div>
+
+<h3>12.7 Idempotency keys — chain safety</h3>
+<p>If the chain retries on a transient error and you POST twice, you don't want two orders. Send an <code class="inline">Idempotency-Key</code> header; the server returns the same response for retries with the same key.</p>
+
+<pre data-lang="ts">const key = crypto.randomUUID();
+const first  = await request.post('/api/orders', { data, headers: { 'Idempotency-Key': key } });
+const second = await request.post('/api/orders', { data, headers: { 'Idempotency-Key': key } });
+expect(second.status()).toBe(first.status());
+expect((await second.json()).id).toBe((await first.json()).id);   // same order, not duplicate</pre>
+
+<h3>12.8 Common pitfalls</h3>
+<ul>
+<li><strong>Forgetting to await</strong> — POST returns a Response promise; you must await it AND its <code class="inline">.json()</code>.</li>
+<li><strong>Reusing data across tests</strong> — chain A leaves a half-built record; chain B sees it and behaves differently. Always create fresh, clean up.</li>
+<li><strong>Hardcoded ids</strong> — never hardcode <code class="inline">/users/42</code>. Always derive from the previous step.</li>
+<li><strong>No timeout on the whole chain</strong> — set a per-test timeout (<code class="inline">test.setTimeout(60_000)</code>) for long chains to avoid silent stalls.</li>
+<li><strong>Missing intermediate assertions</strong> — if every step succeeds quietly and only the last assertion runs, a failure in step 3 leaves you bisecting. Assert each step's success.</li>
+</ul>
+
+<h3>12.9 Chain vs single test — what to pick</h3>
+<table>
+<tr><th>Concern</th><th>Single test with chain</th><th>Many small tests + fixtures</th></tr>
+<tr><td>Speed</td><td>One test, one setup</td><td>Fixture builds once per worker, shared</td></tr>
+<tr><td>Failure clarity</td><td>Long step list, may bisect</td><td>Each step is its own test, names the failing piece</td></tr>
+<tr><td>Reuse of state</td><td>Recreated every test</td><td>Cached in fixture, reused</td></tr>
+<tr><td>Best for</td><td>End-to-end happy path (one test, full journey)</td><td>Variations on the same setup (refund, cancel, modify all need a paid order)</td></tr>
+</table>
+
+<div class="qa-bank">
+<h3>Module 12 — Interview Q&amp;A bank</h3>
+
+<details class="qa"><summary>What does "API chaining" mean?</summary>
+<div class="answer">Running a sequence of HTTP calls where each call uses data produced by the previous one — typically ids returned from create endpoints. The whole sequence is exercised as one test (or as a fixture) to validate the end-to-end backend flow.</div></details>
+
+<details class="qa"><summary>Is API chaining sequential or tree-structured?</summary>
+<div class="answer">Both, depending on the flow. Sequential (linear) when each step depends on the immediate previous one (login → fetch → update). Tree/DAG when one step produces an id that several independent follow-ups use (create user → in parallel: add address, add card, build cart → join: verify profile). Use <code class="inline">Promise.all</code> for the parallel branch to save wall-clock time.</div></details>
+
+<details class="qa"><summary>How do you pass data between steps?</summary>
+<div class="answer">Three patterns. (1) Local variables in one test — simplest. (2) A fixture that runs the chain in setup and exposes the resulting state — best when multiple tests share the state. (3) A typed context object accumulated step by step — readable for very long chains.</div></details>
+
+<details class="qa"><summary>Why is teardown order important?</summary>
+<div class="answer">Resources have foreign-key dependencies. Deleting a user before deleting its orders typically fails with 409 Conflict. Always teardown in LIFO order — reverse of creation — so child resources are removed before their parents.</div></details>
+
+<details class="qa"><summary>What should happen when step 3 of a 6-step chain fails?</summary>
+<div class="answer">The test should fail at step 3 with a clear message identifying that step — not silently let later steps run on bad data and fail confusingly. Add an explicit <code class="inline">expect</code> after each step, with a meaningful message via the second arg to expect.</div></details>
+
+<details class="qa"><summary>What's an idempotency key and why does it matter in a chain?</summary>
+<div class="answer">A unique value (often UUID) sent in a header on POST. The server caches the response under that key; retries with the same key return the cached response instead of creating a duplicate resource. Lets your test safely retry a transient failure mid-chain.</div></details>
+
+<details class="qa"><summary>Should every chain step be its own test?</summary>
+<div class="answer">No — that fights the test runner's isolation model. Keep the chain in one test (or one fixture). If you want different variations of the final state validated, build the state in a shared fixture and write small tests against it.</div></details>
+
+<details class="qa"><summary>How do you parallelise a chain?</summary>
+<div class="answer">Inside the chain: wherever multiple steps are independent (all depend on the same parent id but not on each other), use <code class="inline">await Promise.all([...])</code>. Across tests: each test runs in its own context — Playwright already parallelises them across workers.</div></details>
+
+<details class="qa"><summary>How do you handle a chain that includes a webhook callback?</summary>
+<div class="answer">Trigger the action, then poll the resulting state with <code class="inline">expect.poll</code> for up to a few seconds until the webhook has been processed. Alternatively, expose a test-only endpoint that synchronously processes the webhook to remove the async wait.</div></details>
+
+<details class="qa"><summary>Where do you draw the line between API chain test and E2E UI test?</summary>
+<div class="answer">API chains validate backend correctness and contract end-to-end. E2E UI tests validate user journeys including rendering, navigation, browser-specific behaviour. Use both — keep one happy-path E2E for the user journey, lots of API chains for backend permutations.</div></details>
+
+<details class="qa"><summary>What's wrong with hardcoded ids like /users/42 in a chain?</summary>
+<div class="answer">The id may not exist in fresh environments (CI), or may be owned by a different test. Always derive ids from the previous step's response. If you need stable seed data, create it via the API at the start of the chain.</div></details>
+
+<details class="qa"><summary>How do you debug a long chain that fails intermittently?</summary>
+<div class="answer">Log each step's request and response (URL, status, key body fields). Add intermediate assertions with messages. Capture timings — slow upstream services can race the next call. If a webhook is involved, switch to <code class="inline">expect.poll</code> instead of fixed waits.</div></details>
+
+<details class="qa"><summary>Can a chain be expressed declaratively (data-driven)?</summary>
+<div class="answer">Yes — a JSON file listing steps (method, url template, body template, capture rules for ids). A small runner walks the list, substituting captured ids into templates. Useful when QA non-engineers maintain chains. Trade-off: harder to debug than plain TypeScript.</div></details>
+
+<details class="qa"><summary>How does Postman's "tests + variables" compare to a Playwright chain?</summary>
+<div class="answer">Same idea — Postman collections chain requests and capture values into variables. Playwright gives you full TS, real assertions, the same fixtures and parallelism as your UI tests, and reuses your team's code-review/CI pipeline. Postman wins for ad-hoc exploration and non-engineer collaboration.</div></details>
+
+<details class="qa"><summary>If two chains can collide on shared data, how do you isolate them?</summary>
+<div class="answer">Per-test seeding — create a fresh user/account/tenant at the start of each chain, never share. If you must share (slow seed), use a worker-scoped fixture so each worker has its own copy.</div></details>
+</div>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

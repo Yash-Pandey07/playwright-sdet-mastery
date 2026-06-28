@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Design Pro (complete) | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn System Design Pro (complete) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, system-design-pro, testing, automation, playwright system design pro complete ">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="System Design Pro (complete) — Playwright SDET">
+  <meta property="og:description" content="Learn System Design Pro (complete) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/system-design-pro.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="System Design Pro (complete)">
+  <meta name="twitter:description" content="Learn System Design Pro (complete) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/system-design-pro.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=" active"><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">68</span>System Design Pro — Complete Reference</h2>
+
+<div class="toc">
+<h4>What this module is</h4>
+<p>Pro-grade system design reference. Replaces buying a separate book. Every building block in depth, 15+ worked end-to-end designs, distributed systems internals, DB internals, networking depth, capacity math, anti-patterns, real-world case studies.</p>
+<ul>
+<li>Interview framework + capacity math cheat sheet</li>
+<li>Each building block deep: LB, cache, CDN, queue, search, vector DB, object store</li>
+<li>Database internals (B-tree, LSM, MVCC, replication protocols, isolation deep)</li>
+<li>Network deep (TCP, HTTP/2/3, QUIC, gRPC, WebSocket, SSE)</li>
+<li>Distributed systems: Paxos, Raft, vector clocks, CRDTs, gossip</li>
+<li>Consistency models (linearizable → eventual)</li>
+<li>15+ end-to-end designs: URL shortener, chat, news feed, Uber, Twitter, YouTube, Dropbox, Slack, Netflix, payment, search, ads, rate limiter, notification, recommendation</li>
+<li>Anti-patterns + scaling pitfalls</li>
+</ul>
+</div>
+
+<h3>68.1 Interview framework</h3>
+<ol>
+<li><strong>Clarify</strong> (5 min): users, scale, primary use cases, SLA, regions, mobile vs web, read/write ratio</li>
+<li><strong>Capacity estimate</strong> (5 min): DAU → QPS, storage, bandwidth. Use orders of magnitude.</li>
+<li><strong>API contracts</strong> (5 min): top endpoints, request/response shapes</li>
+<li><strong>Data model</strong> (5 min): entities + relationships + primary access pattern</li>
+<li><strong>High-level diagram</strong> (10 min): client → LB → app → DB → cache → queue → workers → CDN</li>
+<li><strong>Deep dive</strong> (15–20 min): pick hardest component; sharding, replication, caching, queue patterns</li>
+<li><strong>Scale + failures</strong> (10 min): 10× growth, region outage, hot key, cascading failure</li>
+<li><strong>Trade-offs throughout</strong>: SQL vs NoSQL, push vs pull, sync vs async, strong vs eventual</li>
+</ol>
+
+<h3>68.2 Capacity math (memorise)</h3>
+<table>
+<tr><th>Conversion</th><th>Value</th></tr>
+<tr><td>DAU → avg QPS</td><td>DAU × actions/user/day ÷ 86,400</td></tr>
+<tr><td>Avg → peak QPS</td><td>×5 to ×10 typically</td></tr>
+<tr><td>1 KB × 1M req/s</td><td>1 GB/s bandwidth</td></tr>
+<tr><td>1 GB Postgres</td><td>~10M small rows or 1M moderate</td></tr>
+<tr><td>1 Postgres node</td><td>5K-20K simple reads/sec</td></tr>
+<tr><td>1 Redis node</td><td>100K+ ops/sec</td></tr>
+<tr><td>1 Node.js / FastAPI process</td><td>10K-50K simple req/sec</td></tr>
+<tr><td>Kafka per broker</td><td>~1 GB/s write</td></tr>
+<tr><td>S3 cost</td><td>~$0.023/GB-month (Standard)</td></tr>
+<tr><td>EC2 m5.large</td><td>~$70/month always-on</td></tr>
+</table>
+
+<h4>Latency numbers everyone should know</h4>
+<table>
+<tr><th>Op</th><th>Time</th></tr>
+<tr><td>L1 cache</td><td>1 ns</td></tr>
+<tr><td>L2 cache</td><td>4 ns</td></tr>
+<tr><td>Main memory</td><td>100 ns</td></tr>
+<tr><td>Compress 1 KB with zip</td><td>3 µs</td></tr>
+<tr><td>Send 1 KB over 1 Gbps</td><td>10 µs</td></tr>
+<tr><td>SSD random read</td><td>150 µs</td></tr>
+<tr><td>Read 1 MB sequentially from memory</td><td>250 µs</td></tr>
+<tr><td>Round trip same datacenter</td><td>500 µs</td></tr>
+<tr><td>Read 1 MB sequentially from SSD</td><td>1 ms</td></tr>
+<tr><td>HDD seek</td><td>10 ms</td></tr>
+<tr><td>Read 1 MB sequentially from disk</td><td>20 ms</td></tr>
+<tr><td>Round trip CA → Netherlands</td><td>150 ms</td></tr>
+</table>
+
+<h3>68.3 Building blocks (each deep)</h3>
+
+<h4>Load Balancer</h4>
+<ul>
+<li><strong>L4 (TCP)</strong>: routes by IP/port. Fast, dumb. Used for non-HTTP (DBs, custom protocols).</li>
+<li><strong>L7 (HTTP)</strong>: routes by path/header/cookie. SSL termination. A/B routing. Body inspection.</li>
+<li><strong>Algorithms</strong>: round-robin, least-connections, IP hash (sticky), weighted, EWMA.</li>
+<li><strong>Health checks</strong>: HTTP /health endpoint; remove unhealthy from pool.</li>
+<li><strong>Tools</strong>: Nginx, HAProxy, Envoy, AWS ALB/NLB, Cloudflare.</li>
+<li><strong>Global LB</strong>: GSLB / anycast / DNS-based routing for geo distribution.</li>
+</ul>
+
+<h4>CDN</h4>
+<ul>
+<li>Edge servers cache content close to users. Reduce latency + origin load.</li>
+<li><strong>Push CDN</strong>: you upload assets to CDN proactively.</li>
+<li><strong>Pull CDN</strong>: edge fetches on first miss, caches by Cache-Control.</li>
+<li><strong>Edge compute</strong>: run code at edge (Cloudflare Workers, Lambda@Edge).</li>
+<li><strong>Invalidation</strong>: tags or paths; can take seconds-minutes globally.</li>
+<li><strong>Use cases</strong>: static assets, images, videos (HLS/DASH), API responses (with caution).</li>
+</ul>
+
+<h4>Cache</h4>
+<ul>
+<li><strong>Local in-process</strong> (LRU map): fastest; per-instance only.</li>
+<li><strong>Distributed</strong>: Redis, Memcached. Shared across instances.</li>
+<li><strong>Patterns</strong>:
+  <ul>
+    <li><em>Cache-aside (lazy)</em>: read miss → fetch DB → set cache. Most common.</li>
+    <li><em>Write-through</em>: write hits cache + DB.</li>
+    <li><em>Write-back (write-behind)</em>: write to cache; flush to DB later. Risky.</li>
+    <li><em>Read-through</em>: cache layer wraps DB; app talks to cache only.</li>
+    <li><em>Refresh-ahead</em>: prefetch hot keys before expiry.</li>
+  </ul>
+</li>
+<li><strong>Eviction</strong>: LRU, LFU, ARC, TTL-based.</li>
+<li><strong>Hot key</strong>: single key hit by many → use multi-tier cache or replicate the key.</li>
+<li><strong>Thundering herd</strong>: many clients miss same key simultaneously → single-flight pattern (one fetches, others wait).</li>
+<li><strong>Cache stampede protection</strong>: probabilistic early expiration; XFetch algorithm.</li>
+</ul>
+
+<h4>Message Queue</h4>
+<ul>
+<li><strong>Point-to-point</strong> (SQS, RabbitMQ default): one message → one consumer.</li>
+<li><strong>Pub/Sub</strong> (SNS, Redis Pub/Sub): one → many.</li>
+<li><strong>Streaming</strong> (Kafka, Kinesis): durable log; consumers track offsets; replay possible.</li>
+<li><strong>At-most-once</strong>: fire and forget; possible loss.</li>
+<li><strong>At-least-once</strong>: redeliver on ack timeout; possible duplicates → idempotent consumer.</li>
+<li><strong>Exactly-once</strong>: hard; needs transactional producer + idempotent consumer or distributed transaction.</li>
+<li><strong>Backpressure</strong>: queue depth alarms; reject producers or shed load when consumers fall behind.</li>
+<li><strong>DLQ</strong> (dead-letter queue): messages that fail processing N times → DLQ for human review.</li>
+</ul>
+
+<h4>Search Engine</h4>
+<ul>
+<li>Inverted index: term → doc list. Built offline / streaming.</li>
+<li><strong>BM25</strong>: relevance scoring (TF-IDF improved).</li>
+<li><strong>Elasticsearch / OpenSearch / Meilisearch / Typesense</strong>.</li>
+<li>Sharded by doc ID hash for horizontal scale.</li>
+<li><strong>Real-time</strong>: refresh interval (1s typical) vs throughput trade-off.</li>
+<li><strong>Hybrid</strong>: text (BM25) + vector (semantic) — combine via reciprocal rank fusion.</li>
+</ul>
+
+<h4>Vector DB</h4>
+<ul>
+<li>Stores embeddings; ANN search via HNSW / IVF / PQ.</li>
+<li><strong>pgvector</strong> (Postgres ext), Pinecone, Weaviate, Qdrant, Milvus, Chroma.</li>
+<li>Used for: semantic search, RAG, recommendation, dedup.</li>
+<li>Metadata filtering + hybrid retrieval critical for production.</li>
+</ul>
+
+<h4>Object Storage</h4>
+<ul>
+<li><strong>S3 / GCS / Azure Blob</strong>: blob storage, REST API, 11 9s durability.</li>
+<li><strong>Tiering</strong>: Standard → IA → Glacier (cost vs retrieval time).</li>
+<li><strong>Multipart upload</strong>: parallel chunks for large files.</li>
+<li><strong>Presigned URLs</strong>: client uploads/downloads directly (skip app server).</li>
+<li><strong>Versioning</strong>: keep history; protect against accidental delete.</li>
+<li><strong>Event triggers</strong>: S3 → Lambda → process new files.</li>
+</ul>
+
+<h3>68.4 Database internals (deep)</h3>
+
+<h4>B-tree (Postgres, MySQL default)</h4>
+<ul>
+<li>Self-balancing tree; each node holds N keys (sorted).</li>
+<li>Reads: O(log_N(rows)) — typically 3-4 disk accesses for billions of rows.</li>
+<li>Good for reads + range scans.</li>
+<li>Writes: page splits when full → write amplification.</li>
+<li>WAL (write-ahead log) ensures durability + crash recovery.</li>
+</ul>
+
+<h4>LSM tree (Cassandra, RocksDB, LevelDB)</h4>
+<ul>
+<li>Writes go to in-memory <strong>memtable</strong>; flushed as immutable <strong>SSTables</strong> on disk.</li>
+<li>Reads check memtable + bloom-filter-gated SSTables.</li>
+<li><strong>Compaction</strong>: merge SSTables (read amplification, write amplification, space amplification trade-off).</li>
+<li>Optimised for writes; reads slower than B-tree (multiple SSTable lookups).</li>
+</ul>
+
+<h4>MVCC (Multi-Version Concurrency Control)</h4>
+<ul>
+<li>Each row has multiple versions tagged with transaction id.</li>
+<li>Readers don't block writers; writers don't block readers.</li>
+<li>Postgres: in-place updates create new tuple; old tuple garbage-collected by VACUUM.</li>
+<li>Cost: bloat if VACUUM falls behind; tuning autovacuum is critical at scale.</li>
+</ul>
+
+<h4>Isolation levels (deep)</h4>
+<table>
+<tr><th>Level</th><th>Prevents</th><th>Anomalies allowed</th></tr>
+<tr><td>READ UNCOMMITTED</td><td>—</td><td>Dirty reads</td></tr>
+<tr><td>READ COMMITTED</td><td>Dirty reads</td><td>Non-repeatable + phantom + lost updates</td></tr>
+<tr><td>REPEATABLE READ</td><td>+ Non-repeatable</td><td>Phantoms (in SQL spec; PG snapshot isolation prevents)</td></tr>
+<tr><td>SNAPSHOT</td><td>Dirty + non-rep + phantom (uses snapshot)</td><td>Write skew</td></tr>
+<tr><td>SERIALIZABLE</td><td>Everything</td><td>None</td></tr>
+</table>
+
+<h4>Replication protocols</h4>
+<ul>
+<li><strong>Async</strong>: leader acks client immediately; replicates later. Fast; risk of data loss on leader crash.</li>
+<li><strong>Semi-sync</strong>: leader waits for at least one replica ack. Compromise.</li>
+<li><strong>Sync</strong>: leader waits for all replicas. Strong durability; slow.</li>
+<li><strong>Logical replication</strong>: replicates row-level changes (CDC use case).</li>
+<li><strong>Physical replication</strong>: replicates WAL bytes; faster, fewer features.</li>
+</ul>
+
+<h4>Sharding</h4>
+<ul>
+<li><strong>Range</strong>: by key range. Easy range scans; hot spots if data skewed.</li>
+<li><strong>Hash</strong>: by hash(key) % N. Uniform; bad for range queries.</li>
+<li><strong>Consistent hash</strong>: ring of nodes; key goes to nearest clockwise. Rebalancing moves ~1/N of keys.</li>
+<li><strong>Directory-based</strong>: explicit lookup table key → shard. Flexible; extra hop + SPOF.</li>
+<li><strong>Geographic</strong>: by region (regulatory / locality).</li>
+<li>Cross-shard queries are expensive — design schema to fit access patterns.</li>
+</ul>
+
+<h3>68.5 Distributed systems (deep)</h3>
+
+<h4>CAP theorem (revisited)</h4>
+<p>In a partition, choose Consistency or Availability. Partition is unavoidable in real systems → effectively choose CP or AP.</p>
+<ul>
+<li><strong>CP</strong>: Postgres, MongoDB (with majority writes), ZooKeeper. Refuses writes during partition.</li>
+<li><strong>AP</strong>: Cassandra, DynamoDB, CouchDB. Accepts writes; eventual consistency via repair.</li>
+</ul>
+
+<h4>PACELC</h4>
+<p>Extends CAP. <em>If</em> Partition: A vs C. <em>Else</em>: Latency vs Consistency. Captures the always-on trade-off, not just partition behaviour.</p>
+
+<h4>Consistency models (full hierarchy, strongest → weakest)</h4>
+<ol>
+<li><strong>Linearizable</strong> (atomic): every op appears instantaneously between invocation and response.</li>
+<li><strong>Sequential</strong>: all clients see same global order; not necessarily real-time.</li>
+<li><strong>Causal</strong>: causally related operations seen in same order; concurrent ops can differ.</li>
+<li><strong>Read-your-writes</strong>: user sees own writes.</li>
+<li><strong>Monotonic reads</strong>: never see older value once you've seen newer.</li>
+<li><strong>Monotonic writes</strong>: writes from same client applied in order.</li>
+<li><strong>Eventual</strong>: replicas converge given no writes.</li>
+</ol>
+
+<h4>Consensus algorithms</h4>
+<h5>Paxos (Lamport, 1989)</h5>
+<ul>
+<li>Roles: Proposer, Acceptor, Learner.</li>
+<li>Two phases: Prepare (get promise from majority) + Accept (propose value).</li>
+<li>Hard to understand; basis for many real systems.</li>
+</ul>
+
+<h5>Raft (Ongaro &amp; Ousterhout, 2014)</h5>
+<ul>
+<li>Designed for understandability.</li>
+<li>Leader election (heartbeats; if absent → candidate requests votes; majority wins).</li>
+<li>Log replication: leader appends; majority ack → committed.</li>
+<li>Safety: log matching property guarantees consistency.</li>
+<li>Used by: etcd, Consul, CockroachDB, TiDB.</li>
+</ul>
+
+<h5>ZAB (ZooKeeper Atomic Broadcast)</h5>
+<ul>
+<li>Similar to Raft; predates it.</li>
+<li>Used by ZooKeeper.</li>
+</ul>
+
+<h4>Vector clocks</h4>
+<p>Per-node counter, exchanged with each message. Compare two vectors:</p>
+<ul>
+<li>V1 ≤ V2 if every entry V1[i] ≤ V2[i] → V1 happened-before V2.</li>
+<li>Neither ≤ → concurrent.</li>
+</ul>
+<p>Used by Dynamo, Voldemort to detect conflicts; client / app must resolve.</p>
+
+<h4>CRDTs (Conflict-Free Replicated Data Types)</h4>
+<ul>
+<li>Data structures where concurrent updates automatically merge without conflict.</li>
+<li><strong>G-Counter</strong>: grow-only counter; each replica increments its own slot; total = sum.</li>
+<li><strong>PN-Counter</strong>: positive + negative counters.</li>
+<li><strong>G-Set</strong>: grow-only set; union on merge.</li>
+<li><strong>OR-Set</strong>: observed-remove set; supports adds + removes correctly.</li>
+<li><strong>LWW-Register</strong>: last-writer-wins (timestamp).</li>
+<li>Used by Riak, Redis CRDT, collaboration tools (Yjs, Automerge).</li>
+</ul>
+
+<h4>Gossip protocols</h4>
+<ul>
+<li>Each node periodically picks K random peers and exchanges state.</li>
+<li>Information spreads exponentially; converges in O(log N).</li>
+<li>Used for: cluster membership (Cassandra, Consul), failure detection.</li>
+</ul>
+
+<h4>Two-phase commit (2PC)</h4>
+<ul>
+<li>Coordinator: phase 1 (prepare) — ask participants to vote. Phase 2 (commit/abort) — based on votes.</li>
+<li>Blocking: coordinator crash during phase 2 stalls participants.</li>
+<li>Used rarely now; sagas preferred for microservices.</li>
+</ul>
+
+<h4>Saga pattern</h4>
+<ul>
+<li>Distributed transaction as chain of local transactions + compensating actions.</li>
+<li>If step N fails, run inverse of steps 1..N-1.</li>
+<li><strong>Orchestration</strong>: central state machine (Temporal, Camunda, AWS Step Functions).</li>
+<li><strong>Choreography</strong>: services react to events; no central coord.</li>
+</ul>
+
+<h3>68.6 Networking deep</h3>
+
+<h4>TCP</h4>
+<ul>
+<li>3-way handshake: SYN → SYN-ACK → ACK.</li>
+<li>Reliable, ordered, byte stream.</li>
+<li>Congestion control: slow start → AIMD (additive increase, multiplicative decrease) → modern: CUBIC, BBR.</li>
+<li>Head-of-line blocking: lost packet stalls entire stream.</li>
+</ul>
+
+<h4>HTTP/1.1 vs HTTP/2 vs HTTP/3</h4>
+<table>
+<tr><th>Version</th><th>Transport</th><th>Key feature</th></tr>
+<tr><td>HTTP/1.1</td><td>TCP, text</td><td>Keep-alive, pipelining (rarely used)</td></tr>
+<tr><td>HTTP/2</td><td>TCP, binary</td><td>Multiplexed streams, HPACK header compression, server push</td></tr>
+<tr><td>HTTP/3</td><td>QUIC (UDP)</td><td>0-RTT handshake, no HOL blocking at transport, connection migration</td></tr>
+</table>
+
+<h4>gRPC</h4>
+<ul>
+<li>HTTP/2 + Protobuf. Strong typing, efficient binary, bidi streaming.</li>
+<li>Code generation from .proto in many languages.</li>
+<li>Server reflection for dynamic discovery.</li>
+<li>gRPC-Web for browser support (proxy needed).</li>
+</ul>
+
+<h4>WebSocket</h4>
+<ul>
+<li>HTTP upgrade → persistent bidirectional TCP.</li>
+<li>Used for chat, live updates, collaboration.</li>
+<li>Scaling: sticky sessions + Redis pub/sub or Kafka for fanout.</li>
+<li>Heartbeats to detect dead connections.</li>
+</ul>
+
+<h4>SSE (Server-Sent Events)</h4>
+<ul>
+<li>One-way server → client stream over HTTP.</li>
+<li>Auto-reconnect built in.</li>
+<li>Simpler than WebSocket when bidirectional not needed (LLM token streaming, notifications).</li>
+</ul>
+
+<h4>TLS handshake (TLS 1.3)</h4>
+<ul>
+<li>1-RTT: client hello (key share) → server hello (key share + cert) → both compute shared secret via ECDHE → finished.</li>
+<li>0-RTT for resumed sessions (replay-attack risk; restrict to idempotent ops).</li>
+<li>PFS (perfect forward secrecy) — keys not derivable from long-term cert key.</li>
+</ul>
+
+<h4>DNS</h4>
+<ul>
+<li>Resolver → root → TLD → authoritative.</li>
+<li>Records: A, AAAA, CNAME, MX, TXT, SRV.</li>
+<li>TTL controls cache duration. Low TTL = fast change, more queries.</li>
+<li>Anycast for global low-latency resolvers.</li>
+<li>DNS-based failover for GSLB.</li>
+</ul>
+
+<h3>68.7 Failure handling toolkit</h3>
+<ul>
+<li><strong>Timeout</strong>: every external call; pick based on p99 + buffer; cascade them downward.</li>
+<li><strong>Retry</strong>: exponential backoff + jitter; only idempotent ops; max attempts.</li>
+<li><strong>Circuit breaker</strong>: closed → open (fail fast) → half-open (probe).</li>
+<li><strong>Bulkhead</strong>: separate thread pools / connection pools per downstream so one failure doesn't drain everything.</li>
+<li><strong>Rate limit / load shed</strong>: refuse traffic when overloaded; preserve core functions.</li>
+<li><strong>Graceful degradation</strong>: serve cached / partial data on dep failure.</li>
+<li><strong>Fallback</strong>: alternative path or provider.</li>
+<li><strong>Dead-letter queue</strong>: park poison messages for triage.</li>
+<li><strong>Health check</strong>: liveness (am I alive?) + readiness (am I ready to serve?).</li>
+<li><strong>Chaos testing</strong>: prove all of the above actually work.</li>
+</ul>
+
+<h3>68.8 Worked end-to-end designs (15+)</h3>
+
+<h4>(1) URL shortener (e.g. bit.ly)</h4>
+<p><strong>Scale</strong>: 100M URLs created/year → 3 URLs/sec. Reads dominate writes ~100:1.</p>
+<ul>
+<li>POST /shorten {url} → 7-char base62 slug; 62^7 ≈ 3.5T URLs.</li>
+<li>Slug generation: counter (centralised, predictable) OR random hash (avoid collisions via retry).</li>
+<li>Storage: KV (slug → {url, expiry, owner, created_at}). Postgres or DynamoDB.</li>
+<li>Cache hot slugs in Redis (LRU, TTL).</li>
+<li>GET /:slug → 301 redirect (cacheable in browser).</li>
+<li>Click analytics: async fire-and-forget to Kafka → warehouse.</li>
+<li>Rate limit per IP; abuse / malware detection.</li>
+<li>Custom slugs (vanity URL) — uniqueness check.</li>
+</ul>
+
+<h4>(2) Distributed unique id generator (Snowflake)</h4>
+<p>64-bit ID:</p>
+<ul>
+<li>1 sign bit (unused)</li>
+<li>41 timestamp bits (ms since epoch) — ~69 years</li>
+<li>10 node bits — 1024 nodes</li>
+<li>12 sequence bits — 4096 ids per ms per node</li>
+</ul>
+<p>Time-sortable, no central coord. Modern: UUIDv7 (similar guarantees, standard).</p>
+
+<h4>(3) Rate limiter</h4>
+<ul>
+<li><strong>Token bucket</strong>: refill rate R; bucket size N. Allows bursts up to N.</li>
+<li><strong>Leaky bucket</strong>: smooths output at fixed rate.</li>
+<li><strong>Sliding window log</strong>: store timestamps in sorted set. Precise; memory-heavy.</li>
+<li><strong>Sliding window counter</strong>: weighted average of current + previous fixed windows. Approximate; cheap.</li>
+<li>Implementation: Redis INCR + EXPIRE; Lua script for atomicity.</li>
+<li>Distributed: per-edge enforcement + central Redis source of truth.</li>
+<li>Response: 429 + Retry-After header.</li>
+</ul>
+
+<h4>(4) Chat (1-1 + group)</h4>
+<p><strong>Scale</strong>: 1B users; 50 msgs/user/day = 50B/day = 580K msgs/sec average.</p>
+<ul>
+<li>WS edge cluster + sticky sessions.</li>
+<li>Connection-manager service tracks userId → connectionId (Redis).</li>
+<li>Message: producer publishes to Kafka per channel.</li>
+<li>Recipient's connection-manager subscribes; pushes via WS.</li>
+<li>Persistence: Cassandra (write-heavy, time-partitioned by channel).</li>
+<li>Read receipts: separate events.</li>
+<li>Presence: Redis SET online_users with TTL refreshed by heartbeat.</li>
+<li>Group chat: write once to channel topic; all subscribers see.</li>
+<li>End-to-end encryption (Signal): client-side; server stores ciphertext.</li>
+</ul>
+
+<h4>(5) News feed (Twitter / X)</h4>
+<ul>
+<li><strong>Fanout-on-write</strong>: when user posts, write to each follower's feed cache.
+  <ul><li>Pro: cheap reads (just fetch follower's feed).</li><li>Con: expensive for celebs with millions of followers; lots of duplicate storage.</li></ul>
+</li>
+<li><strong>Fanout-on-read</strong>: when user opens feed, query latest posts from accounts they follow + merge.
+  <ul><li>Pro: no precomputation.</li><li>Con: expensive read query, especially for users following many.</li></ul>
+</li>
+<li><strong>Hybrid</strong>: fanout-on-write for normal users; fanout-on-read for celebs (defined by follower threshold).</li>
+<li>Feed cache: Redis sorted set per user (score = post timestamp).</li>
+<li>Ranking: ML model re-ranks on read (chronological is now rare).</li>
+<li>Media: S3 + CDN; multiple resolutions transcoded async.</li>
+</ul>
+
+<h4>(6) Uber-like ride matching</h4>
+<ul>
+<li>Geo-index drivers: S2 cells / Quad tree / Geohash buckets in Redis.</li>
+<li>Driver app sends location updates every 4 seconds via WS / UDP.</li>
+<li>Rider request: query nearby drivers in K cells around pickup; pick by ETA + rating.</li>
+<li>Trip state machine: requested → matched → en-route → started → completed.</li>
+<li>Payment as async post-trip (Stripe).</li>
+<li>Surge pricing: based on supply/demand per cell; recomputed every few minutes.</li>
+<li>Reliability: each request retried; failover regions.</li>
+</ul>
+
+<h4>(7) YouTube / video streaming</h4>
+<ul>
+<li>Upload → S3.</li>
+<li>Transcoding pipeline (queue → workers): produce multiple bitrates (240p, 480p, 720p, 1080p, 4K).</li>
+<li>HLS / DASH adaptive streaming; CDN serves segments.</li>
+<li>Metadata in Postgres (title, owner, upload time).</li>
+<li>Views / likes in Cassandra (massive write throughput).</li>
+<li>Recommendation: offline batch ML + real-time signals (Kafka).</li>
+<li>Search: Elasticsearch.</li>
+<li>Live streaming: ingest → transcode → CDN with lower latency (LL-HLS).</li>
+</ul>
+
+<h4>(8) Dropbox-like file sync</h4>
+<ul>
+<li>File chunked into 4 MB blocks; content-hash addressed (dedup across users).</li>
+<li>Block storage: S3.</li>
+<li>Metadata DB (Postgres): user → file → block list + versions.</li>
+<li>Sync: delta updates; client polls or WS for change notifications.</li>
+<li>Conflict resolution: last-writer-wins with version vectors; "conflicted copy" file created.</li>
+<li>End-to-end encryption (optional): client-side; server can't read content.</li>
+</ul>
+
+<h4>(9) Search autocomplete</h4>
+<ul>
+<li><strong>Trie</strong> of past queries; precompute top-K results per prefix node.</li>
+<li>Or <strong>Elasticsearch completion suggester</strong>.</li>
+<li>Cache hot prefixes in Redis.</li>
+<li>Real-time: streaming query log → update top-K per prefix periodically (every minute).</li>
+<li>Ranking signals: popularity, recency, personalisation, location.</li>
+<li>Typo tolerance: edit-distance ≤ K via fuzzy search.</li>
+</ul>
+
+<h4>(10) Distributed cache (Memcached / Redis cluster)</h4>
+<ul>
+<li>Consistent hash for shard selection.</li>
+<li>Replication factor 2-3 for fault tolerance.</li>
+<li>Eviction: LRU default; LFU for frequency-aware.</li>
+<li>TTL on writes; lazy expiration on read.</li>
+<li>Cache warming after restart (replay from log or migrate from peer).</li>
+<li>Hot-key protection: read-through with single-flight; replicate hot keys.</li>
+</ul>
+
+<h4>(11) Distributed file system (HDFS / GFS)</h4>
+<ul>
+<li><strong>Namenode</strong> (master): metadata (file → blocks → datanodes); SPOF (HA via ZooKeeper).</li>
+<li><strong>Datanode</strong> (worker): stores blocks (128 MB default); 3× replication.</li>
+<li>Write: client → namenode (allocates block) → write to 3 datanodes (pipeline).</li>
+<li>Read: client → namenode (get block locations) → read from nearest datanode.</li>
+<li>Rack-aware placement: 1 replica local, 1 same rack, 1 different rack.</li>
+</ul>
+
+<h4>(12) Notification system</h4>
+<ul>
+<li>Multi-channel: push, email, SMS, in-app.</li>
+<li>Producer publishes notification intent → queue.</li>
+<li>Worker fans out to channel-specific workers based on user prefs + opt-outs.</li>
+<li>Per-channel provider (FCM/APNs for push; SES/SendGrid for email; Twilio for SMS).</li>
+<li>Rate limit per user; quiet hours; A/B test templates.</li>
+<li>Idempotency key dedupes retries.</li>
+<li>DLQ for failed sends.</li>
+</ul>
+
+<h4>(13) Payment system</h4>
+<ul>
+<li>API gateway → Payment service → Stripe / Adyen.</li>
+<li>Idempotency key required (UUID per checkout attempt).</li>
+<li>Webhook from provider for async outcomes (3DS, refunds).</li>
+<li>Ledger: append-only Postgres / event sourcing for audit.</li>
+<li>Reconciliation jobs: nightly compare our records vs provider's.</li>
+<li>Fraud detection: rules + ML on transaction stream.</li>
+<li>PCI-DSS scope minimization: tokenize cards via provider; never store raw PAN.</li>
+</ul>
+
+<h4>(14) Ads serving</h4>
+<ul>
+<li>Auction: real-time bidding (RTB) — &lt; 100 ms response per request.</li>
+<li>Index ads with targeting criteria (audience, geo, time).</li>
+<li>Candidate generation: select eligible ads (cheap).</li>
+<li>Ranking: ML model predicts CTR × bid → score.</li>
+<li>Frequency capping: per user/day (Redis counters).</li>
+<li>Budget pacing: distribute budget through the day.</li>
+<li>Click-through tracking; attribution (last-click, multi-touch).</li>
+</ul>
+
+<h4>(15) Recommendation engine (Netflix / YouTube)</h4>
+<ul>
+<li>Collaborative filtering (user-item matrix, matrix factorization).</li>
+<li>Content-based (item features).</li>
+<li>Hybrid + deep learning rankers.</li>
+<li>Offline batch training (Spark, GPU clusters); features in feature store.</li>
+<li>Real-time scoring at request time.</li>
+<li>Cold start: fall back to popular / trending / similar users.</li>
+</ul>
+
+<h4>(16) Real-time analytics / dashboards</h4>
+<ul>
+<li>Events → Kafka → stream processor (Flink / Spark Streaming).</li>
+<li>Aggregations (count, sum, percentiles) → time-series DB (ClickHouse, Druid, InfluxDB).</li>
+<li>Approximate algorithms (HyperLogLog, T-Digest) for cardinality / quantiles at scale.</li>
+<li>Dashboard queries served from precomputed cubes.</li>
+</ul>
+
+<h3>68.9 Architectural styles</h3>
+<table>
+<tr><th>Style</th><th>When fits</th><th>Trade-offs</th></tr>
+<tr><td>Monolith</td><td>Small team, single domain, simple ops</td><td>Easier to build/operate; harder to scale teams; single deploy</td></tr>
+<tr><td>Modular monolith</td><td>Mid-size; clear module boundaries</td><td>Transition path; still one deploy</td></tr>
+<tr><td>Microservices</td><td>Many teams; bounded contexts; need independent scale</td><td>Complex ops; network failures; data consistency</td></tr>
+<tr><td>Serverless</td><td>Event-driven, sporadic load, pay-per-use</td><td>Cold starts; vendor lock-in; debugging</td></tr>
+<tr><td>Event-driven</td><td>Decoupled producers/consumers; async workflows</td><td>Eventual consistency; debugging traces</td></tr>
+<tr><td>CQRS + Event Sourcing</td><td>Audit trail required; complex projections</td><td>Replay complexity; harder local dev</td></tr>
+<tr><td>Cell-based</td><td>Massive scale; blast-radius isolation</td><td>Cross-cell routing; rebalancing</td></tr>
+</table>
+
+<h3>68.10 Anti-patterns + scaling pitfalls</h3>
+<ul>
+<li><strong>Distributed monolith</strong>: microservices that must deploy together. Worst of both worlds.</li>
+<li><strong>Shared database across services</strong>: tight coupling, can't evolve schema independently. Anti-microservice.</li>
+<li><strong>Synchronous chain of N services</strong>: latency + failure compounds. Use events.</li>
+<li><strong>Dual-write</strong>: write to DB + Kafka non-transactionally. Use outbox pattern.</li>
+<li><strong>Cache-without-TTL</strong>: stale data forever. Always TTL or explicit invalidation.</li>
+<li><strong>SELECT * in production</strong>: bandwidth + breaks on schema change.</li>
+<li><strong>N+1 queries</strong>: classic ORM gotcha. Eager-load or DataLoader.</li>
+<li><strong>No backpressure</strong>: producers overwhelm consumers; queue grows unbounded.</li>
+<li><strong>Optimistic without conflict resolution</strong>: silent data loss.</li>
+<li><strong>Pet servers</strong> (vs cattle): hand-configured instances; can't be replaced. Use IaC.</li>
+<li><strong>Ignoring p99 / tail latency</strong>: averages lie. Optimise for the slowest 1%.</li>
+<li><strong>Premature microservices</strong>: split a monolith you don't yet understand → split wrong.</li>
+</ul>
+
+<h3>68.11 Real-world case-study takeaways</h3>
+
+<h4>Netflix</h4>
+<ul>
+<li>Open Connect: own CDN appliances inside ISPs for video delivery.</li>
+<li>Hystrix → Resilience4j: circuit breakers everywhere.</li>
+<li>Chaos Monkey: continuous failure injection in prod.</li>
+<li>Cassandra for time-series (viewing history); evcache (memcached fork) for caching.</li>
+</ul>
+
+<h4>Twitter / X</h4>
+<ul>
+<li>Hybrid timeline (precomputed for normal, on-read for celebs).</li>
+<li>Snowflake: distributed id generator.</li>
+<li>Manhattan: in-house multi-tenant K/V store.</li>
+</ul>
+
+<h4>WhatsApp</h4>
+<ul>
+<li>Erlang for massive concurrency (per-user process model).</li>
+<li>50 engineers serving 900M users at peak (pre-Meta).</li>
+<li>BEAM VM's per-process GC = no global pauses.</li>
+</ul>
+
+<h4>Discord</h4>
+<ul>
+<li>Elixir/Phoenix for realtime.</li>
+<li>Migrated MongoDB → Cassandra → ScyllaDB for messages (write throughput).</li>
+<li>Voice: WebRTC + own SFU servers.</li>
+</ul>
+
+<h4>Stripe</h4>
+<ul>
+<li>Idempotency-key pattern for safe retries.</li>
+<li>API versioning by date; old versions kept alive years.</li>
+<li>Heavy investment in observability + automated remediation.</li>
+</ul>
+
+<h4>Amazon DynamoDB</h4>
+<ul>
+<li>Single-table design: model access patterns into a single denormalised table with composite keys.</li>
+<li>GSIs (Global Secondary Indexes) for alternate access patterns.</li>
+<li>Eventually consistent reads default; strongly consistent reads cost double.</li>
+</ul>
+
+<div class="qa-bank">
+<h3>Module 68 — System Design Pro Q&amp;A (40+)</h3>
+
+<details class="qa"><summary>Walk through the framework you use for any system design.</summary>
+<div class="answer">Clarify → estimate → API → data model → diagram → deep dive → scale + failures → trade-offs. Talk constantly. Pick depth over breadth in the deep dive.</div></details>
+
+<details class="qa"><summary>How do you do back-of-envelope capacity math?</summary>
+<div class="answer">DAU × actions/user/day ÷ 86,400 = avg QPS. Peak ≈ avg × 5-10. Storage: bytes/record × records/day × retention. Bandwidth: req/sec × bytes/req. Always show your work.</div></details>
+
+<details class="qa"><summary>L4 vs L7 load balancer?</summary>
+<div class="answer">L4 routes by TCP info (IP/port); fast, protocol-agnostic. L7 routes by HTTP (path, header, cookie); supports SSL termination, A/B routing, rewriting. L7 for HTTP services; L4 for DBs / TCP services.</div></details>
+
+<details class="qa"><summary>Cache-aside vs write-through vs write-back?</summary>
+<div class="answer">Cache-aside: app reads cache first, on miss reads DB + populates. Write-through: writes go to cache and DB simultaneously. Write-back: writes to cache; flushed to DB later (risky on cache loss).</div></details>
+
+<details class="qa"><summary>What's a hot key in caching and how to handle?</summary>
+<div class="answer">A single key receiving disproportionate traffic. Mitigations: replicate the key across cache nodes; tier with a local in-process cache in front of distributed cache; randomize key suffix (key_1..key_10) and aggregate.</div></details>
+
+<details class="qa"><summary>How does consistent hashing work?</summary>
+<div class="answer">Map keys + nodes onto a ring (hash space 0..2^32). Key goes to next node clockwise. Adding/removing node moves only ~1/N of keys. Virtual nodes (each node at multiple ring positions) smooth distribution.</div></details>
+
+<details class="qa"><summary>B-tree vs LSM tree — when which?</summary>
+<div class="answer">B-tree: random reads fast, in-place updates, write amplification from page splits. Used by Postgres, MySQL. LSM: writes very fast (append memtable), reads slower (multiple SSTable lookups), compactions. Used by Cassandra, RocksDB. Write-heavy → LSM; read-heavy + range queries → B-tree.</div></details>
+
+<details class="qa"><summary>What is MVCC?</summary>
+<div class="answer">Multi-Version Concurrency Control. Each row has multiple versions tagged with transaction id. Readers don't block writers and vice versa. Cost: bloat (old versions) requires VACUUM / garbage collection.</div></details>
+
+<details class="qa"><summary>Explain Raft in 60 seconds.</summary>
+<div class="answer">Leader-based consensus. One leader elected by majority vote (heartbeats + term numbers). Clients send writes to leader; leader appends to log; replicates; once majority acks, committed. Followers redirect writes to leader. On leader failure, new election. Used by etcd, Consul, CockroachDB.</div></details>
+
+<details class="qa"><summary>What are vector clocks for?</summary>
+<div class="answer">Detect causal vs concurrent updates in distributed systems without coordination. Each node has its own counter; vector = array of all counters. Compare element-wise. Used in Dynamo, Voldemort.</div></details>
+
+<details class="qa"><summary>What's a CRDT?</summary>
+<div class="answer">Conflict-Free Replicated Data Type. Data structure where concurrent updates automatically converge without coordination. Examples: G-Counter, OR-Set, LWW-Register. Used by collaboration tools, Riak.</div></details>
+
+<details class="qa"><summary>Two-phase commit — why is it problematic?</summary>
+<div class="answer">Blocking: coordinator crash in phase 2 leaves participants in limbo. Slow: synchronous across services. Modern microservices use sagas (compensating actions) instead.</div></details>
+
+<details class="qa"><summary>How would you design a global rate limiter?</summary>
+<div class="answer">Per-edge token bucket (low latency, eventual sync). Central Redis cluster as global source of truth (shard by user). Edges allow brief over-limit during partition. Aggregator reconciles every minute. Acceptable: occasional 1-2× limit; never block legitimate traffic.</div></details>
+
+<details class="qa"><summary>Sharding strategy choice?</summary>
+<div class="answer">Hash for uniform load. Range for range-query workloads. Consistent hash for rebalancing-friendly. Directory-based for flexibility. Geographic for compliance/locality. Sharding key is hard to change post-launch — design carefully.</div></details>
+
+<details class="qa"><summary>How do you handle hot shard?</summary>
+<div class="answer">Sub-shard the hot key (write distribution). Read replicas for read scale. Caching in front. Sharding key change (migrate to better key — painful). Detect early via per-shard QPS metrics.</div></details>
+
+<details class="qa"><summary>How would you design the outbox pattern?</summary>
+<div class="answer">Same DB transaction writes business row + event row to <code class="inline">outbox</code> table. Separate poller reads unprocessed outbox rows, publishes to Kafka, marks sent. Guarantees at-least-once event delivery atomic with the DB write.</div></details>
+
+<details class="qa"><summary>Idempotency-key pattern?</summary>
+<div class="answer">Client generates UUID per logical operation. Server stores key → response. Retries with same key return cached response without re-executing. Critical for at-least-once delivery (queues, retries). Stripe popularised it.</div></details>
+
+<details class="qa"><summary>Saga orchestration vs choreography?</summary>
+<div class="answer">Orchestration: central state machine (Temporal, Camunda) calls services. Easier to reason, single point of failure. Choreography: each service reacts to events. Decoupled, harder to debug ("where is this stuck?").</div></details>
+
+<details class="qa"><summary>How does Kafka guarantee ordering?</summary>
+<div class="answer">Strict order within a partition. No global order across partitions. Key-based partitioning (hash(key) % N) ensures same key → same partition → ordered for that key.</div></details>
+
+<details class="qa"><summary>Kafka vs RabbitMQ vs SQS?</summary>
+<div class="answer">Kafka: append-only log, high throughput, replay-able, consumer-controlled offsets. RabbitMQ: broker-managed queues, complex routing (exchanges), classic task queue. SQS: managed AWS queue, simple, scales to zero. Kafka for event streaming; RabbitMQ/SQS for work distribution.</div></details>
+
+<details class="qa"><summary>How do you scale a write-heavy DB?</summary>
+<div class="answer">1. Vertical scale + tune. 2. Read replicas (read-only). 3. Partition by time/tenant. 4. Shard horizontally. 5. Switch to write-optimised DB (Cassandra). Each step is expensive; verify previous insufficient first.</div></details>
+
+<details class="qa"><summary>Linearizable vs sequential consistency?</summary>
+<div class="answer">Linearizable: every op appears to take effect instantaneously between invocation and response (real-time order). Sequential: all clients see same global order but not real-time. Linearizable is stronger and more expensive.</div></details>
+
+<details class="qa"><summary>CAP vs PACELC?</summary>
+<div class="answer">CAP: during a partition, pick Consistency or Availability. PACELC: <em>else</em> (no partition), pick Latency or Consistency. PACELC captures the always-on trade-off, not just partition behaviour.</div></details>
+
+<details class="qa"><summary>How to design read-after-write consistency?</summary>
+<div class="answer">Route a user's reads to leader for a window after their write. Or use sticky session (same replica per user). Or client cache + version checks. Without it, "I clicked Save and it disappeared" UX bug.</div></details>
+
+<details class="qa"><summary>Cassandra consistency levels?</summary>
+<div class="answer">Tunable per query: ONE, QUORUM, ALL, LOCAL_QUORUM. W + R &gt; N → strong consistency (read-your-writes). Common: LOCAL_QUORUM for both writes and reads (works within a region).</div></details>
+
+<details class="qa"><summary>What is HOL blocking in HTTP/2 and how does HTTP/3 fix it?</summary>
+<div class="answer">HTTP/2 multiplexes streams over one TCP connection. A lost TCP packet stalls all streams (HOL at transport). HTTP/3 runs over QUIC (UDP) with per-stream loss recovery, eliminating transport-layer HOL.</div></details>
+
+<details class="qa"><summary>How would you scale Postgres to billions of rows?</summary>
+<div class="answer">Partition by time (range or list partitioning). Read replicas. Connection pooling (PgBouncer). Indexes optimised per access pattern. Then Citus / TimescaleDB for distributed Postgres. Most apps don't need this.</div></details>
+
+<details class="qa"><summary>What is the thundering herd problem?</summary>
+<div class="answer">When a cache key expires, many concurrent requests miss and all hit the DB simultaneously. Solutions: single-flight (one fetches, others wait); probabilistic early expiration; jittered TTLs; explicit refresh-ahead.</div></details>
+
+<details class="qa"><summary>How would you design Twitter timeline?</summary>
+<div class="answer">Fanout-on-write for normal users (precompute follower feeds). Fanout-on-read for celebs (compute on read). Cache feeds in Redis sorted set per user. ML re-ranks on read. Media on S3+CDN.</div></details>
+
+<details class="qa"><summary>How would you design Uber matching?</summary>
+<div class="answer">Geo-index drivers in Redis (S2 cells). Driver app sends location every 4s. On ride request, query nearby cells; pick best driver by ETA+rating. State machine for trip lifecycle. Payment async post-trip.</div></details>
+
+<details class="qa"><summary>How to design YouTube?</summary>
+<div class="answer">Upload to S3 → transcoding queue → multiple bitrates → CDN. HLS/DASH adaptive. Metadata in Postgres; views/likes in Cassandra. Recommendation = offline ML + realtime signals.</div></details>
+
+<details class="qa"><summary>How to design Dropbox sync?</summary>
+<div class="answer">Chunked files (4 MB blocks). Content-hash addressed (dedup). S3 for blocks. Metadata in Postgres. Delta sync via push notification or polling. Conflict resolution with version vectors.</div></details>
+
+<details class="qa"><summary>How would you design a notification service?</summary>
+<div class="answer">Producer publishes intent. Worker fans out to channel-specific senders (push/email/SMS/in-app). Per-user rate limits + quiet hours. Idempotency key. DLQ for failures. Provider fallback.</div></details>
+
+<details class="qa"><summary>How would you design ad serving?</summary>
+<div class="answer">RTB auction &lt;100ms per request. Candidate generation (eligible ads). Ranking via ML model (CTR × bid). Frequency capping in Redis. Budget pacing. Click attribution.</div></details>
+
+<details class="qa"><summary>How would you design a recommendation engine?</summary>
+<div class="answer">Offline collaborative filtering (matrix factorization or deep learning). Content-based fallback. Feature store. Real-time scoring. Cold-start = popular/trending. Re-rank in real-time per user.</div></details>
+
+<details class="qa"><summary>How would you design a distributed file system?</summary>
+<div class="answer">Master (metadata: file → blocks → datanodes; HA via ZooKeeper). Workers store blocks (128 MB, 3× replication). Rack-aware placement. Client → master for locations, then direct to nearest worker.</div></details>
+
+<details class="qa"><summary>How does a circuit breaker work?</summary>
+<div class="answer">Tracks failures to a downstream. Closed = normal. After N failures → Open (fail fast, no calls). After cooldown → Half-Open (probe). One success → Closed; failure → Open again. Prevents cascading failure.</div></details>
+
+<details class="qa"><summary>Bulkhead pattern?</summary>
+<div class="answer">Isolate failure domains. Separate thread pools / connection pools per downstream. If one downstream becomes slow, only its pool starves — other services unaffected.</div></details>
+
+<details class="qa"><summary>What is graceful degradation?</summary>
+<div class="answer">When a dep fails, serve cached/partial data instead of erroring. Example: recommendation service down → show popular items. Stay useful even when degraded.</div></details>
+
+<details class="qa"><summary>How would you design a payment system safely?</summary>
+<div class="answer">Idempotency key per checkout. Append-only ledger for audit. Webhook from provider for async outcomes. Reconciliation jobs nightly. Tokenize cards via provider (PCI scope minimisation). Fraud rules + ML on transaction stream.</div></details>
+
+<details class="qa"><summary>How would you debug a global latency spike?</summary>
+<div class="answer">Check dashboards: latency by region, service, endpoint. Identify scope (region? all? subset?). Check recent deploys, infra events (provider status pages). Trace a representative slow request via distributed tracing. Common: DB slow query, downstream service degradation, GC pause, network change, deploy bug.</div></details>
+
+<details class="qa"><summary>What's "cell-based architecture"?</summary>
+<div class="answer">Divide infrastructure into independent cells, each hosting a subset of users. Blast radius of any failure is one cell. AWS uses this internally. Trade-off: extra routing layer, rebalancing complexity.</div></details>
+
+<details class="qa"><summary>How to handle slow consumer in Kafka?</summary>
+<div class="answer">Scale consumers up to partition count. Batch messages. Process async (decouple ack from work). If consumer fundamentally slow, add more partitions (one-time rebalance) or use parallel processing per partition (carefully — order preserved only per partition).</div></details>
+
+<details class="qa"><summary>How does Spanner achieve external consistency globally?</summary>
+<div class="answer">TrueTime: atomic clocks + GPS in every datacenter; bounded clock uncertainty ε. Commits wait out ε before responding. Guarantees: any commit with timestamp T returns after T-real-time elapses. Linearizable global ordering.</div></details>
+
+<details class="qa"><summary>One-sentence summary of how to approach system design?</summary>
+<div class="answer">"Clarify ruthlessly, estimate roughly, sketch clearly, justify trade-offs, and dive deep into one piece rather than half-cover five."</div></details>
+</div>
+
+<h3>68.X Worked Designs — Code Reference</h3>
+
+<h4>URL Shortener — Base62 + FastAPI</h4>
+<pre data-lang="python">
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
+import redis, string, random
+
+app = FastAPI()
+r = redis.Redis(host="localhost", port=6379, decode_responses=True)
+CHARS = string.ascii_letters + string.digits  # 62 chars
+
+def base62_encode(n: int) -&gt; str:
+    result = ""
+    while n:
+        result = CHARS[n % 62] + result
+        n //= 62
+    return result or CHARS[0]
+
+def generate_short_code(url: str) -&gt; str:
+    # Use Redis INCR for monotonic ID
+    seq_id = r.incr("url:seq")
+    code = base62_encode(seq_id)
+    r.setex(f"url:{code}", 86400 * 30, url)
+    return code
+
+@app.post("/shorten")
+def shorten(url: str) -&gt; dict:
+    # Check existing (dedup by URL hash)
+    import hashlib
+    url_hash = hashlib.sha256(url.encode()).hexdigest()[:16]
+    existing = r.get(f"hash:{url_hash}")
+    if existing:
+        return {"short_code": existing, "url": url}
+    code = generate_short_code(url)
+    r.set(f"hash:{url_hash}", code)
+    return {"short_code": code, "url": url}
+
+@app.get("/{code}")
+def redirect(code: str):
+    url = r.get(f"url:{code}")
+    if not url:
+        raise HTTPException(status_code=404, detail="Link not found or expired")
+    r.incr(f"url:{code}:clicks")  # analytics
+    return RedirectResponse(url=url, status_code=302)
+</pre>
+
+<h4>Chat Service — WebSocket + Redis Pub/Sub</h4>
+<pre data-lang="python">
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import redis.asyncio as aioredis
+import asyncio, json
+
+app = FastAPI()
+
+class ConnectionManager:
+    def __init__(self):
+        self.rooms: dict[str, list[WebSocket]] = {}
+
+    async def connect(self, ws: WebSocket, room: str):
+        await ws.accept()
+        self.rooms.setdefault(room, []).append(ws)
+
+    def disconnect(self, ws: WebSocket, room: str):
+        self.rooms.get(room, []).remove(ws)
+
+    async def broadcast(self, room: str, message: str, sender: WebSocket = None):
+        for ws in self.rooms.get(room, []):
+            if ws is not sender:
+                await ws.send_text(message)
+
+mgr = ConnectionManager()
+redis_pub = aioredis.Redis(host="localhost")
+redis_sub = aioredis.Redis(host="localhost")
+
+@app.websocket("/ws/{room}/{user_id}")
+async def websocket_endpoint(ws: WebSocket, room: str, user_id: str):
+    await mgr.connect(ws, room)
+    sub = redis_sub.pubsub()
+    await sub.subscribe(f"chat:{room}")
+
+    async def listen_redis():
+        async for msg in sub.listen():
+            if msg["type"] == "message":
+                await ws.send_text(msg["data"])
+
+    asyncio.create_task(listen_redis())
+    try:
+        while True:
+            data = await ws.receive_text()
+            payload = json.dumps({"user": user_id, "text": data})
+            await redis_pub.publish(f"chat:{room}", payload)
+    except WebSocketDisconnect:
+        mgr.disconnect(ws, room)
+</pre>
+
+<h4>News Feed Fanout — Write Path</h4>
+<pre data-lang="python">
+import redis, json, time
+
+r = redis.Redis(host="localhost", port=6379)
+
+def post_tweet(user_id: int, content: str) -&gt; int:
+    tweet_id = r.incr("tweet:seq")
+    tweet = {"id": tweet_id, "user_id": user_id, "content": content, "ts": int(time.time())}
+    r.set(f"tweet:{tweet_id}", json.dumps(tweet))
+
+    # Fan-out to followers (write-to-fan-out for small follower count)
+    followers = r.smembers(f"followers:{user_id}")
+    pipe = r.pipeline()
+    for follower_id in followers:
+        # Each follower has a sorted set timeline, score = timestamp
+        pipe.zadd(f"timeline:{follower_id.decode()}", {str(tweet_id): tweet["ts"]})
+        pipe.zremrangebyrank(f"timeline:{follower_id.decode()}", 0, -1001)  # keep last 1000
+    pipe.execute()
+    return tweet_id
+
+def get_feed(user_id: int, page: int = 0, per_page: int = 20) -&gt; list:
+    start = page * per_page
+    end   = start + per_page - 1
+    tweet_ids = r.zrevrange(f"timeline:{user_id}", start, end)
+    pipe = r.pipeline()
+    for tid in tweet_ids:
+        pipe.get(f"tweet:{tid.decode()}")
+    return [json.loads(t) for t in pipe.execute() if t]
+</pre>
+
+<h4>Distributed Lock — Redis SETNX</h4>
+<pre data-lang="python">
+import redis, uuid, time
+from contextlib import contextmanager
+
+r = redis.Redis(host="localhost", port=6379)
+
+@contextmanager
+def distributed_lock(resource: str, ttl: int = 30, retry: int = 3, wait: float = 0.1):
+    lock_key = f"lock:{resource}"
+    lock_val = str(uuid.uuid4())
+    acquired = False
+    for _ in range(retry):
+        acquired = r.set(lock_key, lock_val, nx=True, ex=ttl)
+        if acquired:
+            break
+        time.sleep(wait)
+    if not acquired:
+        raise Exception(f"Could not acquire lock on {resource}")
+    try:
+        yield
+    finally:
+        # Release only if still our lock (Lua for atomicity)
+        script = """
+        if redis.call("get",KEYS[1]) == ARGV[1] then
+            return redis.call("del",KEYS[1])
+        else return 0 end
+        """
+        r.eval(script, 1, lock_key, lock_val)
+
+# Usage
+# with distributed_lock("payment:order_99"):
+#     process_payment("order_99")
+</pre>
+
+<h4>Bloom Filter — Duplicate URL Detection</h4>
+<pre data-lang="python">
+import math, mmh3
+from bitarray import bitarray
+
+class BloomFilter:
+    def __init__(self, n: int, fp_rate: float = 0.01):
+        m = int(-n * math.log(fp_rate) / (math.log(2) ** 2))
+        k = int((m / n) * math.log(2))
+        self.m = m
+        self.k = k
+        self.bits = bitarray(m)
+        self.bits.setall(0)
+
+    def add(self, item: str):
+        for seed in range(self.k):
+            idx = mmh3.hash(item, seed) % self.m
+            self.bits[idx] = 1
+
+    def __contains__(self, item: str) -&gt; bool:
+        return all(self.bits[mmh3.hash(item, s) % self.m] for s in range(self.k))
+
+# URL deduplication for web crawler
+seen = BloomFilter(n=10_000_000, fp_rate=0.001)  # 10M URLs, 0.1% FP rate
+seen.add("https://example.com/page1")
+print("https://example.com/page1" in seen)  # True
+print("https://example.com/page2" in seen)  # False
+</pre>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Locators & UI Testing | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn Locators & UI Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, locators, testing, automation, playwright locators ui testing">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="Locators & UI Testing — Playwright SDET">
+  <meta property="og:description" content="Learn Locators & UI Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/locators.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Locators & UI Testing">
+  <meta name="twitter:description" content="Learn Locators & UI Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/locators.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=" active"><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">02</span>Locators &amp; UI Testing (complete)</h2>
+
+<div class="toc">
+<h4>What you will master here</h4>
+<ul>
+<li>Every Playwright locator type and the recommended priority order</li>
+<li>Accessible names, ARIA roles, strict mode, exact matching</li>
+<li>Narrowing locators: filter, chaining, nth, has, hasText</li>
+<li>All UI interactions: click, fill, type, select, hover, keyboard, mouse</li>
+<li>Multi-tab, iframes, dialogs, file upload/download, drag-drop</li>
+<li>Web-first assertions and the "assert on locator, not on extracted value" rule</li>
+</ul>
+</div>
+
+<h3>2.1 What a Locator actually is</h3>
+<p>A <strong>Locator</strong> is <em>not</em> a reference to a DOM node — it is a <em>description</em> of how to find one. When you call <code class="inline">page.locator('#submit')</code>, no DOM lookup happens yet. Playwright stores the recipe ("find an element with id <code class="inline">submit</code>"). The lookup happens fresh every time you act on it, which is why locators never go stale.</p>
+<p>Compare this with Selenium's <code class="inline">WebElement</code>, which is a handle to a found element. If the DOM re-renders, the handle becomes stale and you get <code class="inline">StaleElementReferenceException</code>. Playwright's design sidesteps that entire class of bug.</p>
+
+<h3>2.2 The locator priority order (memorize this)</h3>
+<p>Playwright's team strongly recommends choosing locators in this order:</p>
+<table>
+<tr><th>#</th><th>Locator</th><th>What it targets</th><th>Why it's good</th></tr>
+<tr><td>1</td><td><code class="inline">getByRole</code></td><td>ARIA role + accessible name</td><td>Mirrors how assistive tech sees the page. Survives CSS/structure changes.</td></tr>
+<tr><td>2</td><td><code class="inline">getByLabel</code></td><td>Form controls by their visible label</td><td>Maps to user intent ("the Email field"). Refactor-proof.</td></tr>
+<tr><td>3</td><td><code class="inline">getByPlaceholder</code></td><td>Inputs by placeholder text</td><td>Falls back when no label exists.</td></tr>
+<tr><td>4</td><td><code class="inline">getByText</code></td><td>Elements by their visible text</td><td>Best for non-interactive content (paragraphs, error messages).</td></tr>
+<tr><td>5</td><td><code class="inline">getByAltText</code></td><td>Images by alt attribute</td><td>For media; also a11y-friendly.</td></tr>
+<tr><td>6</td><td><code class="inline">getByTitle</code></td><td>Elements by title tooltip</td><td>Rarely needed; good for tooltipped buttons.</td></tr>
+<tr><td>7</td><td><code class="inline">getByTestId</code></td><td><code class="inline">data-testid</code> attribute</td><td>Last-resort, dev-controlled, completely stable.</td></tr>
+<tr><td>8</td><td><code class="inline">locator('css')</code> / <code class="inline">locator('xpath=...')</code></td><td>Raw CSS or XPath</td><td>Escape hatch. Fragile because CSS/structure change often.</td></tr>
+</table>
+
+<div class="tip"><b>Rule of thumb</b>Ask "how would a user describe this element?" — if they would say "the Submit button", use <code class="inline">getByRole('button', { name: 'Submit' })</code>. If they would say "the third row of the table", combine getByRole + nth.</div>
+
+<h3>2.3 getByRole — the most important one</h3>
+<p>HTML elements have an implicit ARIA role: a <code class="inline">&lt;button&gt;</code> has role <em>button</em>, a <code class="inline">&lt;a href&gt;</code> has role <em>link</em>, <code class="inline">&lt;h1&gt;</code> has role <em>heading</em>, etc. The <em>accessible name</em> is what a screen reader would read out — usually the visible text, or the value of <code class="inline">aria-label</code> / <code class="inline">aria-labelledby</code> / <code class="inline">title</code>.</p>
+
+<pre data-lang="ts">// HTML: &lt;button&gt;Sign in&lt;/button&gt;
+await page.getByRole('button', { name: 'Sign in' }).click();
+
+// HTML: &lt;h2&gt;Recent orders&lt;/h2&gt;
+await expect(page.getByRole('heading', { name: 'Recent orders' })).toBeVisible();
+
+// HTML: &lt;a href="/help"&gt;Help center&lt;/a&gt;
+await page.getByRole('link', { name: 'Help center' }).click();
+
+// HTML: &lt;input type="checkbox" aria-label="Remember me"&gt;
+await page.getByRole('checkbox', { name: 'Remember me' }).check();
+
+// Exact match (default is substring, case-insensitive)
+await page.getByRole('button', { name: 'Save', exact: true }).click();
+
+// Regex
+await page.getByRole('button', { name: /^delete/i }).click();</pre>
+
+<h4>Common roles you'll use daily</h4>
+<table>
+<tr><th>Role</th><th>HTML</th></tr>
+<tr><td>button</td><td>&lt;button&gt;, &lt;input type=button|submit&gt;</td></tr>
+<tr><td>link</td><td>&lt;a href&gt;</td></tr>
+<tr><td>textbox</td><td>&lt;input type=text|email|password|tel|url|search&gt;, &lt;textarea&gt;</td></tr>
+<tr><td>checkbox / radio</td><td>&lt;input type=checkbox|radio&gt;</td></tr>
+<tr><td>combobox</td><td>&lt;select&gt;</td></tr>
+<tr><td>heading</td><td>&lt;h1&gt;…&lt;h6&gt;</td></tr>
+<tr><td>list / listitem</td><td>&lt;ul&gt;, &lt;ol&gt; / &lt;li&gt;</td></tr>
+<tr><td>row / cell / columnheader</td><td>&lt;tr&gt;, &lt;td&gt;, &lt;th&gt;</td></tr>
+<tr><td>dialog</td><td>&lt;dialog&gt;, role="dialog"</td></tr>
+<tr><td>img</td><td>&lt;img alt&gt; (no alt = role="presentation")</td></tr>
+</table>
+
+<h3>2.4 getByLabel, getByPlaceholder, getByText, getByTestId</h3>
+<pre data-lang="ts">// &lt;label&gt;Email&lt;/label&gt;&lt;input type="email"&gt;
+await page.getByLabel('Email').fill('user@test.com');
+
+// &lt;input placeholder="Search products"&gt;
+await page.getByPlaceholder('Search products').fill('shoes');
+
+// Match visible text (substring, case-insensitive)
+await page.getByText('Welcome back').click();
+await page.getByText('Order placed', { exact: true });
+await page.getByText(/total: \$\d+/i);
+
+// Alt text on images
+await page.getByAltText('Company logo').click();
+
+// Title attribute
+await page.getByTitle('Open menu').click();
+
+// data-testid — last resort
+// &lt;div data-testid="cart-count"&gt;3&lt;/div&gt;
+await expect(page.getByTestId('cart-count')).toHaveText('3');</pre>
+
+<div class="note"><b>Custom test-id attribute</b>Configure once in <code class="inline">playwright.config.ts</code>: <code class="inline">use: { testIdAttribute: 'data-qa' }</code> and your team can use <code class="inline">data-qa</code> instead.</div>
+
+<h3>2.5 CSS and XPath — the escape hatches</h3>
+<pre data-lang="ts">// CSS
+page.locator('button.primary');
+page.locator('div.card &gt; h3');
+page.locator('input[name="email"]');
+
+// XPath — prefix with xpath= OR start with / or (
+page.locator('//button[contains(text(),"Save")]');
+page.locator('xpath=//div[@class="row"][3]');
+
+// Playwright-only CSS extensions
+page.locator('button:has-text("Buy")');         // text inside
+page.locator('div:has(span.badge)');            // contains another element
+page.locator('button:visible');                 // visible only
+page.locator('text=Hello');                     // text engine
+page.locator(':light(button)');                 // pierce light DOM
+page.locator(':nth-match(button, 2)');          // 2nd match</pre>
+
+<div class="warn"><b>Why XPath is fragile</b>XPath usually encodes the document structure (e.g. <code class="inline">div[2]/span[3]</code>). Any DOM refactor breaks it. Prefer role/label locators that follow <em>semantics</em>, not <em>structure</em>.</div>
+
+<h3>2.6 Strict mode and narrowing</h3>
+<p>Every action method (click, fill, etc.) in Playwright requires the locator to resolve to <strong>exactly one</strong> element. If it matches multiple, you get a clear error. This is <em>strict mode</em> and it is on by default.</p>
+
+<pre data-lang="ts">// FAILS with strict mode if multiple buttons named "Edit" exist
+await page.getByRole('button', { name: 'Edit' }).click();
+// Error: strict mode violation: resolved to 3 elements
+//   1) &lt;button&gt;Edit&lt;/button&gt; (in row 1)
+//   2) &lt;button&gt;Edit&lt;/button&gt; (in row 2)
+//   3) ...</pre>
+
+<h4>Narrowing strategies</h4>
+
+<h5>By position</h5>
+<pre data-lang="ts">page.getByRole('button', { name: 'Edit' }).first();
+page.getByRole('button', { name: 'Edit' }).last();
+page.getByRole('button', { name: 'Edit' }).nth(2);  // 0-indexed</pre>
+
+<h5>By filter</h5>
+<pre data-lang="ts">// rows containing "Alice"
+page.getByRole('row').filter({ hasText: 'Alice' });
+
+// rows NOT containing "deleted"
+page.getByRole('row').filter({ hasNotText: 'deleted' });
+
+// rows that contain a checkbox
+page.getByRole('row').filter({ has: page.getByRole('checkbox') });
+
+// rows that do NOT contain an "archived" badge
+page.getByRole('row').filter({ hasNot: page.getByText('Archived') });</pre>
+
+<h5>By chaining (best practice for tables and lists)</h5>
+<pre data-lang="ts">// Click the Delete button on the row that contains "alice@test.com"
+await page
+  .getByRole('row', { name: /alice@test\.com/ })
+  .getByRole('button', { name: 'Delete' })
+  .click();
+
+// Or with filter
+await page
+  .getByRole('row').filter({ hasText: 'alice@test.com' })
+  .getByRole('button', { name: 'Delete' })
+  .click();</pre>
+
+<div class="tip"><b>Why narrowing beats indexing</b>nth(3) breaks the moment someone inserts a row. Filtering by content stays correct.</div>
+
+<h3>2.6.5 Parent / Sibling / Child relationships</h3>
+<p>Unlike Selenium, Playwright has no <code class="inline">.parent()</code> method. You express tree relationships through <strong>chaining</strong>, <strong>filter+has</strong>, or fall back to CSS / XPath when needed.</p>
+
+<h4>Child — chain or CSS</h4>
+<pre data-lang="ts">// "Find the Delete button INSIDE the row containing alice"
+await page.getByRole('row', { name: /alice@test\.com/ })
+  .getByRole('button', { name: 'Delete' })
+  .click();
+
+// CSS direct child
+page.locator('ul.menu > li');           // li directly inside ul.menu
+page.locator('.card .title');           // title anywhere inside card</pre>
+
+<h4>Parent — filter by what the parent contains</h4>
+<pre data-lang="ts">// "The row that CONTAINS the Delete button"
+const row = page.getByRole('row').filter({ has: page.getByRole('button', { name: 'Delete' }) });
+await row.click();
+
+// "The row that contains specific TEXT"
+page.getByRole('row').filter({ hasText: 'alice@test.com' });
+
+// XPath escape hatch for true "ancestor"
+page.locator('xpath=//button[normalize-space()="Delete"]/ancestor::tr');</pre>
+
+<h4>Sibling — CSS combinators or XPath</h4>
+<pre data-lang="ts">// CSS: + adjacent sibling, ~ general sibling
+page.locator('label:has-text("Email") + input');     // input directly after label
+page.locator('label:has-text("Email") ~ input');     // any input sibling after label
+
+// XPath
+page.locator('xpath=//label[normalize-space()="Email"]/following-sibling::input[1]');
+page.locator('xpath=//input[@id="pw"]/preceding-sibling::label[1]');</pre>
+
+<h4>"Closest ancestor that matches" pattern (common interview question)</h4>
+<pre data-lang="ts">// Selenium: element.find_element(By.XPATH, "./ancestor::tr")
+// Playwright equivalent:
+const cell = page.getByText('alice@test.com');
+const row = page.getByRole('row').filter({ has: cell });
+// or with XPath
+const row2 = cell.locator('xpath=ancestor::tr[1]');</pre>
+
+<table>
+<tr><th>Relationship</th><th>Playwright idiom (preferred)</th><th>CSS fallback</th><th>XPath fallback</th></tr>
+<tr><td>Child of</td><td><code class="inline">parent.locator(child)</code> (chain)</td><td><code class="inline">parent &gt; child</code></td><td><code class="inline">parent/child</code></td></tr>
+<tr><td>Descendant of</td><td>Chain locators</td><td><code class="inline">parent child</code> (space)</td><td><code class="inline">parent//child</code></td></tr>
+<tr><td>Parent of (containing)</td><td><code class="inline">.filter({ has: child })</code></td><td><code class="inline">parent:has(child)</code></td><td><code class="inline">child/parent::*</code></td></tr>
+<tr><td>Ancestor of</td><td><code class="inline">.filter({ has: descendant })</code></td><td><code class="inline">ancestor:has(descendant)</code></td><td><code class="inline">child/ancestor::tag</code></td></tr>
+<tr><td>Next sibling</td><td>Use CSS or XPath</td><td><code class="inline">prev + next</code></td><td><code class="inline">node/following-sibling::tag[1]</code></td></tr>
+<tr><td>Any following sibling</td><td>Use CSS or XPath</td><td><code class="inline">prev ~ sibling</code></td><td><code class="inline">node/following-sibling::tag</code></td></tr>
+<tr><td>Previous sibling</td><td>Use XPath</td><td>—</td><td><code class="inline">node/preceding-sibling::tag[1]</code></td></tr>
+</table>
+
+<div class="tip"><b>Rule of thumb</b>If both options exist, prefer chaining + filter over CSS/XPath axes. The chain locator stays readable and Playwright re-resolves each segment independently — more robust to mid-page changes.</div>
+
+<h3>2.7 Stability ranking — when to use what</h3>
+<table>
+<tr><th>Stability</th><th>Approach</th><th>Notes</th></tr>
+<tr><td>★★★★★</td><td>role + accessible name</td><td>Survives styling, restructuring, language changes if i18n keys are stable</td></tr>
+<tr><td>★★★★☆</td><td>getByLabel / getByPlaceholder</td><td>Labels rarely change for working forms</td></tr>
+<tr><td>★★★★☆</td><td>getByTestId</td><td>Stable if team treats data-testid as a contract</td></tr>
+<tr><td>★★★☆☆</td><td>getByText</td><td>Breaks when copy changes</td></tr>
+<tr><td>★★☆☆☆</td><td>CSS class / structure</td><td>Designers refactor classes; risky</td></tr>
+<tr><td>★☆☆☆☆</td><td>XPath with positions</td><td>Breaks on any DOM change</td></tr>
+</table>
+
+<h3>2.8 The full UI interaction toolkit</h3>
+
+<h4>Click family</h4>
+<pre data-lang="ts">await page.getByRole('button', { name: 'Buy' }).click();
+await locator.click({ button: 'right' });       // right click
+await locator.click({ clickCount: 2 });         // double click (or .dblclick())
+await locator.click({ modifiers: ['Shift'] });  // shift-click
+await locator.click({ position: { x: 10, y: 5 }}); // click at offset
+await locator.click({ force: true });           // skip actionability checks (last resort)
+await locator.click({ trial: true });           // dry-run, validate actionability without clicking</pre>
+
+<h4>Fill vs type vs press_sequentially</h4>
+<pre data-lang="ts">// fill() — clears the field and sets the value in one go. Fast. Preferred for forms.
+await page.getByLabel('Email').fill('user@test.com');
+
+// type() — types char by char (legacy alias for pressSequentially). Slower but triggers per-key events.
+await page.getByLabel('Search').pressSequentially('hello', { delay: 100 });
+
+// clear()
+await page.getByLabel('Email').clear();
+
+// press() — single key combo (does NOT type chars, fires the key)
+await page.getByLabel('Search').press('Enter');
+await page.keyboard.press('Control+A');</pre>
+
+<div class="tip"><b>Choosing fill vs type</b>Use <code class="inline">fill</code> 95% of the time. Reach for <code class="inline">pressSequentially</code> only when the UI must react per keystroke (autocomplete preview, char counter test, contenteditable rich-text).</div>
+
+<h4>Checkboxes &amp; radios</h4>
+<pre data-lang="ts">await page.getByRole('checkbox', { name: 'Remember me' }).check();
+await page.getByRole('checkbox', { name: 'Remember me' }).uncheck();
+await page.getByRole('radio', { name: 'Express delivery' }).check();
+await expect(page.getByRole('checkbox', { name: 'TOS' })).toBeChecked();</pre>
+
+<h4>Select dropdowns (native &lt;select&gt;)</h4>
+<pre data-lang="ts">// by value
+await page.getByLabel('Country').selectOption('IN');
+
+// by visible label
+await page.getByLabel('Country').selectOption({ label: 'India' });
+
+// by index
+await page.getByLabel('Country').selectOption({ index: 2 });
+
+// multiple (multi-select)
+await page.getByLabel('Sizes').selectOption(['S', 'M', 'L']);</pre>
+
+<div class="warn"><b>Custom dropdowns</b>If it's not a real <code class="inline">&lt;select&gt;</code> (which most modern UIs are not), you can't use selectOption. Click the trigger, then click the option: <code class="inline">await page.getByRole('combobox').click(); await page.getByRole('option', { name: 'India' }).click();</code></div>
+
+<h4>Hover, focus, blur</h4>
+<pre data-lang="ts">await page.getByText('Account').hover();    // triggers any hover menu
+await page.getByLabel('Email').focus();
+await page.getByLabel('Email').blur();</pre>
+
+<h4>Keyboard &amp; mouse — low level</h4>
+<pre data-lang="ts">// Keyboard (no element focus needed, fires at window level)
+await page.keyboard.press('Escape');
+await page.keyboard.down('Shift');
+await page.keyboard.up('Shift');
+await page.keyboard.type('hello, world');   // types chars
+
+// Mouse (page coordinates)
+await page.mouse.move(100, 200);
+await page.mouse.down();
+await page.mouse.move(300, 400, { steps: 10 }); // 10 intermediate moves = smooth drag
+await page.mouse.up();
+await page.mouse.wheel(0, 500);  // scroll down 500 px</pre>
+
+<h4>Drag and drop</h4>
+<pre data-lang="ts">// High-level (HTML5 drag-and-drop)
+await page.locator('#source').dragTo(page.locator('#target'));
+
+// Manual — for canvas/SVG or non-HTML5 DnD
+const src = await page.locator('#source').boundingBox();
+const dst = await page.locator('#target').boundingBox();
+await page.mouse.move(src.x + src.width / 2, src.y + src.height / 2);
+await page.mouse.down();
+await page.mouse.move(dst.x + dst.width / 2, dst.y + dst.height / 2, { steps: 20 });
+await page.mouse.up();</pre>
+
+<h4>Screenshots</h4>
+<pre data-lang="ts">await page.screenshot({ path: 'full.png', fullPage: true });
+await page.locator('.invoice').screenshot({ path: 'invoice.png' });
+
+// Visual regression
+await expect(page).toHaveScreenshot('home.png');                    // full page
+await expect(page.locator('.invoice')).toHaveScreenshot('inv.png'); // element
+// First run creates baseline. Later runs diff vs baseline.</pre>
+
+<h3>2.9 Multiple tabs and windows (promise-first pattern)</h3>
+<p>When a click opens a new tab, Playwright emits a <code class="inline">page</code> event on the context. Two important rules:</p>
+<ol>
+<li><strong>Subscribe to the event <em>before</em> you trigger it</strong> — otherwise you miss it.</li>
+<li>Use <code class="inline">Promise.all</code> to start listening and acting in one atomic step.</li>
+</ol>
+
+<pre data-lang="ts">test('opens terms in a new tab', async ({ context, page }) => {
+  await page.goto('/signup');
+
+  const [newPage] = await Promise.all([
+    context.waitForEvent('page'),            // start listening first
+    page.getByRole('link', { name: 'Terms' }).click(), // then trigger
+  ]);
+
+  await newPage.waitForLoadState();
+  await expect(newPage).toHaveURL(/\/terms/);
+  await expect(newPage.getByRole('heading')).toHaveText('Terms of Service');
+  await newPage.close();
+});</pre>
+
+<div class="warn"><b>Bug magnet</b>Don't do <code class="inline">await page.click('a')</code> first and <em>then</em> <code class="inline">await context.waitForEvent('page')</code>. The new page may have already opened and the event has fired. Always Promise.all the two together.</div>
+
+<h3>2.10 iframes</h3>
+<pre data-lang="ts">// Scope locators to inside an iframe
+const stripe = page.frameLocator('iframe[name="card-frame"]');
+await stripe.getByPlaceholder('Card number').fill('4242 4242 4242 4242');
+await stripe.getByPlaceholder('MM / YY').fill('12 / 30');
+await stripe.getByPlaceholder('CVC').fill('123');
+
+// Nested iframes
+const inner = page.frameLocator('#outer').frameLocator('#inner');
+await inner.getByRole('button', { name: 'Pay' }).click();
+
+// All frames on the page
+for (const frame of page.frames()) console.log(frame.url());</pre>
+
+<h3>2.11 Dialogs (alert / confirm / prompt)</h3>
+<pre data-lang="ts">// Subscribe BEFORE the action that triggers the dialog.
+page.on('dialog', async dialog =&gt; {
+  console.log(dialog.type(), dialog.message());
+  if (dialog.type() === 'prompt') {
+    await dialog.accept('the answer');
+  } else if (dialog.type() === 'confirm') {
+    await dialog.accept();
+  } else {
+    await dialog.dismiss();
+  }
+});
+
+await page.getByRole('button', { name: 'Delete account' }).click();</pre>
+
+<div class="tip"><b>One-time handler</b>If a dialog only fires once: <code class="inline">page.once('dialog', d =&gt; d.accept())</code>.</div>
+
+<h3>2.12 File upload</h3>
+<pre data-lang="ts">// Standard &lt;input type="file"&gt; — fastest path
+await page.getByLabel('Upload CV').setInputFiles('fixtures/cv.pdf');
+
+// Multiple files
+await page.getByLabel('Photos').setInputFiles(['a.jpg', 'b.jpg']);
+
+// Clear the selection
+await page.getByLabel('Upload CV').setInputFiles([]);
+
+// Buffer instead of disk file
+await page.getByLabel('Upload').setInputFiles({
+  name: 'invoice.csv',
+  mimeType: 'text/csv',
+  buffer: Buffer.from('id,total\n1,99.00\n')
+});
+
+// Custom button that opens a file chooser (no &lt;input&gt; in markup)
+const [chooser] = await Promise.all([
+  page.waitForEvent('filechooser'),
+  page.getByRole('button', { name: 'Add file' }).click(),
+]);
+await chooser.setFiles('fixtures/cv.pdf');</pre>
+
+<h3>2.13 File download</h3>
+<pre data-lang="ts">const [download] = await Promise.all([
+  page.waitForEvent('download'),
+  page.getByRole('button', { name: 'Export CSV' }).click(),
+]);
+console.log('suggested name:', download.suggestedFilename());
+await download.saveAs('./downloads/export.csv');
+// or read the content stream directly:
+const stream = await download.createReadStream();</pre>
+
+<h3>2.14 Web-first assertions and the golden rule</h3>
+<p>Playwright's <code class="inline">expect</code> works on a <strong>locator</strong>, and it <strong>auto-retries</strong> the assertion until it passes or the timeout expires. This is what makes flaky tests rare.</p>
+
+<h5>The golden rule</h5>
+<div class="tip"><b>Assert on the locator, not on a value you extracted.</b>
+<code class="inline">await expect(locator).toHaveText('Hello')</code> retries on every poll.<br>
+<code class="inline">expect(await locator.textContent()).toBe('Hello')</code> reads <em>once</em>, then asserts — and flakes if the text appears 1 ms later.</div>
+
+<h5>The full assertion menu</h5>
+<pre data-lang="ts">// Visibility / DOM
+await expect(locator).toBeVisible();
+await expect(locator).toBeHidden();
+await expect(locator).toBeAttached();
+await expect(locator).toHaveCount(3);
+
+// Enabled / state
+await expect(locator).toBeEnabled();
+await expect(locator).toBeDisabled();
+await expect(locator).toBeEditable();
+await expect(locator).toBeChecked();
+await expect(locator).toBeFocused();
+await expect(locator).toBeEmpty();
+
+// Text
+await expect(locator).toHaveText('Hello');                 // exact
+await expect(locator).toHaveText(/Hel/);                   // regex
+await expect(locator).toContainText('ell');
+await expect(locator).toContainText(['A','B','C']);        // for list of items
+
+// Attribute / value
+await expect(locator).toHaveAttribute('href', '/about');
+await expect(locator).toHaveClass(/active/);
+await expect(locator).toHaveValue('user@test.com');
+await expect(locator).toHaveCSS('color', 'rgb(255, 0, 0)');
+await expect(locator).toHaveJSProperty('checked', true);
+
+// Page-level
+await expect(page).toHaveTitle(/Dashboard/);
+await expect(page).toHaveURL(/\/dashboard/);
+
+// Response
+await expect(response).toBeOK();
+
+// Negation
+await expect(locator).not.toBeVisible();
+
+// Custom timeout (overrides default)
+await expect(locator).toBeVisible({ timeout: 10_000 });
+
+// Soft assertions — collect failures, don't stop
+await expect.soft(locator).toHaveText('A');
+await expect.soft(locator2).toBeVisible();
+// Test fails at the end if any soft assertion failed.</pre>
+
+<h3>2.15 Actionability deep-dive</h3>
+<p>Before every action, Playwright checks the conditions in the table. You don't write these — they're automatic. But knowing them helps you debug "Why is my click failing?"</p>
+<table>
+<tr><th>Action</th><th>Attached</th><th>Visible</th><th>Stable</th><th>Receives events</th><th>Enabled</th><th>Editable</th></tr>
+<tr><td>click, dblclick, tap</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
+<tr><td>fill, type, clear</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+<tr><td>check, uncheck</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
+<tr><td>hover</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>selectOption</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>focus, scrollIntoViewIfNeeded</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<div class="qa-bank">
+<h3>Module 2 — Interview Q&amp;A bank</h3>
+
+<details class="qa"><summary>What is a Locator and why is it different from a Selenium WebElement?</summary>
+<div class="answer">A Locator is a <em>description</em> of how to find an element, not a reference to it. The DOM is re-queried every time you act, so locators never go stale — they sidestep <code class="inline">StaleElementReferenceException</code>. Selenium's WebElement is a handle to a found node; if the DOM re-renders, you must re-find it.</div></details>
+
+<details class="qa"><summary>What is the recommended locator priority order?</summary>
+<div class="answer">getByRole → getByLabel → getByPlaceholder → getByText → getByAltText → getByTitle → getByTestId → raw CSS/XPath. Higher priority = closer to how a user describes the element = more stable across refactors.</div></details>
+
+<details class="qa"><summary>What is an accessible name?</summary>
+<div class="answer">The string a screen reader would announce for an element. Usually the visible text inside the element, or the value of <code class="inline">aria-label</code> / <code class="inline">aria-labelledby</code> / a linked <code class="inline">&lt;label&gt;</code> / <code class="inline">title</code>. <code class="inline">getByRole('button', { name: 'Save' })</code> matches that name.</div></details>
+
+<details class="qa"><summary>What is strict mode and why is it the default?</summary>
+<div class="answer">Strict mode requires action-method locators to resolve to exactly one element. If they match many, Playwright throws a clear error listing the matches. Selenium silently picks the first match, which silently masks ambiguity bugs — strict mode forces you to be specific.</div></details>
+
+<details class="qa"><summary>How do you handle "found multiple elements" errors without using nth?</summary>
+<div class="answer">Narrow by content (preferred) or by structure. Examples: <code class="inline">.filter({ hasText: 'Alice' })</code>, <code class="inline">.filter({ has: page.getByRole('checkbox') })</code>, or chain locators: <code class="inline">page.getByRole('row', { name: /alice/i }).getByRole('button', { name: 'Delete' })</code>. Use <code class="inline">.nth(n)</code> only when the position is the actual semantic (e.g. "the first row").</div></details>
+
+<details class="qa"><summary>Difference between fill, type and pressSequentially?</summary>
+<div class="answer"><code class="inline">fill</code> clears and sets the value in one operation — fastest, preferred. <code class="inline">pressSequentially</code> (alias type) types char by char and fires per-key events — needed for autocomplete tests or contenteditable. <code class="inline">press</code> sends a single key combo and does not type characters (e.g. <code class="inline">press('Enter')</code>).</div></details>
+
+<details class="qa"><summary>How do you select an option from a non-native dropdown (e.g. React Select)?</summary>
+<div class="answer">You can't use <code class="inline">selectOption</code> — that's only for native <code class="inline">&lt;select&gt;</code>. Click the trigger, then click the option by role: <code class="inline">await page.getByRole('combobox').click(); await page.getByRole('option', { name: 'India' }).click();</code></div></details>
+
+<details class="qa"><summary>Why is "promise-first" mandatory for new pages and downloads?</summary>
+<div class="answer">Because the event you're waiting for can fire <em>before</em> you start listening. <code class="inline">Promise.all([context.waitForEvent('page'), page.click(...)])</code> guarantees the listener is attached before the trigger runs. Doing them sequentially can miss the event entirely.</div></details>
+
+<details class="qa"><summary>How do you handle a JS alert/confirm/prompt?</summary>
+<div class="answer">Register a <code class="inline">page.on('dialog', d =&gt; d.accept())</code> handler <em>before</em> the action that opens it. You can read <code class="inline">d.type()</code> and <code class="inline">d.message()</code>, then call <code class="inline">d.accept(value?)</code> or <code class="inline">d.dismiss()</code>. If the dialog only fires once, use <code class="inline">page.once</code>.</div></details>
+
+<details class="qa"><summary>How do you interact with an iframe?</summary>
+<div class="answer">Use <code class="inline">page.frameLocator(selector)</code> to scope inside an iframe and continue chaining locators normally: <code class="inline">page.frameLocator('iframe[name=card]').getByPlaceholder('CVC').fill('123')</code>. For nested iframes, chain frameLocators.</div></details>
+
+<details class="qa"><summary>How do you upload a file to a button that doesn't expose an input?</summary>
+<div class="answer">Use the filechooser event: <code class="inline">const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.getByRole('button', { name: 'Add file' }).click()]); await chooser.setFiles('file.pdf');</code></div></details>
+
+<details class="qa"><summary>How do you handle file downloads?</summary>
+<div class="answer">Promise.all the click with <code class="inline">page.waitForEvent('download')</code>; the resulting download object exposes <code class="inline">suggestedFilename()</code>, <code class="inline">saveAs(path)</code>, and <code class="inline">createReadStream()</code>.</div></details>
+
+<details class="qa"><summary>Explain the "assert on locator not extracted value" rule.</summary>
+<div class="answer"><code class="inline">await expect(locator).toHaveText('Hi')</code> auto-retries the lookup + comparison every ~50 ms until it passes or times out. <code class="inline">expect(await locator.textContent()).toBe('Hi')</code> snapshots the text once and asserts; if it became 'Hi' a millisecond later, the test flakes. Web-first assertions remove that race.</div></details>
+
+<details class="qa"><summary>What's the difference between toBeVisible and toBeAttached?</summary>
+<div class="answer"><code class="inline">toBeAttached</code> = the element is in the DOM (may be hidden). <code class="inline">toBeVisible</code> = in DOM AND rendered (non-zero size, not display:none, not visibility:hidden). For "wait until popup appears", use toBeVisible. For "the row is created in the DOM tree", toBeAttached.</div></details>
+
+<details class="qa"><summary>What does force: true do, and when is it correct to use?</summary>
+<div class="answer">It skips actionability checks — Playwright clicks the element without verifying it's visible/stable/enabled. Use it as a last resort when actionability is wrong (e.g. a custom overlay that hit-tests fail on but the click would still work). Prefer fixing the locator first.</div></details>
+
+<details class="qa"><summary>What's the difference between page.locator and page.$ (deprecated)?</summary>
+<div class="answer"><code class="inline">page.locator</code> returns a re-queried, retriable description; <code class="inline">page.$</code> returned a one-time ElementHandle that goes stale. ElementHandle still exists for rare cases (passing DOM nodes into evaluate), but locator is the modern API.</div></details>
+
+<details class="qa"><summary>How do you wait for an element to become enabled?</summary>
+<div class="answer">Use a web-first assertion: <code class="inline">await expect(locator).toBeEnabled()</code>. Or, since action methods auto-wait for enabled as part of actionability, often you just call <code class="inline">.click()</code> directly and the wait is implicit.</div></details>
+
+<details class="qa"><summary>How do you scroll an element into view?</summary>
+<div class="answer">You usually don't need to — action methods scroll automatically. To do it manually: <code class="inline">await locator.scrollIntoViewIfNeeded()</code>. For arbitrary scrolling: <code class="inline">await page.mouse.wheel(0, 500)</code> or <code class="inline">await page.evaluate(() =&gt; window.scrollBy(0, 500))</code>.</div></details>
+
+<details class="qa"><summary>What's a soft assertion and when is it useful?</summary>
+<div class="answer"><code class="inline">expect.soft(...)</code> records the failure but lets the test continue. At end of test, if any soft assertion failed, the test fails. Useful for "I want to check 5 things on a page and see all the failures at once", instead of fixing one, re-running, fixing the next.</div></details>
+
+<details class="qa"><summary>How do you target the 3rd row of a table that contains a specific user?</summary>
+<div class="answer">Don't use nth(2) — it breaks when rows reorder. Use: <code class="inline">page.getByRole('row').filter({ hasText: 'alice@test.com' })</code>. If you genuinely need positional (e.g. "header row"), then nth(0) is fine.</div></details>
+
+<details class="qa"><summary>How would you click a button that only appears after hovering on a menu?</summary>
+<div class="answer">Hover the parent, then click the now-visible child: <code class="inline">await page.getByRole('menu', { name: 'Account' }).hover(); await page.getByRole('menuitem', { name: 'Sign out' }).click();</code></div></details>
+
+<details class="qa"><summary>How do you assert that a list contains items in a specific order?</summary>
+<div class="answer"><code class="inline">await expect(page.getByRole('listitem')).toHaveText(['Apples', 'Bananas', 'Cherries'])</code> — passing an array compares all elements and the order. <code class="inline">toContainText([...])</code> is the substring variant.</div></details>
+
+<details class="qa"><summary>How do you handle a dropdown that fetches options over the network?</summary>
+<div class="answer">Open the dropdown, then await a web-first assertion that an expected option is present (which retries until network resolves): <code class="inline">await page.getByRole('combobox').click(); await expect(page.getByRole('option', { name: 'India' })).toBeVisible(); await page.getByRole('option', { name: 'India' }).click();</code></div></details>
+
+<details class="qa"><summary>If a test sometimes passes and sometimes fails on the same element, what's the typical cause?</summary>
+<div class="answer">Almost always one of: (1) you used <code class="inline">page.waitForTimeout</code> instead of a web-first assertion; (2) you asserted on an extracted value instead of a locator; (3) animations are still running and the element isn't stable; (4) the locator is ambiguous and matches a different element on slow runs; (5) network call hasn't resolved. Fix the wait/assertion, not by adding sleeps.</div></details>
+</div>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

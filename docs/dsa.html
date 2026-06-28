@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Fundamentals | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn DSA Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, dsa, testing, automation, playwright dsa fundamentals">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="DSA Fundamentals — Playwright SDET">
+  <meta property="og:description" content="Learn DSA Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/dsa.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DSA Fundamentals">
+  <meta name="twitter:description" content="Learn DSA Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/dsa.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=" active"><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">37</span>DSA Fundamentals (deep teach)</h2>
+
+<div class="toc">
+<h4>What you will master here</h4>
+<ul>
+<li>Complexity analysis (Big-O, Big-Θ, Big-Ω, amortised)</li>
+<li>Arrays, strings, hashmaps, sets — when to pick each</li>
+<li>Stacks, queues, deques, priority queues</li>
+<li>Linked lists, doubly-linked lists</li>
+<li>Trees: binary, BST, balanced (AVL/Red-Black), trie</li>
+<li>Graphs: BFS, DFS, Dijkstra, topological sort</li>
+<li>Sorting: quicksort, mergesort, heapsort, counting sort</li>
+<li>Recursion vs iteration; memoisation; DP</li>
+</ul>
+</div>
+
+<h3>37.1 Complexity — the alphabet</h3>
+<table>
+<tr><th>Notation</th><th>Meaning</th></tr>
+<tr><td>Big-O — O(f)</td><td>Upper bound — "grows no faster than f"</td></tr>
+<tr><td>Big-Ω — Ω(f)</td><td>Lower bound — "grows at least as fast as f"</td></tr>
+<tr><td>Big-Θ — Θ(f)</td><td>Tight bound — both upper and lower</td></tr>
+<tr><td>Amortised</td><td>Average over a sequence — array push is O(1) amortised even though resize is O(n)</td></tr>
+</table>
+
+<table>
+<tr><th>Complexity</th><th>Examples</th><th>Feels like</th></tr>
+<tr><td>O(1)</td><td>Hash lookup, array index</td><td>Instant</td></tr>
+<tr><td>O(log n)</td><td>Binary search, balanced tree ops</td><td>1B items in ~30 steps</td></tr>
+<tr><td>O(n)</td><td>Linear scan</td><td>Scales linearly</td></tr>
+<tr><td>O(n log n)</td><td>Mergesort, heapsort</td><td>Best general-purpose sort</td></tr>
+<tr><td>O(n²)</td><td>Nested loop, bubble sort</td><td>Slow on big input</td></tr>
+<tr><td>O(2ⁿ)</td><td>Naive subset/Fibonacci</td><td>Exponential — usually wrong</td></tr>
+<tr><td>O(n!)</td><td>All permutations</td><td>Brute force; need pruning</td></tr>
+</table>
+
+<h3>37.2 Arrays &amp; Strings</h3>
+<ul>
+<li>Contiguous memory; O(1) index access; O(n) insert/delete in middle</li>
+<li>Dynamic arrays (JS Array, Python list) — amortised O(1) push, resize doubles capacity</li>
+<li>Strings are usually immutable in JS — every "modification" creates a new string</li>
+<li><strong>Two-pointer</strong> — sorted array tricks (pair sum, palindrome)</li>
+<li><strong>Sliding window</strong> — substring/subarray with constraints</li>
+<li><strong>Prefix sum</strong> — range queries in O(1) after O(n) preprocessing</li>
+</ul>
+
+<pre data-lang="ts">// Prefix sum
+function prefix(nums: number[]): number[] {
+  const p = new Array(nums.length + 1).fill(0);
+  for (let i = 0; i &lt; nums.length; i++) p[i + 1] = p[i] + nums[i];
+  return p;
+}
+// rangeSum(l, r) = p[r+1] - p[l]</pre>
+
+<h3>37.3 Hashmaps &amp; Sets</h3>
+<ul>
+<li>Average O(1) insert/lookup; worst case O(n) with adversarial keys</li>
+<li>Use Set when you only need membership; Map when you need a value per key</li>
+<li>JS <code class="inline">Map</code> preserves insertion order; <code class="inline">{}</code> coerces keys to string</li>
+<li>Hash collisions in practice are extremely rare for non-adversarial workloads</li>
+</ul>
+
+<h3>37.4 Stacks &amp; Queues</h3>
+<table>
+<tr><th>Structure</th><th>Order</th><th>Operations</th></tr>
+<tr><td>Stack</td><td>LIFO</td><td>push, pop, peek (top) — all O(1)</td></tr>
+<tr><td>Queue</td><td>FIFO</td><td>enqueue, dequeue — O(1) with linked list</td></tr>
+<tr><td>Deque</td><td>Both ends</td><td>pushFront, pushBack, popFront, popBack — O(1)</td></tr>
+<tr><td>Priority Queue (min-heap)</td><td>By priority</td><td>insert, extract-min — O(log n)</td></tr>
+</table>
+
+<p>JS arrays approximate all four — <code class="inline">push/pop</code> for stack, <code class="inline">push/shift</code> for queue (but <code class="inline">shift</code> is O(n)!). For real queue use a linked list or a JS class.</p>
+
+<h3>37.5 Linked Lists</h3>
+<pre data-lang="ts">class Node { val: number; next: Node | null = null; constructor(v: number) { this.val = v; } }
+
+// Insert at head — O(1)
+function prepend(head: Node | null, v: number): Node {
+  const n = new Node(v); n.next = head; return n;
+}
+
+// Reverse iteratively — O(n) time, O(1) space
+function reverse(head: Node | null): Node | null {
+  let prev: Node | null = null, curr = head;
+  while (curr) { const next = curr.next; curr.next = prev; prev = curr; curr = next; }
+  return prev;
+}</pre>
+
+<p>When to use a linked list: O(1) insert/delete at known positions; no random access required. Most real code uses arrays — linked lists are interview territory.</p>
+
+<h3>37.6 Trees</h3>
+<table>
+<tr><th>Tree type</th><th>Property</th><th>Used for</th></tr>
+<tr><td>Binary tree</td><td>Each node ≤ 2 children</td><td>Generic hierarchical data</td></tr>
+<tr><td>Binary search tree (BST)</td><td>Left &lt; root &lt; right</td><td>Sorted lookup O(log n) when balanced</td></tr>
+<tr><td>Balanced BST (AVL, Red-Black)</td><td>Auto-balancing</td><td>Java TreeMap, C++ std::map</td></tr>
+<tr><td>Heap (binary)</td><td>Parent ≤ children (min-heap)</td><td>Priority queue</td></tr>
+<tr><td>Trie (prefix tree)</td><td>Path = string</td><td>Autocomplete, prefix queries</td></tr>
+<tr><td>B-tree</td><td>Many children per node</td><td>DB indexes, filesystems</td></tr>
+</table>
+
+<h4>Tree traversals</h4>
+<ul>
+<li><strong>Inorder</strong> (left, root, right) — gives sorted order on a BST</li>
+<li><strong>Preorder</strong> (root, left, right) — useful for cloning</li>
+<li><strong>Postorder</strong> (left, right, root) — useful for deleting</li>
+<li><strong>BFS / level-order</strong> — queue-based, useful for "shortest path"</li>
+</ul>
+
+<pre data-lang="ts">// DFS preorder
+function preorder(n: TreeNode | null, out: number[] = []): number[] {
+  if (!n) return out;
+  out.push(n.val);
+  preorder(n.left, out);
+  preorder(n.right, out);
+  return out;
+}
+
+// BFS
+function bfs(root: TreeNode | null): number[] {
+  const out: number[] = [], q: TreeNode[] = root ? [root] : [];
+  while (q.length) {
+    const n = q.shift()!;
+    out.push(n.val);
+    if (n.left) q.push(n.left);
+    if (n.right) q.push(n.right);
+  }
+  return out;
+}</pre>
+
+<h3>37.7 Graphs</h3>
+<p>A graph = nodes + edges. Directed or undirected, weighted or not, cyclic or acyclic.</p>
+
+<h4>Representations</h4>
+<ul>
+<li><strong>Adjacency list</strong> — <code class="inline">Map&lt;node, node[]&gt;</code>. Best for sparse graphs.</li>
+<li><strong>Adjacency matrix</strong> — 2D array; O(1) edge check, O(n²) space.</li>
+</ul>
+
+<h4>Algorithms</h4>
+<table>
+<tr><th>Algorithm</th><th>Purpose</th><th>Complexity</th></tr>
+<tr><td>BFS</td><td>Shortest path (unweighted)</td><td>O(V + E)</td></tr>
+<tr><td>DFS</td><td>Connectivity, topological sort</td><td>O(V + E)</td></tr>
+<tr><td>Dijkstra</td><td>Shortest path (positive weights)</td><td>O((V+E) log V)</td></tr>
+<tr><td>Bellman-Ford</td><td>Shortest path (negative weights)</td><td>O(V·E)</td></tr>
+<tr><td>Floyd-Warshall</td><td>All-pairs shortest path</td><td>O(V³)</td></tr>
+<tr><td>Topological sort</td><td>DAG ordering</td><td>O(V + E)</td></tr>
+<tr><td>Union-Find</td><td>Connected components</td><td>Nearly O(1) per op</td></tr>
+</table>
+
+<h3>37.8 Sorting</h3>
+<table>
+<tr><th>Algorithm</th><th>Time avg</th><th>Time worst</th><th>Stable?</th></tr>
+<tr><td>Bubble / Insertion</td><td>O(n²)</td><td>O(n²)</td><td>Yes</td></tr>
+<tr><td>Mergesort</td><td>O(n log n)</td><td>O(n log n)</td><td>Yes</td></tr>
+<tr><td>Quicksort</td><td>O(n log n)</td><td>O(n²)</td><td>No (typically)</td></tr>
+<tr><td>Heapsort</td><td>O(n log n)</td><td>O(n log n)</td><td>No</td></tr>
+<tr><td>Counting / Radix</td><td>O(n + k)</td><td>O(n + k)</td><td>Yes</td></tr>
+<tr><td>JS Array.sort (V8)</td><td>O(n log n)</td><td>O(n log n)</td><td>Yes (Timsort since 2019)</td></tr>
+</table>
+
+<h3>37.9 Recursion &amp; DP</h3>
+
+<h4>Recursion basics</h4>
+<ul>
+<li>Base case (when to stop)</li>
+<li>Recursive case (smaller subproblem)</li>
+<li>Combine results</li>
+<li>Watch the call stack — JS doesn't tail-call optimise</li>
+</ul>
+
+<h4>Memoisation (top-down DP)</h4>
+<pre data-lang="ts">// Fibonacci with memo
+const memo = new Map&lt;number, number&gt;();
+function fib(n: number): number {
+  if (n &lt; 2) return n;
+  if (memo.has(n)) return memo.get(n)!;
+  const r = fib(n - 1) + fib(n - 2);
+  memo.set(n, r);
+  return r;
+}
+// O(n) with memo vs O(2^n) without</pre>
+
+<h4>Tabulation (bottom-up DP)</h4>
+<pre data-lang="ts">function fib2(n: number): number {
+  if (n &lt; 2) return n;
+  let a = 0, b = 1;
+  for (let i = 2; i &lt;= n; i++) [a, b] = [b, a + b];
+  return b;
+}
+// O(n) time, O(1) space</pre>
+
+<h3>37.10 When to use which</h3>
+<table>
+<tr><th>Need</th><th>Pick</th></tr>
+<tr><td>Random access by index</td><td>Array</td></tr>
+<tr><td>Key → value lookup</td><td>HashMap</td></tr>
+<tr><td>Membership check</td><td>Set</td></tr>
+<tr><td>LIFO order</td><td>Stack (array)</td></tr>
+<tr><td>FIFO order</td><td>Queue (linked list / deque)</td></tr>
+<tr><td>Priority access</td><td>Heap / PriorityQueue</td></tr>
+<tr><td>Sorted lookup</td><td>Balanced BST (TreeMap)</td></tr>
+<tr><td>Prefix search</td><td>Trie</td></tr>
+<tr><td>Connected components / cycle detection</td><td>Union-Find / DFS</td></tr>
+<tr><td>Shortest path unweighted</td><td>BFS</td></tr>
+<tr><td>Shortest path weighted</td><td>Dijkstra</td></tr>
+</table>
+
+<div class="qa-bank">
+<h3>Module 37 — DSA Q&amp;A</h3>
+
+<details class="qa"><summary>What's the difference between O, Θ, Ω?</summary>
+<div class="answer">Big-O: upper bound (grows no faster than). Big-Ω: lower bound (grows at least as fast as). Big-Θ: both — tight bound. In practice O is what's usually meant.</div></details>
+
+<details class="qa"><summary>What is amortised complexity?</summary>
+<div class="answer">Average cost per operation over a sequence. Array push is O(1) amortised: most pushes are O(1), occasional resizes are O(n), but spread over many pushes the average stays constant.</div></details>
+
+<details class="qa"><summary>Hashmap vs balanced BST?</summary>
+<div class="answer">Hashmap: O(1) avg lookup, no order. BST (balanced): O(log n) lookup, maintains sorted order, supports range queries. Use BST when you need to iterate in order or query ranges.</div></details>
+
+<details class="qa"><summary>When would you use a stack?</summary>
+<div class="answer">Anywhere you need LIFO: function call tracking, undo, expression evaluation, valid-parentheses, DFS without recursion. <code class="inline">push/pop</code> on a JS array works.</div></details>
+
+<details class="qa"><summary>What's a priority queue?</summary>
+<div class="answer">Queue where each element has a priority; extract always returns highest priority. Usually implemented as a binary heap — O(log n) insert and extract. Used in Dijkstra, top-K, scheduling.</div></details>
+
+<details class="qa"><summary>BFS or DFS — when?</summary>
+<div class="answer">BFS for shortest path on unweighted graphs / level-order on trees. DFS for full exploration, topological sort, cycle detection, path existence. BFS = queue; DFS = recursion or stack.</div></details>
+
+<details class="qa"><summary>What's a trie?</summary>
+<div class="answer">Tree where each node represents a character; path from root to node spells a prefix. O(L) lookup where L = word length. Used in autocomplete, prefix queries, spell-checkers.</div></details>
+
+<details class="qa"><summary>How does mergesort work?</summary>
+<div class="answer">Recursively split array in half, sort each half, merge. O(n log n) guaranteed, stable, but O(n) extra space. Quicksort is similar but in-place and faster in practice (cache-friendly).</div></details>
+
+<details class="qa"><summary>What's the difference between memoisation and tabulation?</summary>
+<div class="answer">Memoisation: top-down recursion + cache. Tabulation: bottom-up iteration, fill a table. Same time complexity; tabulation often uses less memory (can drop earlier rows), no recursion stack.</div></details>
+
+<details class="qa"><summary>When is DP the right tool?</summary>
+<div class="answer">Problems with overlapping subproblems AND optimal substructure (optimal answer composed of optimal sub-answers). Climbing stairs, coin change, edit distance, LCS, knapsack. If subproblems don't repeat, plain recursion / divide-and-conquer is fine.</div></details>
+
+<details class="qa"><summary>What's a binary heap?</summary>
+<div class="answer">Array-backed tree where parent &lt; children (min-heap) or parent &gt; children (max-heap). Insert and extract-min in O(log n). Index math: parent of i is (i-1)/2; children are 2i+1 and 2i+2.</div></details>
+
+<details class="qa"><summary>Sliding window vs two-pointer?</summary>
+<div class="answer">Both move pointers forward. Two-pointer often starts at opposite ends (sorted pair sum, palindrome). Sliding window keeps a contiguous range, growing/shrinking to satisfy a constraint (longest substring without repeats).</div></details>
+
+<details class="qa"><summary>What's the space complexity of a recursive DFS?</summary>
+<div class="answer">O(depth) for the call stack — up to O(n) for a skewed tree, O(log n) for a balanced tree. Iterative DFS with an explicit stack has the same.</div></details>
+
+<details class="qa"><summary>Why might a hashmap be O(n) in the worst case?</summary>
+<div class="answer">Adversarial keys causing every entry to land in the same bucket — degenerates to a linked list. Real hash functions + load-factor-triggered resizing make this practically impossible for non-adversarial workloads.</div></details>
+
+<details class="qa"><summary>When is recursion preferred over iteration?</summary>
+<div class="answer">When the natural definition is recursive — tree/graph traversal, divide-and-conquer (mergesort), backtracking (permutations). For linear iteration, plain loops are clearer and have no stack risk.</div></details>
+</div>
+
+<h3>37.11 Advanced data structures (dev-level)</h3>
+
+<h4>Fenwick tree (Binary Indexed Tree)</h4>
+<p>O(log n) prefix sums with point updates. Compact array implementation.</p>
+<pre data-lang="ts">class Fenwick {
+  private bit: number[];
+  constructor(n: number) { this.bit = new Array(n + 1).fill(0); }
+  update(i: number, delta: number) {
+    for (i++; i &lt; this.bit.length; i += i &amp; -i) this.bit[i] += delta;
+  }
+  query(i: number): number {           // prefix sum [0..i]
+    let s = 0;
+    for (i++; i &gt; 0; i -= i &amp; -i) s += this.bit[i];
+    return s;
+  }
+}</pre>
+
+<h4>Segment tree</h4>
+<p>Range queries (sum/min/max) + range updates with lazy propagation. O(log n) per op.</p>
+
+<h4>Union-Find (Disjoint Set Union)</h4>
+<pre data-lang="ts">class DSU {
+  parent: number[]; rank: number[];
+  constructor(n: number) {
+    this.parent = Array.from({ length: n }, (_, i) =&gt; i);
+    this.rank = new Array(n).fill(0);
+  }
+  find(x: number): number {
+    if (this.parent[x] !== x) this.parent[x] = this.find(this.parent[x]);  // path compression
+    return this.parent[x];
+  }
+  union(x: number, y: number): boolean {
+    const rx = this.find(x), ry = this.find(y);
+    if (rx === ry) return false;
+    if (this.rank[rx] &lt; this.rank[ry]) this.parent[rx] = ry;
+    else if (this.rank[rx] &gt; this.rank[ry]) this.parent[ry] = rx;
+    else { this.parent[ry] = rx; this.rank[rx]++; }
+    return true;
+  }
+}
+// Nearly O(1) per op with both optimisations</pre>
+
+<h4>Trie + Aho-Corasick</h4>
+<pre data-lang="ts">class Trie {
+  children = new Map&lt;string, Trie&gt;();
+  end = false;
+  insert(word: string) {
+    let n: Trie = this;
+    for (const c of word) {
+      if (!n.children.has(c)) n.children.set(c, new Trie());
+      n = n.children.get(c)!;
+    }
+    n.end = true;
+  }
+  search(word: string): boolean {
+    let n: Trie = this;
+    for (const c of word) {
+      if (!n.children.has(c)) return false;
+      n = n.children.get(c)!;
+    }
+    return n.end;
+  }
+}
+// Aho-Corasick = Trie + failure links → multi-pattern search in O(text + patterns + matches)</pre>
+
+<h4>Bloom filter</h4>
+<p>Probabilistic membership: false positives possible, false negatives impossible. Tiny memory. K hash functions set K bits per insert; lookup checks all K bits.</p>
+
+<h4>Skip list</h4>
+<p>Probabilistic alternative to balanced trees. Multiple levels of forward pointers. Average O(log n) ops. Used in Redis sorted sets, LevelDB.</p>
+
+<h4>LRU cache (O(1) all ops)</h4>
+<p>Hashmap + doubly-linked list. Map keys → list nodes. Move to head on access; evict tail on overflow. (See dev ebook m41 for full implementation.)</p>
+
+<h3>37.12 Graph algorithms (advanced)</h3>
+<table>
+<tr><th>Algorithm</th><th>Purpose</th><th>Complexity</th></tr>
+<tr><td>Dijkstra</td><td>Single-source shortest path (non-negative weights)</td><td>O((V+E) log V) with heap</td></tr>
+<tr><td>Bellman-Ford</td><td>Same but handles negative weights; detects negative cycles</td><td>O(V·E)</td></tr>
+<tr><td>Floyd-Warshall</td><td>All-pairs shortest path</td><td>O(V³)</td></tr>
+<tr><td>A*</td><td>Heuristic-guided Dijkstra (maps, games)</td><td>Depends on heuristic</td></tr>
+<tr><td>Kruskal / Prim</td><td>Minimum spanning tree</td><td>O(E log V)</td></tr>
+<tr><td>Topological sort</td><td>DAG linearisation; dependency order</td><td>O(V + E)</td></tr>
+<tr><td>Tarjan / Kosaraju</td><td>Strongly connected components</td><td>O(V + E)</td></tr>
+<tr><td>Max-flow (Dinic's)</td><td>Network capacity</td><td>O(V²·E)</td></tr>
+</table>
+
+<h3>37.13 Dynamic programming patterns (complete catalogue)</h3>
+<table>
+<tr><th>Pattern</th><th>Example problems</th></tr>
+<tr><td>1D state</td><td>Fibonacci, climb stairs, house robber, max subarray (Kadane)</td></tr>
+<tr><td>2D string</td><td>Edit distance, LCS, regex match, distinct subsequences</td></tr>
+<tr><td>Knapsack (0/1)</td><td>Subset sum, partition equal sum, target sum</td></tr>
+<tr><td>Knapsack (unbounded)</td><td>Coin change ways, combinations</td></tr>
+<tr><td>Interval DP</td><td>Matrix chain multiplication, palindrome partition, burst balloons</td></tr>
+<tr><td>State machine</td><td>Best time to buy/sell stock (with cooldown / fees / k transactions)</td></tr>
+<tr><td>Tree DP</td><td>House robber III, longest path, diameter</td></tr>
+<tr><td>Bitmask DP</td><td>TSP for small N (N ≤ 20), assignment problem</td></tr>
+<tr><td>Digit DP</td><td>Count numbers in [L,R] with property</td></tr>
+<tr><td>DP on graphs</td><td>Longest path in DAG, count paths</td></tr>
+</table>
+
+<h3>37.14 Bit manipulation</h3>
+<pre data-lang="ts">x &amp; (x - 1)        // clears lowest set bit (Brian Kernighan)
+x &amp; -x             // isolates lowest set bit
+x | (1 &lt;&lt; k)       // set bit k
+x &amp; ~(1 &lt;&lt; k)      // clear bit k
+x ^ (1 &lt;&lt; k)       // toggle bit k
+(x &gt;&gt; k) &amp; 1       // read bit k
+Number.isInteger(Math.log2(x))  // is x a power of 2
+
+// Count set bits (popcount)
+function popcount(x: number): number {
+  let c = 0;
+  while (x) { x &amp;= x - 1; c++; }
+  return c;
+}
+
+// Swap without temp
+a ^= b; b ^= a; a ^= b;</pre>
+
+<h3>37.15 Math you'll use</h3>
+<ul>
+<li><strong>Modular arithmetic</strong> — large number ops mod prime; (a + b) % m, (a * b) % m, Fermat's little theorem for inverse</li>
+<li><strong>GCD (Euclidean)</strong>: <code class="inline">gcd(a,b) = b == 0 ? a : gcd(b, a % b)</code></li>
+<li><strong>Sieve of Eratosthenes</strong> — primes up to N in O(N log log N)</li>
+<li><strong>Combinatorics</strong> — nCr precomputation via Pascal's triangle</li>
+<li><strong>Geometry</strong> — line intersection, convex hull (Graham scan)</li>
+<li><strong>Reservoir sampling</strong> — pick K from a stream of unknown length, uniform probability</li>
+</ul>
+
+<h3>37.16 SDET-flavoured DSA scenarios (interview-real)</h3>
+<ol>
+<li><strong>Test selection algorithm</strong> — given a diff (set of changed files) + a coverage map (test → files covered), select minimum tests covering all changed files (set cover, greedy approximation)</li>
+<li><strong>Flake detection</strong> — given a stream of test results (pass/fail per run), detect tests with failure rate &gt; X% in sliding window of N (sliding window + counter)</li>
+<li><strong>Dependency graph</strong> — given a Jenkins job DAG, find longest path (critical path), detect cycles (topological sort)</li>
+<li><strong>Test ordering</strong> — schedule tests to minimise total wall-clock time across K parallel workers (LPT scheduling, NP-hard, greedy approx)</li>
+<li><strong>Log-search</strong> — find requests matching a pattern in a 100 GB log file; can't load to memory (streaming + grep + parallel)</li>
+<li><strong>Rate limiter</strong> — design a sliding-window counter (sorted set in Redis, or per-shard counters with aggregation)</li>
+</ol>
+
+<div class="qa-bank">
+<h3>Module 37 — Advanced DSA Q&amp;A bank</h3>
+
+<details class="qa"><summary>What's a Fenwick tree useful for?</summary>
+<div class="answer">Range-sum (or other associative-op) queries on a mutable array. O(log n) for both point update and prefix query. Simpler than segment tree when you only need point updates and prefix queries.</div></details>
+
+<details class="qa"><summary>Union-Find optimisations?</summary>
+<div class="answer">Path compression (flatten chains during find) + union by rank/size (attach smaller tree under larger). Combined: nearly O(1) amortised per op — inverse Ackermann α(n) which is &lt; 5 for any realistic n.</div></details>
+
+<details class="qa"><summary>When use a Trie?</summary>
+<div class="answer">Autocomplete, prefix queries, dictionary problems, IP routing tables (radix trie). O(L) lookup where L = word length. Memory cost: one node per char-position across all words.</div></details>
+
+<details class="qa"><summary>What's Aho-Corasick?</summary>
+<div class="answer">Trie + failure links. Search for many patterns in text in one O(text + patterns + matches) pass. Used in grep, antivirus, intrusion detection.</div></details>
+
+<details class="qa"><summary>Bloom filter trade-off?</summary>
+<div class="answer">Constant-size, very small. False positives possible (with tunable rate), no false negatives. Use to skip expensive lookups (DB, disk) when the answer is "definitely not here".</div></details>
+
+<details class="qa"><summary>Dijkstra vs Bellman-Ford?</summary>
+<div class="answer">Dijkstra: faster, requires non-negative weights. Bellman-Ford: slower, handles negative weights, detects negative cycles. Both single-source.</div></details>
+
+<details class="qa"><summary>How to detect a cycle in a directed graph?</summary>
+<div class="answer">DFS with 3-colour state (white = unvisited, grey = in current stack, black = done). If you reach a grey node, there's a cycle. O(V + E).</div></details>
+
+<details class="qa"><summary>Topological sort algorithms?</summary>
+<div class="answer">Kahn's BFS (repeatedly pick nodes with indegree 0) or DFS-postorder reverse. Both O(V + E). Kahn's also detects cycles (if not all nodes processed).</div></details>
+
+<details class="qa"><summary>When use A*?</summary>
+<div class="answer">Shortest path on a graph where you have a heuristic estimate of distance to goal (e.g. Euclidean for maps). A* explores fewer nodes than Dijkstra when the heuristic is good. Heuristic must be admissible (never overestimates).</div></details>
+
+<details class="qa"><summary>Memoisation vs tabulation — practical difference?</summary>
+<div class="answer">Memoisation: top-down recursion + cache. Often more intuitive but stack-bound. Tabulation: bottom-up loop. Usually less memory (can compress dimensions). Same time complexity.</div></details>
+
+<details class="qa"><summary>How would you compress DP state?</summary>
+<div class="answer">If dp[i] depends only on dp[i-1], use two variables instead of an array. If dp[i][j] depends only on dp[i-1][j-...], reduce 2D to 1D rolling.</div></details>
+
+<details class="qa"><summary>0/1 knapsack vs unbounded knapsack?</summary>
+<div class="answer">0/1: each item once; loop items outer, weights inner DESCENDING. Unbounded: items reusable; loop items outer, weights inner ASCENDING. The loop direction prevents/enables re-use.</div></details>
+
+<details class="qa"><summary>What's a state machine DP?</summary>
+<div class="answer">Define states (e.g. "holding stock", "not holding") + transitions. dp[i][state] = best by end of day i in state. Useful for buy/sell stock variations.</div></details>
+
+<details class="qa"><summary>How to find SCCs?</summary>
+<div class="answer">Tarjan's (one DFS pass with low-link) or Kosaraju's (two DFS passes; second on transposed graph). O(V + E). Common in compiler analysis, social network communities.</div></details>
+
+<details class="qa"><summary>Reservoir sampling — algorithm?</summary>
+<div class="answer">Pick K from a stream of unknown N, uniform probability. Fill reservoir with first K. For i &gt;= K, generate r = rand(0..i); if r &lt; K, replace reservoir[r] with item i. O(N) one pass, O(K) memory.</div></details>
+
+<details class="qa"><summary>How to find Kth largest in an array?</summary>
+<div class="answer">Min-heap of size K → O(n log k). Or quickselect (Hoare partition) → O(n) average, O(n²) worst. Or sort → O(n log n) simplest.</div></details>
+
+<details class="qa"><summary>Sliding-window vs two-pointer — same thing?</summary>
+<div class="answer">Sliding window is a specific two-pointer pattern where both move forward, expanding/shrinking to maintain a constraint. Generic two-pointer also covers opposite-end traversal (palindrome, sorted pair).</div></details>
+
+<details class="qa"><summary>How to handle very deep recursion in JS?</summary>
+<div class="answer">JS doesn't optimise tail calls (despite spec). Convert to iteration with an explicit stack. Or increase stack via Node's <code class="inline">--stack-size</code> flag (rare).</div></details>
+
+<details class="qa"><summary>What's the matroid property (greedy correctness)?</summary>
+<div class="answer">A condition under which a greedy choice always leads to optimal. If a problem is a matroid, greedy works. Example: minimum spanning tree (Kruskal). Hard to prove for new problems; often need DP fallback.</div></details>
+
+<details class="qa"><summary>Why is union-find used in Kruskal?</summary>
+<div class="answer">Kruskal sorts edges by weight, picks each if it doesn't form a cycle. "Doesn't form a cycle" = endpoints in different components. Union-find answers + merges in nearly O(1).</div></details>
+
+<details class="qa"><summary>How would you implement a thread-safe LRU cache?</summary>
+<div class="answer">Single lock around the map+list ops (simple, contention high). Or finer: lock-free using ConcurrentHashMap + AtomicReference for nodes (complex, paper-level). For most apps, simple lock is fine; if hot, shard the cache across N independent LRUs.</div></details>
+
+<details class="qa"><summary>One key formula to remember for DP?</summary>
+<div class="answer">Define dp[state] precisely. Then write transition: dp[state] = function of dp[smaller_states]. Then base + iteration order. Most DP bugs are unclear state definition.</div></details>
+
+<details class="qa"><summary>How would an SDET design a test selection algorithm?</summary>
+<div class="answer">Map files → tests (from coverage data). Given changed files = set S, find minimum tests covering S — Set Cover (NP-hard). Use greedy: repeatedly pick the test covering most uncovered files. Approximation ratio ln(n). Add nightly full run as safety net.</div></details>
+
+<details class="qa"><summary>How to detect a sliding-window flake?</summary>
+<div class="answer">Per-test ring buffer of last N results. Compute failure rate = fails / N. Alert if &gt; threshold. Implementation: hashmap test_id → ring buffer; update on each test result.</div></details>
+</div>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Design Fundamentals | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn System Design Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, system-design, testing, automation, playwright system design fundamentals">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="System Design Fundamentals — Playwright SDET">
+  <meta property="og:description" content="Learn System Design Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/system-design.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="System Design Fundamentals">
+  <meta name="twitter:description" content="Learn System Design Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/system-design.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=" active"><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">38</span>System Design Fundamentals</h2>
+
+<div class="toc">
+<h4>What you will master here</h4>
+<ul>
+<li>How to approach any system design interview</li>
+<li>Scaling: vertical, horizontal, partitioning, replication</li>
+<li>Caching, CDNs, load balancers</li>
+<li>Databases: SQL vs NoSQL; sharding; replication</li>
+<li>Async patterns: queues, pub-sub, event sourcing</li>
+<li>CAP theorem and consistency models</li>
+<li>Failures: timeouts, retries, circuit breakers, idempotency</li>
+<li>Designing a URL shortener, chat app, news feed — quick walkthroughs</li>
+</ul>
+</div>
+
+<h3>38.1 The interview structure</h3>
+<ol>
+<li><strong>Clarify</strong> — users, scale, features. "Are we designing read-heavy or write-heavy? Global or single-region?"</li>
+<li><strong>Estimate</strong> — back-of-envelope. "1M DAU, 10 reads each = 10M reads/day = ~120 read QPS average, 1200 peak."</li>
+<li><strong>Data model</strong> — what entities, what relationships, primary keys.</li>
+<li><strong>API</strong> — endpoints with example request/response.</li>
+<li><strong>High-level diagram</strong> — client, LB, service, DB, cache, queue.</li>
+<li><strong>Deep dive</strong> — pick the hardest part, work it out.</li>
+<li><strong>Trade-offs</strong> — SQL vs NoSQL? Sync vs async? Strong vs eventual consistency?</li>
+<li><strong>Failures &amp; scale</strong> — how does it handle 10× growth? A region outage?</li>
+</ol>
+
+<h3>38.2 Scaling fundamentals</h3>
+
+<h4>Vertical vs horizontal</h4>
+<ul>
+<li><strong>Vertical</strong> — bigger machine. Easy, limited (you run out of CPUs/RAM at some point). Expensive at the top end.</li>
+<li><strong>Horizontal</strong> — more machines. Harder (need load balancing, state coordination), but scales arbitrarily.</li>
+</ul>
+
+<h4>Stateless services + load balancer</h4>
+<p>Make app servers stateless (no session in process memory). Store state in DB or Redis. Now you can run N replicas behind a load balancer — round-robin or least-connections. Adding capacity = launching more instances.</p>
+
+<h4>Sharding (partitioning)</h4>
+<p>Split data across multiple DB instances by a key (user_id mod N, geographic region, hash range). Each shard handles 1/N of the load.</p>
+<ul>
+<li><strong>Hash sharding</strong> — uniform load, hard to do range queries</li>
+<li><strong>Range sharding</strong> — easy range queries, can hot-spot if data skews</li>
+<li><strong>Directory-based</strong> — lookup service maps key → shard; more flexible, extra hop</li>
+</ul>
+
+<h4>Replication</h4>
+<ul>
+<li><strong>Leader-follower (primary-replica)</strong> — writes to leader, reads from replicas. Read scaling, async replication = eventual consistency on replicas.</li>
+<li><strong>Multi-leader</strong> — writes can hit any leader; conflict resolution required. Used across regions for low write latency.</li>
+<li><strong>Leaderless</strong> (Cassandra, Dynamo) — quorum reads/writes; tunable consistency.</li>
+</ul>
+
+<h3>38.3 Caching</h3>
+<table>
+<tr><th>Cache layer</th><th>What it caches</th><th>Tool</th></tr>
+<tr><td>Browser</td><td>Static assets, images</td><td>Cache-Control headers</td></tr>
+<tr><td>CDN (CloudFront, Cloudflare)</td><td>Static assets globally</td><td>Edge servers</td></tr>
+<tr><td>App / Service cache (in-memory)</td><td>Frequently read DB rows</td><td>Local hashmap</td></tr>
+<tr><td>Distributed cache</td><td>Shared across instances</td><td>Redis, Memcached</td></tr>
+<tr><td>DB query cache</td><td>Recent query results</td><td>Built-in to some DBs</td></tr>
+</table>
+
+<h4>Cache strategies</h4>
+<ul>
+<li><strong>Cache-aside (lazy)</strong> — app checks cache, on miss reads DB and stores in cache. Most common.</li>
+<li><strong>Write-through</strong> — every write hits both cache and DB. Always fresh, slower writes.</li>
+<li><strong>Write-back</strong> — writes go to cache; flushed to DB later. Fast, risky (cache loss = data loss).</li>
+<li><strong>TTL eviction</strong> — entries expire after N seconds.</li>
+</ul>
+
+<div class="warn"><b>Cache invalidation — one of the two hard problems</b>"There are only two hard things in CS: cache invalidation and naming things." Stale cache returns wrong data. Strategies: short TTL, event-driven invalidation on writes, cache versioning (key includes a version).</div>
+
+<h3>38.4 SQL vs NoSQL</h3>
+<table>
+<tr><th>Property</th><th>SQL (relational)</th><th>NoSQL</th></tr>
+<tr><td>Schema</td><td>Fixed</td><td>Flexible / schemaless</td></tr>
+<tr><td>Joins</td><td>Native, powerful</td><td>Limited / none</td></tr>
+<tr><td>Transactions (ACID)</td><td>Strong</td><td>Often eventual / per-document</td></tr>
+<tr><td>Scaling</td><td>Vertical → harder horizontal</td><td>Horizontal by design</td></tr>
+<tr><td>Examples</td><td>Postgres, MySQL</td><td>MongoDB (document), Redis (KV), Cassandra (wide-column), Neo4j (graph)</td></tr>
+<tr><td>Best for</td><td>Structured data, complex queries, transactions</td><td>High write throughput, flexible schema, simple access patterns</td></tr>
+</table>
+
+<h3>38.5 Async patterns</h3>
+
+<h4>Message queue (SQS, RabbitMQ)</h4>
+<p>Producer publishes message to a queue. Consumer pulls and processes. Decouples producer from consumer; smooths bursts; survives consumer crashes.</p>
+
+<h4>Pub-sub (Kafka, Redis Streams, Google Pub/Sub)</h4>
+<p>Producer publishes to a topic; many subscribers each get a copy. One event triggers many side effects (email + analytics + warehouse).</p>
+
+<h4>Event sourcing</h4>
+<p>Store every state change as an immutable event; current state is derived by replaying events. Auditable; complex; great for financial systems.</p>
+
+<h4>CQRS</h4>
+<p>Command Query Responsibility Segregation — different models for writes and reads. Writes go to a normalized DB; reads from a denormalized projection optimised for queries.</p>
+
+<h3>38.6 CAP theorem</h3>
+<p>In a distributed system, you can have at most two of:</p>
+<ul>
+<li><strong>C</strong> — Consistency (all nodes see the same data)</li>
+<li><strong>A</strong> — Availability (every request gets a response)</li>
+<li><strong>P</strong> — Partition tolerance (works despite network partitions)</li>
+</ul>
+<p>Since network partitions happen in real systems, you really choose CP or AP. SQL DBs default CP (refuse writes during partition); Dynamo / Cassandra default AP (accept writes, reconcile later).</p>
+
+<h3>38.7 Consistency models</h3>
+<ul>
+<li><strong>Strong</strong> — every read sees the latest write. Synchronous replication. Most expensive.</li>
+<li><strong>Eventual</strong> — given enough time without writes, all replicas converge. Cheapest, common in NoSQL.</li>
+<li><strong>Read-your-writes</strong> — a session sees its own writes immediately, even on replicas.</li>
+<li><strong>Monotonic reads</strong> — once you see a value, you never see an older one.</li>
+<li><strong>Causal</strong> — causally related events are ordered consistently.</li>
+</ul>
+
+<h3>38.8 Failure handling</h3>
+<ul>
+<li><strong>Timeouts</strong> — every external call has one. Choose carefully — too short = unnecessary failures, too long = cascade.</li>
+<li><strong>Retries</strong> — with exponential backoff + jitter. Idempotency required for non-GET calls.</li>
+<li><strong>Circuit breaker</strong> — after N failures, stop calling the service for a cooldown. Saves both sides.</li>
+<li><strong>Bulkhead</strong> — isolate failure domains; one slow upstream doesn't starve all threads.</li>
+<li><strong>Graceful degradation</strong> — return cached / partial data when fresh fetch fails.</li>
+<li><strong>Dead letter queue</strong> — messages that can't be processed go to a DLQ for human review.</li>
+</ul>
+
+<h3>38.9 Quick walkthroughs</h3>
+
+<h4>Design a URL shortener</h4>
+<ul>
+<li>POST /shorten { url } → returns short slug (base62 of an id, 7 chars covers ~3.5T URLs)</li>
+<li>GET /:slug → 301 redirect to original URL</li>
+<li>Storage: KV store (slug → URL). Postgres or DynamoDB.</li>
+<li>Hot URLs cached in Redis with TTL</li>
+<li>Analytics: async event to Kafka per click → warehouse</li>
+<li>Rate limit per IP to prevent abuse</li>
+</ul>
+
+<h4>Design a chat app (1-1)</h4>
+<ul>
+<li>WebSocket between client and connection-service</li>
+<li>Connection-service tracks userId → connectionId in Redis</li>
+<li>Message published to Kafka topic per channel</li>
+<li>Recipient's connection-service picks up and pushes via WS</li>
+<li>Persistence: write to Cassandra (chat history, append-heavy)</li>
+<li>Read receipts as separate events</li>
+</ul>
+
+<h4>Design a news feed</h4>
+<ul>
+<li>Fanout-on-write: when user posts, write to each follower's feed (good for small follower count)</li>
+<li>Fanout-on-read: compute feed when viewer requests (good for celebrities)</li>
+<li>Hybrid: fanout-on-write for normal users, fanout-on-read for accounts with &gt; 1M followers</li>
+<li>Cache hot feeds in Redis</li>
+<li>Ranking: signals = recency, engagement, affinity</li>
+</ul>
+
+<div class="qa-bank">
+<h3>Module 38 — System Design Q&amp;A</h3>
+
+<details class="qa"><summary>Vertical vs horizontal scaling?</summary>
+<div class="answer">Vertical: bigger machine — simple, hits a ceiling. Horizontal: more machines — harder (state, load balancing), scales arbitrarily. Real systems combine both: vertical for the DB, horizontal for stateless app servers.</div></details>
+
+<details class="qa"><summary>What is sharding?</summary>
+<div class="answer">Splitting one dataset across multiple DB instances by key. Each shard owns 1/N of the data. Hash sharding for uniform load; range sharding for sorted access; directory-based for flexibility. Sharding is hard to undo — pick the key carefully.</div></details>
+
+<details class="qa"><summary>What is CAP theorem?</summary>
+<div class="answer">A distributed system can have at most two of Consistency, Availability, Partition tolerance. Real systems must tolerate partitions, so you choose CP (refuse writes during partition) or AP (accept writes, reconcile later).</div></details>
+
+<details class="qa"><summary>SQL vs NoSQL — when each?</summary>
+<div class="answer">SQL when you have structured data, complex queries, transactional integrity. NoSQL when you need horizontal scalability, flexible schema, very high write throughput, or simple access patterns. Many systems use both.</div></details>
+
+<details class="qa"><summary>What is eventual consistency?</summary>
+<div class="answer">All replicas converge to the same state given enough time without writes. Common in NoSQL (Dynamo, Cassandra). Cheap, high availability, but reads may return stale data briefly.</div></details>
+
+<details class="qa"><summary>What's a circuit breaker?</summary>
+<div class="answer">A pattern that monitors failures to a downstream service. After N failures, "opens" — fails fast for a cooldown period, then "half-opens" to test. Prevents cascading failure and gives the downstream room to recover.</div></details>
+
+<details class="qa"><summary>Write-through vs cache-aside?</summary>
+<div class="answer">Write-through: every write updates both cache and DB. Cache always fresh; slower writes. Cache-aside: app checks cache, on miss reads DB and populates cache. Faster writes; stale risk until TTL or invalidation.</div></details>
+
+<details class="qa"><summary>Why do we use a CDN?</summary>
+<div class="answer">To serve static assets from edge servers close to users — drastically reduces latency, offloads origin servers, absorbs traffic spikes. Cache-Control headers govern what's cached at the edge.</div></details>
+
+<details class="qa"><summary>What's the difference between a queue and pub-sub?</summary>
+<div class="answer">Queue: one producer → one consumer per message (delivered to exactly one consumer). Pub-sub: one producer → topic → many subscribers each get a copy. Queues distribute work; pub-sub broadcasts events.</div></details>
+
+<details class="qa"><summary>What's a load balancer doing?</summary>
+<div class="answer">Receives traffic, routes to one of N backend instances by round-robin, least-connections, or hash. Performs health checks; removes unhealthy instances. Layer 4 (TCP) or Layer 7 (HTTP — content-aware).</div></details>
+
+<details class="qa"><summary>What is idempotency in API design?</summary>
+<div class="answer">Calling the same operation multiple times has the same effect as once. GET/PUT/DELETE are idempotent. POST isn't — but you can make it idempotent with an Idempotency-Key header. Crucial for safe retries on network errors.</div></details>
+
+<details class="qa"><summary>What's a bottleneck and how do you find it?</summary>
+<div class="answer">The component that limits overall throughput. Find via metrics: CPU, memory, network, DB query time, lock contention. Profile under load; address the slowest layer first, then the next.</div></details>
+
+<details class="qa"><summary>How do you handle a 10× traffic spike?</summary>
+<div class="answer">(1) Autoscale stateless services horizontally. (2) Cache aggressively — Redis, CDN. (3) Queue writes so DB isn't overwhelmed. (4) Rate-limit / shed load gracefully. (5) Prepared via load tests; not invented in the moment.</div></details>
+
+<details class="qa"><summary>What's read-your-writes consistency?</summary>
+<div class="answer">After a user writes, they see their own write on subsequent reads (even from replicas). Implemented by routing the user's reads to the leader for a while, or by sticky sessions. Prevents the confusing "I just saved that, where did it go?" UX.</div></details>
+
+<details class="qa"><summary>One-sentence approach to system design interviews?</summary>
+<div class="answer">"Clarify requirements + scale → estimate numbers → data model → API → high-level diagram → deep-dive one piece → discuss trade-offs and failure modes."</div></details>
+</div>
+
+<h3>38.10 Capacity estimation cheat sheet (memorise)</h3>
+<table>
+<tr><th>Item</th><th>Order of magnitude</th></tr>
+<tr><td>L1 cache</td><td>1 ns</td></tr>
+<tr><td>L2 cache</td><td>10 ns</td></tr>
+<tr><td>Main memory</td><td>100 ns</td></tr>
+<tr><td>SSD random read</td><td>100 µs</td></tr>
+<tr><td>HDD seek</td><td>10 ms</td></tr>
+<tr><td>Round-trip same DC</td><td>0.5 ms</td></tr>
+<tr><td>Round-trip cross-region</td><td>30-100 ms</td></tr>
+<tr><td>Round-trip continent-to-continent</td><td>150 ms</td></tr>
+<tr><td>Single Postgres instance</td><td>5-20K simple reads/sec</td></tr>
+<tr><td>Redis single instance</td><td>100K+ ops/sec</td></tr>
+<tr><td>Single Node.js process</td><td>10-50K simple-JSON req/sec</td></tr>
+<tr><td>1 KB packet across continent</td><td>~150 ms</td></tr>
+<tr><td>Daily users → peak QPS</td><td>peak ≈ avg × 5-10; avg ≈ DAU × calls/user/day / 86400</td></tr>
+</table>
+
+<h3>38.11 Sharding strategies (deep)</h3>
+<table>
+<tr><th>Strategy</th><th>Pros</th><th>Cons</th></tr>
+<tr><td>Hash sharding (hash(key) mod N)</td><td>Even distribution</td><td>Rebalancing on N change moves nearly all keys</td></tr>
+<tr><td>Range sharding (key ranges)</td><td>Range queries cheap</td><td>Hot spots if data skewed; manual rebalancing</td></tr>
+<tr><td>Consistent hashing</td><td>Rebalancing on N change moves ~1/N of keys</td><td>Slight imbalance; need virtual nodes</td></tr>
+<tr><td>Directory-based (lookup service)</td><td>Most flexible, dynamic rebalancing</td><td>Extra hop + central lookup is SPoF</td></tr>
+<tr><td>Geographic / tenant-based</td><td>Locality, regulatory compliance</td><td>Cross-shard queries expensive</td></tr>
+</table>
+
+<h3>38.12 Replication patterns (deep)</h3>
+<ul>
+<li><strong>Leader-follower (primary-replica)</strong> — writes go to leader, async replication to followers. Read scaling. Async = eventual consistency on followers.</li>
+<li><strong>Synchronous replication</strong> — leader waits for N followers before ack. Strong consistency, slower writes.</li>
+<li><strong>Multi-leader</strong> — writes can hit any leader; conflict resolution needed (last-write-wins, CRDTs, manual).</li>
+<li><strong>Leaderless (Dynamo, Cassandra)</strong> — N replicas; tunable quorum (W + R &gt; N for read-your-writes).</li>
+</ul>
+
+<h3>38.13 Consistency models (deep)</h3>
+<table>
+<tr><th>Model</th><th>Guarantee</th><th>Cost</th></tr>
+<tr><td>Linearizable</td><td>As if single copy; reads return latest committed write</td><td>Slowest; requires coordination</td></tr>
+<tr><td>Sequential</td><td>All clients see same order, not necessarily real-time</td><td>Cheaper than linearizable</td></tr>
+<tr><td>Causal</td><td>Causally related ops ordered consistently</td><td>Vector clocks; medium cost</td></tr>
+<tr><td>Read-your-writes</td><td>User sees own writes immediately</td><td>Route reads to leader for a window</td></tr>
+<tr><td>Monotonic reads</td><td>Once you see a value, never see older</td><td>Sticky session</td></tr>
+<tr><td>Eventual</td><td>Replicas converge given no writes</td><td>Cheapest; always available</td></tr>
+</table>
+
+<h3>38.14 CAP + PACELC</h3>
+<ul>
+<li><strong>CAP</strong>: in a partition, choose Consistency or Availability (C or A; P is unavoidable). Most systems are CP or AP under partition.</li>
+<li><strong>PACELC</strong>: extends CAP. When Partition: choose A or C. Else (no partition): choose Latency or Consistency. Better captures real trade-offs.</li>
+<li>Postgres = PC/EC (when partitioned: prioritises consistency; else: consistency)</li>
+<li>Cassandra = PA/EL (when partitioned: availability; else: latency)</li>
+</ul>
+
+<h3>38.15 Distributed system pitfalls</h3>
+<ul>
+<li><strong>Network is unreliable</strong> — every call can fail or hang</li>
+<li><strong>Latency is non-zero</strong> — round trips add up</li>
+<li><strong>Bandwidth is finite</strong> — design for it</li>
+<li><strong>Network is not secure</strong> — TLS everywhere</li>
+<li><strong>Topology changes</strong> — instances come and go</li>
+<li><strong>There's an admin</strong> — humans cause incidents</li>
+<li><strong>Transport cost is not zero</strong> — JSON serialization is real work</li>
+<li><strong>The network is not homogeneous</strong> — different machines, different OS</li>
+</ul>
+<p>(These are the "Fallacies of Distributed Computing".)</p>
+
+<h3>38.16 Common system-design walkthroughs (interview)</h3>
+
+<h4>Rate limiter</h4>
+<ul>
+<li>Token bucket: bucket holds N tokens; refill rate R; each request consumes 1. Smooths bursts.</li>
+<li>Sliding window log: store timestamps in a sorted set, count entries in window. Precise but memory-heavy.</li>
+<li>Sliding window counter: weighted average of current + previous fixed window. Approximate but cheap.</li>
+<li>Redis: SET counter EX window + INCR. Or Lua script for atomicity.</li>
+<li>Distributed: per-edge enforcement + central Redis source of truth.</li>
+</ul>
+
+<h4>Unique id generator (Twitter Snowflake)</h4>
+<ul>
+<li>64-bit: 1-bit sign + 41 timestamp + 10 node + 12 sequence</li>
+<li>~69 years of timestamps; 1024 nodes; 4096 ids per ms per node</li>
+<li>Time-sortable, no central coord</li>
+<li>UUIDv7 is a modern alternative (time-prefix + random)</li>
+</ul>
+
+<h4>URL shortener</h4>
+<ul>
+<li>POST /shorten {url} → 7-char base62 slug</li>
+<li>62^7 ≈ 3.5T URLs. Generate from counter (base62 encode) or hash.</li>
+<li>KV store (slug → url), Redis cache hot, async analytics to Kafka</li>
+<li>Rate limit per IP, abuse detection</li>
+</ul>
+
+<h4>Chat (1-1 + group)</h4>
+<ul>
+<li>WS edge cluster + sticky sessions + Redis pub/sub fanout</li>
+<li>Messages: Cassandra (write-heavy, append-only)</li>
+<li>Group: write once to topic, members subscribe</li>
+<li>Presence: Redis SET with TTL</li>
+<li>Read receipts: separate event</li>
+</ul>
+
+<h4>Distributed cache</h4>
+<ul>
+<li>Consistent hash for shard selection</li>
+<li>Replication factor 2-3 for fault tolerance</li>
+<li>Eviction: LRU (default), LFU (frequency-aware)</li>
+<li>TTL on writes; lazy expiration on read</li>
+<li>Cache warming after restart, stampede control (single-flight)</li>
+</ul>
+
+<h4>Search autocomplete</h4>
+<ul>
+<li>Trie of prefixes; precompute top-K results per prefix</li>
+<li>Or Elasticsearch completion suggester</li>
+<li>Cache hot prefixes in Redis</li>
+<li>Real-time: stream queries → reindex periodically</li>
+<li>Ranking signals: popularity, recency, personalization</li>
+</ul>
+
+<h4>News feed</h4>
+<ul>
+<li>Fanout-on-write for normal users (small followers)</li>
+<li>Fanout-on-read for celebrities (millions of followers)</li>
+<li>Hybrid: precompute most, compute on read for celebs</li>
+<li>Cache feeds in Redis sorted set (score = post time)</li>
+<li>ML ranker re-orders on read</li>
+</ul>
+
+<h4>Distributed lock</h4>
+<ul>
+<li>Redis SET NX PX with random value; Lua script to release only if value matches</li>
+<li>Redlock (multi-Redis quorum) for stronger guarantee</li>
+<li>ZooKeeper / etcd for genuine consensus (Paxos/Raft)</li>
+<li>Risks: clock skew, GC pause longer than TTL</li>
+</ul>
+
+<h4>Notification system</h4>
+<ul>
+<li>Producer publishes notification intent → queue</li>
+<li>Worker picks channel (push/email/SMS/in-app) based on user prefs</li>
+<li>Rate limit per user; quiet hours; opt-out check</li>
+<li>Idempotency key dedupes retries</li>
+<li>Provider failures: fallback channel</li>
+</ul>
+
+<h3>38.17 Architectural styles</h3>
+<table>
+<tr><th>Style</th><th>When fits</th></tr>
+<tr><td>Monolith</td><td>Small team, fast iteration, simple ops</td></tr>
+<tr><td>Modular monolith</td><td>Same codebase but enforced module boundaries; transition path</td></tr>
+<tr><td>Microservices</td><td>Multiple teams need independent deploy; bounded contexts</td></tr>
+<tr><td>SOA</td><td>Coarser-grained services (older terminology)</td></tr>
+<tr><td>Serverless</td><td>Event-driven, sporadic load, pay-per-use</td></tr>
+<tr><td>Event-driven</td><td>Decoupled producers/consumers; async workflows</td></tr>
+<tr><td>CQRS + Event Sourcing</td><td>Audit trail required, complex projections, replay needed</td></tr>
+</table>
+
+<h3>38.18 Failure handling toolkit</h3>
+<ul>
+<li><strong>Timeout</strong> on every external call</li>
+<li><strong>Retry</strong> with exponential backoff + jitter; only for idempotent ops</li>
+<li><strong>Circuit breaker</strong> — open after N failures, half-open to test recovery</li>
+<li><strong>Bulkhead</strong> — isolate failure domains (separate thread pools per downstream)</li>
+<li><strong>Graceful degradation</strong> — serve cached/partial data when fresh fetch fails</li>
+<li><strong>Fallback</strong> — alternative path (different provider, default value)</li>
+<li><strong>Dead-letter queue</strong> — messages that can't be processed go to DLQ for human review</li>
+<li><strong>Health check</strong> — liveness + readiness; orchestrator restarts unhealthy</li>
+<li><strong>Chaos testing</strong> — verify mechanisms actually work</li>
+</ul>
+
+<div class="qa-bank">
+<h3>Module 38 — System Design Q&amp;A (extended)</h3>
+
+<details class="qa"><summary>Consistent hashing — explain in 1 minute</summary>
+<div class="answer">Map keys + nodes onto a ring (hash space 0..2^32). Key goes to the next node clockwise. Adding/removing a node only moves keys in that arc — ~1/N of keys, not all. Virtual nodes (each node placed at multiple ring positions) smooth distribution.</div></details>
+
+<details class="qa"><summary>PACELC vs CAP?</summary>
+<div class="answer">PACELC adds: when there's NO partition, you still choose between Latency and Consistency. Real systems make trade-offs constantly, not just during partitions. Better captures reality.</div></details>
+
+<details class="qa"><summary>How to design a rate limiter for a global API?</summary>
+<div class="answer">Per-edge enforcement (local in-memory counter) for low latency. Central Redis as source of truth for global limits. Use sliding window counter (approximation) for cost. Return 429 + Retry-After. Document limits.</div></details>
+
+<details class="qa"><summary>Strong vs eventual consistency — when each?</summary>
+<div class="answer">Strong: financial transactions, inventory deduction, critical state where stale = wrong. Eventual: feeds, view counts, recommendations, analytics where stale is fine.</div></details>
+
+<details class="qa"><summary>What's a saga pattern?</summary>
+<div class="answer">Distributed transaction split into local steps with compensating actions. If step 4 fails, run inverse of steps 1-3. Orchestrated (central state machine, Temporal/Camunda) or choreographed (each service reacts to events).</div></details>
+
+<details class="qa"><summary>Outbox pattern, why?</summary>
+<div class="answer">Atomic write of DB row + event. Without it: "write DB then publish" can fail mid-step → divergence. Outbox: write event row in same DB TX as business row; poller reads outbox → publishes to broker → marks sent. Guarantees at-least-once.</div></details>
+
+<details class="qa"><summary>How would you scale a write-heavy table?</summary>
+<div class="answer">(1) Vertical scale + tune autovacuum, indexes. (2) Read replicas (only helps reads). (3) Partition by time/tenant. (4) Shard horizontally (Citus or app-level sharding). (5) Move to NoSQL designed for writes (Cassandra). Each step is expensive — make sure earlier ones won't suffice.</div></details>
+
+<details class="qa"><summary>How does Kafka guarantee ordering?</summary>
+<div class="answer">Within a partition, strict order. Across partitions, no global order. Key-based partitioning (hash(key) % N) sends same key to same partition → ordered per key. For total order, use 1 partition (no parallelism).</div></details>
+
+<details class="qa"><summary>How would you design a global rate limiter with 99.99% availability?</summary>
+<div class="answer">Per-edge token bucket (eventual sync). Central Redis cluster (sharded by user) as global source. Edges allow approximate over-limit on partition. Aggregator reconciles every minute. Acceptable trade-off: slightly over the documented limit during partitions, never blocks legitimate traffic.</div></details>
+
+<details class="qa"><summary>What's idempotency-key pattern?</summary>
+<div class="answer">Client generates a UUID per logical request, sends as header. Server stores key → response. Retry with same key returns cached response, doesn't re-execute. Used by Stripe, AWS APIs. Critical for at-least-once delivery contexts.</div></details>
+
+<details class="qa"><summary>How to handle thundering herd?</summary>
+<div class="answer">N clients hit the same expired cache simultaneously, all miss, all hit DB. Solutions: single-flight (one fetches, others wait), probabilistic early expiration, jittered TTLs, lock-on-recompute pattern.</div></details>
+
+<details class="qa"><summary>What's the difference between L4 and L7 load balancer?</summary>
+<div class="answer">L4 (TCP): routes by IP/port, doesn't inspect content. Fast, simple, protocol-agnostic. L7 (HTTP): routes by path/header/cookie; supports SSL termination, A/B routing, rewriting. Use L7 for HTTP services; L4 for DBs / TCP services.</div></details>
+
+<details class="qa"><summary>Designing a notification service — biggest trade-offs?</summary>
+<div class="answer">Latency vs cost (push provider $$). At-least-once vs at-most-once (dedup vs missed). Per-user rate limiting vs spike absorption. Hot user (millions of notifications) vs avg user. Reliability of cross-provider failover.</div></details>
+
+<details class="qa"><summary>What is read-after-write consistency?</summary>
+<div class="answer">User sees their own writes on subsequent reads, even from replicas. Implementations: route the user's reads to leader for N seconds; sticky session; client cache the write. Without it, "I just clicked Save and it's gone" UX bug.</div></details>
+
+<details class="qa"><summary>How does a leader election work?</summary>
+<div class="answer">Consensus protocol (Paxos, Raft). Nodes vote on a candidate; majority wins. Heartbeat from leader; if absent, follower becomes candidate. ZooKeeper, etcd, Consul provide it as a service. Don't roll your own.</div></details>
+
+<details class="qa"><summary>How would you design YouTube's video upload + view pipeline?</summary>
+<div class="answer">Upload → S3 → transcode pipeline (multiple bitrates) → CDN. Metadata in Postgres; views/likes in Cassandra (append-heavy). HLS/DASH adaptive streaming. Recommendations: offline ML + real-time signals. Search: Elasticsearch.</div></details>
+
+<details class="qa"><summary>What's the typical bottleneck in a web service?</summary>
+<div class="answer">Usually database. Then network (egress bandwidth, latency). Then GC pauses or thread starvation. Profile with metrics; intuition lies. CPU on app servers rarely the limit before DB.</div></details>
+
+<details class="qa"><summary>How to choose between SQL and NoSQL?</summary>
+<div class="answer">SQL if: complex queries, joins, transactions, schema enforced. NoSQL if: massive horizontal scale, flexible schema, simple access patterns, high write throughput. Most apps start with Postgres and never need NoSQL.</div></details>
+
+<details class="qa"><summary>What's the biggest mistake in system design interviews?</summary>
+<div class="answer">Diving into details without clarifying requirements. Always start with scale + use cases + SLA. The same problem at 10K users vs 1B users has totally different solutions.</div></details>
+
+<details class="qa"><summary>How to design a global presence service (who's online)?</summary>
+<div class="answer">Redis SET per region with TTL (30s). Client heartbeats every 15s. To check presence: query all regions in parallel OR replicate to a global SET. Trade-off: cost vs freshness. For exact "online count", use HyperLogLog for approximate cardinality.</div></details>
+</div>
+
+<h3>38.X Code Patterns</h3>
+
+<h4>Cache-Aside Pattern — Python + Redis</h4>
+<pre data-lang="python">
+import redis, json, hashlib
+from functools import wraps
+
+cache = redis.Redis(host="localhost", port=6379, decode_responses=True)
+
+def cached(ttl: int = 300):
+    def decorator(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            key = f"{fn.__name__}:{hashlib.md5(str(args).encode()).hexdigest()}"
+            hit = cache.get(key)
+            if hit:
+                return json.loads(hit)
+            result = fn(*args, **kwargs)
+            cache.setex(key, ttl, json.dumps(result))
+            return result
+        return wrapper
+    return decorator
+
+@cached(ttl=60)
+def get_user_profile(user_id: int) -&gt; dict:
+    # DB query here
+    return {"id": user_id, "name": "Alice", "plan": "pro"}
+</pre>
+
+<h4>Token Bucket Rate Limiter — Redis Lua</h4>
+<pre data-lang="python">
+import redis, time
+
+r = redis.Redis(host="localhost", port=6379)
+
+RATE_LIMIT_SCRIPT = """
+local key      = KEYS[1]
+local capacity = tonumber(ARGV[1])
+local rate     = tonumber(ARGV[2])
+local now      = tonumber(ARGV[3])
+local tokens   = tonumber(redis.call("GET", key) or capacity)
+local last_ts  = tonumber(redis.call("GET", key..":ts") or now)
+local elapsed  = now - last_ts
+local refill   = math.floor(elapsed * rate)
+tokens = math.min(capacity, tokens + refill)
+if tokens &gt;= 1 then
+    redis.call("SET", key, tokens - 1)
+    redis.call("SET", key..":ts", now)
+    redis.call("EXPIRE", key, 3600)
+    return 1
+else
+    return 0
+end
+"""
+
+rate_limit = r.register_script(RATE_LIMIT_SCRIPT)
+
+def allow_request(user_id: str, capacity: int = 10, rate: float = 1.0) -&gt; bool:
+    allowed = rate_limit(
+        keys=[f"rl:{user_id}"],
+        args=[capacity, rate, int(time.time())]
+    )
+    return bool(allowed)
+
+# Usage
+if not allow_request("user_42", capacity=100, rate=10):
+    raise Exception("429 Too Many Requests")
+</pre>
+
+<h4>Circuit Breaker — Python</h4>
+<pre data-lang="python">
+import time
+from enum import Enum
+from functools import wraps
+
+class State(Enum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+class CircuitBreaker:
+    def __init__(self, failure_threshold=5, recovery_timeout=30):
+        self.state = State.CLOSED
+        self.failure_count = 0
+        self.failure_threshold = failure_threshold
+        self.recovery_timeout = recovery_timeout
+        self.opened_at = None
+
+    def __call__(self, fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            if self.state == State.OPEN:
+                elapsed = time.time() - self.opened_at
+                if elapsed &gt; self.recovery_timeout:
+                    self.state = State.HALF_OPEN
+                else:
+                    raise Exception("Circuit open — call blocked")
+            try:
+                result = fn(*args, **kwargs)
+                if self.state == State.HALF_OPEN:
+                    self.state = State.CLOSED
+                    self.failure_count = 0
+                return result
+            except Exception as e:
+                self.failure_count += 1
+                if self.failure_count &gt;= self.failure_threshold:
+                    self.state = State.OPEN
+                    self.opened_at = time.time()
+                raise
+        return wrapper
+
+cb = CircuitBreaker(failure_threshold=3, recovery_timeout=60)
+
+@cb
+def call_payment_service(order_id: str):
+    import requests
+    return requests.post("https://payments.internal/charge", json={"order": order_id}, timeout=2)
+</pre>
+
+<h4>Consistent Hashing — Python</h4>
+<pre data-lang="python">
+import hashlib, bisect
+
+class ConsistentHashRing:
+    def __init__(self, nodes: list, replicas: int = 150):
+        self.replicas = replicas
+        self.ring: dict[int, str] = {}
+        self.sorted_keys: list[int] = []
+        for node in nodes:
+            self.add_node(node)
+
+    def _hash(self, key: str) -&gt; int:
+        return int(hashlib.md5(key.encode()).hexdigest(), 16)
+
+    def add_node(self, node: str):
+        for i in range(self.replicas):
+            h = self._hash(f"{node}:{i}")
+            self.ring[h] = node
+            bisect.insort(self.sorted_keys, h)
+
+    def remove_node(self, node: str):
+        for i in range(self.replicas):
+            h = self._hash(f"{node}:{i}")
+            del self.ring[h]
+            self.sorted_keys.remove(h)
+
+    def get_node(self, key: str) -&gt; str:
+        h = self._hash(key)
+        idx = bisect.bisect(self.sorted_keys, h) % len(self.sorted_keys)
+        return self.ring[self.sorted_keys[idx]]
+
+ring = ConsistentHashRing(["db1", "db2", "db3", "db4"])
+print(ring.get_node("user:42"))    # db2
+print(ring.get_node("user:9999"))  # db1
+</pre>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

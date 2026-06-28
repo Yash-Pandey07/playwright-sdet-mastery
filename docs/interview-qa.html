@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q&A by Experience | Playwright SDET Mastery</title>
+  <meta name="description" content="Learn Interview Q&A by Experience — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta name="keywords" content="playwright, sdet, interview-qa, testing, automation, playwright interview q a by experience">
+  <meta name="author" content="Playwright SDET">
+  <meta property="og:title" content="Interview Q&A by Experience — Playwright SDET">
+  <meta property="og:description" content="Learn Interview Q&A by Experience — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://playwright-sdet-mastery.pages.dev/interview-qa.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Interview Q&A by Experience">
+  <meta name="twitter:description" content="Learn Interview Q&A by Experience — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
+  <link rel="canonical" href="https://playwright-sdet-mastery.pages.dev/interview-qa.html">
+
+  <style>
+:root{
+  --bg:#0d1117; --bg-2:#161b22; --bg-3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-2:#9da7b3; --fg-3:#6e7681;
+  --accent:#58a6ff; --accent-2:#79c0ff; --green:#7ee787; --orange:#ffa657;
+  --red:#ff7b72; --purple:#d2a8ff; --yellow:#f2cc60; --pink:#ff9ec4;
+  --code-bg:#0a0e14;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.7;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex;min-height:100vh}
+aside{
+  width:300px;background:var(--bg-2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:20px 0;
+}
+aside .brand{padding:0 20px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+aside .brand h1{font-size:18px;color:var(--accent);font-weight:700}
+aside .brand p{font-size:12px;color:var(--fg-3);margin-top:4px}
+.search-wrap{padding:0 16px 14px}
+.search-wrap input{
+  width:100%;background:var(--bg-3);border:1px solid var(--border);color:var(--fg);
+  padding:8px 10px;border-radius:6px;font-size:13px;outline:none;
+}
+.search-wrap input:focus{border-color:var(--accent)}
+nav ul{list-style:none}
+nav li a{
+  display:block;padding:8px 20px;color:var(--fg-2);text-decoration:none;
+  font-size:13.5px;border-left:3px solid transparent;transition:.15s;
+}
+nav li a:hover{background:var(--bg-3);color:var(--fg)}
+nav li a.active{background:var(--bg-3);color:var(--accent);border-left-color:var(--accent)}
+nav li a .num{display:inline-block;width:24px;color:var(--fg-3);font-weight:600;font-size:12px}
+nav .cat{
+  padding:14px 20px 6px;color:var(--orange);font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;font-weight:700;border-top:1px solid var(--border);margin-top:8px;
+}
+nav .cat:first-of-type{border-top:none;margin-top:0;padding-top:6px}
+main{margin-left:300px;flex:1;padding:40px 56px;max-width:1100px}
+.module{display:none}
+.module.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2.module-title{
+  font-size:32px;color:var(--accent);padding-bottom:14px;border-bottom:2px solid var(--border);
+  margin-bottom:26px;
+}
+h2.module-title .badge{
+  display:inline-block;background:var(--accent);color:#0d1117;font-size:13px;
+  padding:3px 10px;border-radius:12px;vertical-align:middle;margin-right:12px;font-weight:700;
+}
+h3{font-size:22px;color:var(--accent-2);margin:32px 0 12px}
+h4{font-size:17px;color:var(--orange);margin:22px 0 10px}
+h5{font-size:15px;color:var(--yellow);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 24px}
+li{margin:4px 0}
+strong{color:var(--fg);font-weight:600}
+em{color:var(--purple);font-style:normal;background:rgba(210,168,255,.08);padding:1px 6px;border-radius:3px}
+code.inline{
+  background:var(--bg-3);color:var(--orange);padding:2px 6px;border-radius:4px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:14px 0;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;
+}
+pre .lang{
+  display:block;font-size:11px;color:var(--fg-3);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;
+}
+.note,.warn,.tip{
+  border-left:4px solid var(--accent);background:rgba(88,166,255,.06);
+  padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;
+}
+.warn{border-color:var(--red);background:rgba(255,123,114,.06)}
+.tip{border-color:var(--green);background:rgba(126,231,135,.06)}
+.note b,.warn b,.tip b{display:block;margin-bottom:4px;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.note b{color:var(--accent)}.warn b{color:var(--red)}.tip b{color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-3);color:var(--accent-2);font-weight:600}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+details.qa{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 16px;margin:10px 0;
+}
+details.qa[open]{border-color:var(--accent)}
+details.qa summary{
+  cursor:pointer;font-weight:600;color:var(--fg);font-size:15px;
+  list-style:none;display:flex;align-items:flex-start;gap:10px;
+}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{
+  content:"Q";display:inline-block;background:var(--accent);color:#0d1117;
+  width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+details.qa[open] summary::before{background:var(--green)}
+details.qa .answer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--fg-2)}
+.qa-bank{margin:30px 0}
+.qa-bank h3{display:flex;align-items:center;gap:10px}
+.qa-bank h3::before{content:"";display:inline-block;width:4px;height:24px;background:var(--green);border-radius:2px}
+.diagram{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+  padding:24px;margin:18px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{margin-top:12px;font-size:13px;color:var(--fg-3);font-style:italic}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.flow-box{
+  background:var(--bg-3);border:2px solid var(--accent);border-radius:8px;
+  padding:14px 20px;font-size:14px;font-weight:600;color:var(--fg);min-width:120px;
+}
+.flow-box.alt{border-color:var(--orange)}
+.flow-box.green{border-color:var(--green)}
+.flow-box.red{border-color:var(--red)}
+.flow-arrow{font-size:22px;color:var(--fg-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cmp .col{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp .col h5{margin-top:0;color:var(--accent-2)}
+.toc{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin:20px 0}
+.toc h4{margin-top:0;color:var(--accent)}
+.toc ul{margin-left:18px}
+.toc a{color:var(--fg-2);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.hidden{display:none!important}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.kbd{
+  display:inline-block;background:var(--bg-3);border:1px solid var(--border);
+  border-bottom-width:2px;padding:2px 8px;border-radius:4px;font-family:monospace;
+  font-size:12px;color:var(--fg);
+}
+/* Syntax highlight (custom) */
+.tok-keyword{color:var(--red)}
+.tok-string{color:var(--green)}
+.tok-comment{color:var(--fg-3);font-style:italic}
+.tok-number{color:var(--orange)}
+.tok-function{color:var(--purple)}
+.tok-class{color:var(--yellow)}
+.tok-type{color:var(--accent-2)}
+.tok-builtin{color:var(--accent)}
+.tok-operator{color:var(--pink)}
+.tok-prop{color:var(--accent-2)}
+.tok-decorator{color:var(--yellow)}
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+/* ── Sidebar toggle button ───────────────────────── */
+.nav-toggle{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--fg-2);width:36px;height:36px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;transition:background .15s,border-color .15s,color .15s;
+  padding:0;outline:none;
+}
+.nav-toggle:hover{background:var(--bg-3);border-color:var(--accent);color:var(--accent)}
+
+/* ── Sidebar backdrop (mobile overlay) ──────────── */
+.sidebar-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:999;backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.sidebar-backdrop.visible{display:block}
+
+/* ── Smooth transitions ──────────────────────────── */
+aside{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
+
+/* ── Desktop: sidebar collapsed state ────────────── */
+@media(min-width:769px){
+  .layout.sidebar-collapsed aside{transform:translateX(-310px)}
+  .layout.sidebar-collapsed main{margin-left:0;padding-left:64px}
+}
+
+/* ── Tablet (769–1024px) ─────────────────────────── */
+@media(min-width:769px)and(max-width:1024px){
+  aside{width:260px}
+  main{margin-left:260px;padding:32px 28px}
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────── */
+@media(max-width:768px){
+  aside{
+    position:fixed;z-index:1000;width:280px;
+    transform:translateX(-100%);
+  }
+  aside.mobile-open{transform:translateX(0)}
+  main{margin-left:0;padding:60px 16px 32px}
+  .nav-toggle{top:12px;left:12px}
+  h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
+  h3{font-size:18px;margin:22px 0 10px}
+  h4{font-size:15px}
+  .cmp{grid-template-columns:1fr}
+  .flow-row{gap:6px}
+  .flow-box{padding:10px 14px;font-size:13px}
+  pre{font-size:12px;padding:12px 14px;border-radius:6px}
+  table{font-size:13px;display:block;overflow-x:auto}
+  th,td{padding:7px 10px}
+  details.qa summary{font-size:14px}
+  .toc{padding:12px 16px}
+}
+
+/* ── Small mobile (≤480px) ───────────────────────── */
+@media(max-width:480px){
+  aside{width:100%;max-width:320px}
+  main{padding:56px 12px 24px}
+  h2.module-title{font-size:20px}
+  pre{font-size:11.5px}
+}
+
+/* ── Mobile top bar ──────────────────────────────── */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:998;
+  height:52px;background:var(--bg-2);border-bottom:1px solid var(--border);
+  align-items:center;padding:0 56px 0 58px;
+}
+.mobile-topbar .topbar-title{
+  font-size:14px;font-weight:600;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside id="sidebar">
+  <div class="brand">
+    <h1>Playwright SDET</h1>
+    <p>Mastery ebook · open source</p>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="Search topics, code, Q&A…">
+  </div>
+  <nav>
+    <ul id="navlist">
+      <li class="cat">Home</li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li class="cat">① Prerequisites</li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li class="cat">② Playwright Core</li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li class="cat">③ API & Backend Testing</li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li class="cat">④ Dev & CI</li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li class="cat">⑤ Testing Foundations</li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=""><span class="num">34</span>Test Automation Architecture</a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li class="cat">⑥ AI & Emerging</li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li class="cat">⑦ Alternative Tools</li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li class="cat">⑧ Advanced & Specialized</li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li class="cat">⑨ Full-stack Dev</li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li class="cat">⑩ DSA & Coding</li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li class="cat">⑪ System Design</li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li class="cat">⑫ Interview Prep</li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=" active"><span class="num">69</span>Interview Q&A by Experience</a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+    </ul>
+  </nav>
+</aside>
+    <main>
+      <h2 class="module-title"><span class="badge">33</span>Interview Q&amp;A by Experience Level</h2>
+
+<div class="toc">
+<h4>Tiers covered</h4>
+<ul>
+<li>1–2 years — fundamentals, basic Playwright, basic JS/HTTP</li>
+<li>3–5 years — architecture, advanced Playwright, framework design</li>
+<li>5–8 years — system design, scaling, leadership scenarios</li>
+<li>Round-by-round: phone screen, technical, design, behavioral</li>
+</ul>
+</div>
+
+<h3>33.1 1–2 years SDET — Foundations</h3>
+
+<details class="qa"><summary>What's the difference between functional and non-functional testing?</summary>
+<div class="answer">Functional: what the system does — login works, checkout creates an order. Non-functional: how it does it — performance, security, accessibility, usability, scalability.</div></details>
+
+<details class="qa"><summary>What's a test case? What fields does it have?</summary>
+<div class="answer">A specific scenario to validate behaviour. Fields: id, title, preconditions, steps, expected result, actual result, status, severity, priority, environment.</div></details>
+
+<details class="qa"><summary>Severity vs Priority?</summary>
+<div class="answer">Severity = how bad technically (impact on system). Priority = how urgent to fix (business need). Typo on a launch landing page = low severity, high priority.</div></details>
+
+<details class="qa"><summary>Smoke vs Sanity vs Regression?</summary>
+<div class="answer">Smoke = build acceptance (does it boot?). Sanity = narrow check of a recent change. Regression = full suite to ensure nothing broke.</div></details>
+
+<details class="qa"><summary>What's Playwright?</summary>
+<div class="answer">A Node.js library for automating Chromium, Firefox, WebKit with one API. Cross-browser, auto-wait, parallel by default, built-in network mocking and trace viewer.</div></details>
+
+<details class="qa"><summary>What is a locator?</summary>
+<div class="answer">A description of how to find an element — not a reference. Re-resolved on every action, so it never goes stale. Prefer <code class="inline">getByRole</code>; fall back to CSS / data-testid.</div></details>
+
+<details class="qa"><summary>What is strict mode in Playwright?</summary>
+<div class="answer">Action methods require the locator to resolve to exactly one element. If more match, Playwright throws a clear error. Forces explicit narrowing instead of silently picking the first.</div></details>
+
+<details class="qa"><summary>What is web-first assertion?</summary>
+<div class="answer">An assertion on a locator that auto-retries until it passes or times out. <code class="inline">expect(locator).toHaveText('Hi')</code>. Removes timing flakes — never compare extracted values.</div></details>
+
+<details class="qa"><summary>What's the difference between page.click and locator.click?</summary>
+<div class="answer">page.click takes a selector string and re-resolves; locator.click acts on a pre-built locator. Modern Playwright prefers <code class="inline">page.getByRole(...)</code> → returns a Locator → call <code class="inline">.click()</code>.</div></details>
+
+<details class="qa"><summary>What is auto-wait?</summary>
+<div class="answer">Before each action, Playwright runs actionability checks (attached, visible, stable, enabled, receives events) in a retry loop until they pass or the timeout expires. No manual sleeps needed.</div></details>
+
+<details class="qa"><summary>HTTP methods you know?</summary>
+<div class="answer">GET (read), POST (create), PUT (replace), PATCH (partial update), DELETE (remove), HEAD (headers only), OPTIONS (CORS preflight / discover allowed methods).</div></details>
+
+<details class="qa"><summary>200 vs 201 vs 204?</summary>
+<div class="answer">200 generic success with body. 201 new resource created (POST). 204 success no body (DELETE).</div></details>
+
+<details class="qa"><summary>401 vs 403?</summary>
+<div class="answer">401 — server doesn't know who you are. 403 — knows but not allowed.</div></details>
+
+<details class="qa"><summary>What is REST?</summary>
+<div class="answer">Resources at URLs, HTTP verbs for actions, stateless, JSON usually. Each request carries enough info to be processed; no server-side session memory between calls.</div></details>
+
+<details class="qa"><summary>Why use TypeScript over JavaScript for tests?</summary>
+<div class="answer">Compile-time type checking catches bugs before runtime, IDE auto-complete is richer, refactors are safer. Output is plain JS at runtime — no runtime cost.</div></details>
+
+<h3>33.2 3–5 years SDET — Framework &amp; Architecture</h3>
+
+<details class="qa"><summary>How do you structure a Playwright TS framework?</summary>
+<div class="answer">Layered: tests/ (intent), pages/ (POM), services/ (API clients), fixtures/ (setup), factories/ (data), utils/, config/, data/. Tests don't touch selectors or low-level browser APIs.</div></details>
+
+<details class="qa"><summary>What's a fixture and how do you write one?</summary>
+<div class="answer">Async function returning a value the test consumes, with setup before and teardown after via <code class="inline">await use(value)</code>. Define via <code class="inline">test.extend</code>. Worker- vs test-scoped based on lifetime.</div></details>
+
+<details class="qa"><summary>How do you reuse auth across tests?</summary>
+<div class="answer">Setup project that logs in once, calls <code class="inline">page.context().storageState({ path: 'auth.json' })</code>. Other projects use <code class="inline">use: { storageState: 'auth.json' }</code>. Skip UI login on every test.</div></details>
+
+<details class="qa"><summary>How do you parallelise across machines?</summary>
+<div class="answer">Sharding: <code class="inline">--shard=1/4</code> per CI runner. Combine with in-shard <code class="inline">workers</code> for total parallelism = shards × workers. Merge blob reports at the end.</div></details>
+
+<details class="qa"><summary>How do you handle a flaky test?</summary>
+<div class="answer">Quarantine immediately, open ticket. Reproduce with <code class="inline">--repeat-each</code>, diagnose via trace. Fix root cause — usually replacing waitForTimeout with web-first assertion, isolating data, or mocking unstable upstream. Lift quarantine when <code class="inline">--repeat-each=100</code> passes on CI.</div></details>
+
+<details class="qa"><summary>What's API chaining?</summary>
+<div class="answer">Sequence of HTTP calls where each uses data from the previous. Linear or DAG. State held in local vars, fixtures, or a context object. Cleanup in reverse order of creation.</div></details>
+
+<details class="qa"><summary>How do you mock a backend call in Playwright?</summary>
+<div class="answer"><code class="inline">page.route('**/api/x', route =&gt; route.fulfill({ status, body }))</code>. Or modify the real response via <code class="inline">await route.fetch()</code> + mutate + fulfill.</div></details>
+
+<details class="qa"><summary>How do you choose between POM and Screenplay?</summary>
+<div class="answer">POM by default — fits 99% of teams. Screenplay only for very large suites (1000+ tests, many contributors) where actor/task abstraction pays off.</div></details>
+
+<details class="qa"><summary>How do you handle Cross-browser testing efficiently?</summary>
+<div class="answer">Per-project config (chromium / firefox / webkit). Run smoke on all three on every PR; full regression on chromium + nightly cross-browser. Avoid duplicating UI tests three times for unrelated logic.</div></details>
+
+<details class="qa"><summary>How do you assert on a network call's payload?</summary>
+<div class="answer">Promise.all the action with <code class="inline">page.waitForRequest</code>; capture the request; assert on <code class="inline">request.postDataJSON()</code> and headers.</div></details>
+
+<details class="qa"><summary>What's the difference between mocks, stubs, spies, fakes?</summary>
+<div class="answer">Stub: returns canned response. Mock: stub + verifies it was called as expected. Spy: passes through real call AND records details. Fake: working alternative implementation (in-memory DB). All four eliminate dependence on real systems.</div></details>
+
+<details class="qa"><summary>How do you balance UI vs API tests?</summary>
+<div class="answer">API tests for business logic, edge cases, contracts — fast, cheap. UI for happy-path user journeys and visuals. Hybrid: API setup + UI verify gives both speed and rendering coverage.</div></details>
+
+<details class="qa"><summary>How do you measure test suite health?</summary>
+<div class="answer">Pass rate, retry rate (proxy for flakiness), runtime p95, top slowest tests, top flakiest tests, coverage trend, escaped-defect rate. Tracked over time as KPIs.</div></details>
+
+<h3>33.3 5–8 years SDET — System Design &amp; Leadership</h3>
+
+<details class="qa"><summary>Design a test execution platform for 10K tests with 10-min PR SLA.</summary>
+<div class="answer">Orchestrator API → smart test selector → queue → worker fleet (autoscaling on spot) → blob reports → merge → unified report. Capacity: ~700 tests/sec at peak = ~21k concurrent slots. Trace artifacts to S3, metadata to Postgres. See Module 26.</div></details>
+
+<details class="qa"><summary>Design a flaky-test detection pipeline.</summary>
+<div class="answer">Capture pass/fail per test per run. Compute flakiness score as failure rate over rolling window. Auto-quarantine if &gt; threshold for N consecutive days. Open a JIRA. Track time-to-fix. Nightly job retries quarantined tests to detect self-healing.</div></details>
+
+<details class="qa"><summary>Design a self-healing locator system.</summary>
+<div class="answer">On green runs, snapshot each locator's context (role, name, neighbours, attributes, position). On failure, compute similarity of current DOM candidates against snapshot. Suggest top match. Auto-apply if confidence &gt; threshold; surface in PR for review. Never silently merge.</div></details>
+
+<details class="qa"><summary>How do you scale a test team from 5 → 50 engineers?</summary>
+<div class="answer">Platform vs feature teams. Platform owns the framework, common services (test data, auth, runner). Feature teams own their tests within that framework. Style guides, code review, lint enforce consistency. Office hours; pair sessions. KPIs visible org-wide.</div></details>
+
+<details class="qa"><summary>How do you balance "more tests" vs "faster suite"?</summary>
+<div class="answer">Pyramid first: most coverage at unit/API where it's cheap. Reserve UI E2E for true user journeys. Smart test selection on PRs (only affected). Full regression nightly. Continuously profile and refactor slowest tests.</div></details>
+
+<details class="qa"><summary>How do you justify SDET investment to leadership?</summary>
+<div class="answer">Business outcomes: deploy frequency, lead time, mean time to detect, escaped defect rate. "Cutting flake rate from 12% to 1% lets every PR ship same-day. That's ~10 more deploys/dev/month." Numbers, not opinions.</div></details>
+
+<details class="qa"><summary>What's your stance on AI in testing?</summary>
+<div class="answer">Useful for boilerplate, trace analysis, locator suggestion, judging non-deterministic features. NOT a substitute for deterministic regression. Always human-review AI output. Watch for hallucinated locators and shallow assertions.</div></details>
+
+<details class="qa"><summary>How do you handle conflict with a developer who says "this test is flaky, ignore it"?</summary>
+<div class="answer">Pull the trace, show data. Ask: is it flake because of the test or because the system has a real race? Both happen. If system race, file as bug. If test race, accept it's the SDET's bug and fix. Don't dismiss; investigate.</div></details>
+
+<details class="qa"><summary>How do you onboard a new SDET to your framework?</summary>
+<div class="answer">README + "first PR" guide. Pair on writing one test end-to-end. Walk through layers (test → page object → service → fixture). Pair on debugging a real failing test using trace. Define what good looks like (style guide). Pair-review their first 5 PRs.</div></details>
+
+<details class="qa"><summary>What's your KPI dashboard for the platform team?</summary>
+<div class="answer">PR feedback p95 latency, pass rate, retry rate, top 10 slowest tests, top 10 flakiest tests, cost per PR, infra utilisation, escaped defect rate from prod. Reviewed weekly in platform standup; quarterly with leadership.</div></details>
+
+<details class="qa"><summary>How do you handle a release blocker found 30 minutes before ship?</summary>
+<div class="answer">Triage severity vs business impact. If critical: stop the ship, fix forward or rollback. If not: file, communicate, ship with a known issue documented. Decision is shared with PM, eng lead, on-call.</div></details>
+
+<details class="qa"><summary>Walk me through your proudest SDET work.</summary>
+<div class="answer">STAR — Situation (large suite with 12% flake rate, blocking PRs); Task (improve PR feedback time and reliability); Action (introduced 4-shard sharding + storageState + replaced 47 waitForTimeout + introduced flake-detector pipeline); Result (flake rate to 1%, PR feedback 38m → 7m, dev satisfaction up 40%).</div></details>
+
+<h3 id="m33-5y">33.4 5-Years SDET Interview — Deep Q&amp;A (version-aware, Playwright 1.61)</h3>
+
+<div class="toc">
+<h4>Designed for the 5-year mark</h4>
+<ul>
+<li>You are expected to <strong>own a framework</strong>, not just write tests.</li>
+<li>Architecture, scaling, debugging, and trade-off questions dominate the round.</li>
+<li>Interviewers expect concrete numbers (flake rate, runtime, infra cost) — not platitudes.</li>
+<li>Version-aware questions are common — answer with what 1.61 enables, not generic Playwright.</li>
+</ul>
+</div>
+
+<h4>33.4.1 Version, environment &amp; setup</h4>
+
+<details class="qa"><summary>Which Playwright version do you use and how do you decide when to upgrade?</summary>
+<div class="answer">We pin <code class="inline">@playwright/test</code> at <strong>1.61.0</strong> exactly (no caret) in <code class="inline">package.json</code>, matched against the Docker image <code class="inline">mcr.microsoft.com/playwright:v1.61.0-jammy</code>. Browser binaries are version-locked, so any drift between the library and the image causes "works locally, fails in CI" mismatches. Upgrade cadence: every 2-3 minors, after the .0 release has had a .1 patch (about two weeks). The upgrade is a single PR that bumps three places (package.json, Docker tag, install step) and re-baselines visual snapshots intentionally.</div></details>
+
+<details class="qa"><summary>Why pin the version exactly instead of using a caret range?</summary>
+<div class="answer">Two reasons. (1) Browser binaries are downloaded by <code class="inline">npx playwright install</code> and pinned to the library version. A caret can silently bump the library while the cached binaries stay old, producing protocol mismatches. (2) CI reproducibility — a teammate running <code class="inline">npm ci</code> a month later must get the exact same environment as the green CI run. <code class="inline">package-lock.json</code> helps, but exact pinning makes intent explicit.</div></details>
+
+<details class="qa"><summary>How do you keep CI reproducible with Playwright?</summary>
+<div class="answer">Five things. (1) Exact version pin. (2) <code class="inline">npm ci</code> not <code class="inline">npm install</code>. (3) Official Playwright Docker image matching the version. (4) Cache <code class="inline">~/.cache/ms-playwright</code> in CI keyed on the Playwright version. (5) Re-install browsers on cache miss with <code class="inline">npx playwright install --with-deps</code>. The cache key is critical — keying on lockfile hash works; keying on the version string is simpler and equally correct.</div></details>
+
+<details class="qa"><summary>What does <code class="inline">npx playwright install</code> actually do?</summary>
+<div class="answer">Downloads the pinned Chromium/Firefox/WebKit revisions plus FFmpeg (for video). It does <em>not</em> install npm packages — that's <code class="inline">npm install</code>'s job. The <code class="inline">--with-deps</code> flag also <code class="inline">apt-get install</code>s OS libraries (libgbm, libnss3, etc.) that the browser binaries need on Linux. On macOS/Windows, --with-deps is a no-op.</div></details>
+
+<h4>33.4.2 Framework design &amp; architecture</h4>
+
+<details class="qa"><summary>Walk me through your test framework structure.</summary>
+<div class="answer">Layered. <code class="inline">tests/</code> holds intent only — no selectors. <code class="inline">pages/</code> has Page Objects exposing user-level actions like <code class="inline">login(email, pw)</code>, never raw locators. <code class="inline">services/</code> wraps API calls using <code class="inline">APIRequestContext</code>. <code class="inline">fixtures/</code> defines custom test/worker fixtures via <code class="inline">test.extend</code>. <code class="inline">factories/</code> generates test data with Faker. <code class="inline">config/</code> holds <code class="inline">playwright.config.ts</code> with projects for chromium/firefox/webkit + setup project for storageState. <code class="inline">utils/</code> for pure helpers. Tests never import from <code class="inline">@playwright/test</code> directly — they import from <code class="inline">fixtures/index.ts</code> which re-exports an extended <code class="inline">test</code>.</div></details>
+
+<details class="qa"><summary>How do you decide what goes in a Page Object vs a fixture?</summary>
+<div class="answer">Page Object = stateful interaction with one page/component. Fixture = setup &amp; teardown of a resource that multiple tests share. Rule: if it logs in, sets up data, or starts a server, it's a fixture. If it clicks buttons or asserts on UI, it's a Page Object. A common mistake is putting "logged-in page" creation in a Page Object — it should be a fixture that returns an already-authenticated page.</div></details>
+
+<details class="qa"><summary>How do you handle test data?</summary>
+<div class="answer">Three tiers. (1) Static fixtures for reference data (countries, currencies) in JSON. (2) Generated synthetic data via Faker, seeded per-worker for determinism. (3) API-created data via a <code class="inline">dataFactory</code> fixture that POSTs to the backend, returns the entity, and registers a cleanup hook to DELETE in <code class="inline">afterEach</code>. Never share data across tests; never depend on prod or shared staging data. Each test owns its data lifecycle.</div></details>
+
+<details class="qa"><summary>Custom fixtures with worker vs test scope — when do you choose which?</summary>
+<div class="answer">Test scope (default) for anything mutable per-test — page, request context, test data. Worker scope for expensive one-time setup that's safe to reuse — a logged-in browser context's storageState, a database connection pool, an environment health check. Worker fixtures run once per worker process, so if you run with <code class="inline">workers: 4</code>, you pay the cost 4 times, not 100 times.</div></details>
+
+<details class="qa"><summary>How do you implement parallel-safe authentication?</summary>
+<div class="answer">Setup project pattern (1.31+). One project named <code class="inline">setup</code> with a single spec that logs in via the UI (or API) and calls <code class="inline">page.context().storageState({ path: 'auth/admin.json' })</code>. Every other project declares <code class="inline">dependencies: ['setup']</code> and <code class="inline">use: { storageState: 'auth/admin.json' }</code>. The setup runs once per <code class="inline">npx playwright test</code> invocation; all workers share the resulting cookie file. For multi-role testing, run multiple setup specs in parallel, each writing to a different file.</div></details>
+
+<details class="qa"><summary>What's your stance on POM vs Screenplay vs Functional helpers?</summary>
+<div class="answer">POM by default — fits 99% of teams and is what new joiners expect. Screenplay only when you have 1000+ tests, multiple actor types, and the actor/task model genuinely simplifies. Functional helpers (just exported functions) work for small projects but break down once shared state grows. The wrong choice is usually too-clever Screenplay on a 200-test suite — overhead with no payoff.</div></details>
+
+<h4>33.4.3 Locators &amp; assertions — deep mastery</h4>
+
+<details class="qa"><summary>Walk me through your locator priority and why.</summary>
+<div class="answer">In order: <code class="inline">getByRole</code> &gt; <code class="inline">getByLabel</code> &gt; <code class="inline">getByPlaceholder</code> &gt; <code class="inline">getByText</code> &gt; <code class="inline">getByTestId</code> &gt; CSS &gt; XPath. The reason is twofold: (1) the higher-priority locators are how a real user (or screen reader) identifies the element, so they double as accessibility checks; (2) they survive refactors — designers can change classes and DOM nesting and the test still works. CSS/XPath are escape hatches when nothing else is available, never the first choice.</div></details>
+
+<details class="qa"><summary>What is strict mode and why does it matter?</summary>
+<div class="answer">Action methods (click, fill, etc.) require the locator to resolve to <em>exactly one</em> element. If two match, Playwright throws with a clear error showing both candidates. This forces explicit narrowing (<code class="inline">.first()</code>, <code class="inline">.filter()</code>, <code class="inline">.nth()</code>) instead of silently picking the first match and producing non-deterministic behaviour when the DOM changes. It's one of the design choices that makes Playwright less flaky than Selenium.</div></details>
+
+<details class="qa"><summary>How do you narrow a locator without using nth?</summary>
+<div class="answer">Three primary tools. (1) <code class="inline">.filter({ hasText: 'Total' })</code> — keep elements containing certain text. (2) <code class="inline">.filter({ has: page.getByRole('button') })</code> — keep elements that contain another locator. (3) Chaining — <code class="inline">parent.getByRole('button', { name: 'Save' })</code> scopes the lookup to descendants of <code class="inline">parent</code>. Use <code class="inline">.nth()</code> only when the position is semantically meaningful (the "second row" of a table).</div></details>
+
+<details class="qa"><summary>Web-first assertion — what's the rule and why?</summary>
+<div class="answer">Rule: <em>assert on a locator, never on an extracted value</em>. <code class="inline">expect(locator).toHaveText('Hi')</code> auto-retries the DOM lookup until the text matches or the timeout fires. <code class="inline">expect(await locator.textContent()).toBe('Hi')</code> captures the text once, then asserts statically — if the text hasn't appeared yet, it fails immediately. The auto-retry is what eliminates 90% of timing-related flakes.</div></details>
+
+<details class="qa"><summary>What's the difference between <code class="inline">toBeVisible</code> and <code class="inline">toBeAttached</code>?</summary>
+<div class="answer"><code class="inline">toBeAttached</code> = the element is in the DOM tree. <code class="inline">toBeVisible</code> = attached AND not <code class="inline">display:none</code>, not <code class="inline">visibility:hidden</code>, not size zero, and inside the viewport. Use <code class="inline">toBeAttached</code> when a hidden element matters (a modal exists in the DOM before fading in); use <code class="inline">toBeVisible</code> for "the user can see it".</div></details>
+
+<details class="qa"><summary>How do you use aria snapshots? (1.49+ feature)</summary>
+<div class="answer"><code class="inline">expect(locator).toMatchAriaSnapshot()</code> serialises the accessibility tree of the locator and compares it against a YAML snapshot. Great for stable assertions on complex widgets (a date picker, a select-with-search) without coupling to specific CSS or DOM structure. The snapshot lives next to the spec; you regenerate it intentionally with <code class="inline">--update-snapshots</code>. Caveat: re-baseline carefully — accidental drift is easy.</div></details>
+
+<details class="qa"><summary>How would you test a component that flashes a transient toast for 3 seconds?</summary>
+<div class="answer">Two assertions. (1) <code class="inline">await expect(toast).toBeVisible()</code> — confirms it appeared. (2) <code class="inline">await expect(toast).toBeHidden({ timeout: 5000 })</code> — confirms it auto-dismisses within the window. Don't <code class="inline">waitForTimeout(3000)</code>; use the assertion's built-in retry. If you also need to verify content, chain <code class="inline">toHaveText</code> between the two visibility checks.</div></details>
+
+<h4>33.4.4 Network, mocking &amp; API hybrid</h4>
+
+<details class="qa"><summary>When do you mock a network response and when do you hit the real backend?</summary>
+<div class="answer">Mock when: (a) you're testing UI behaviour given a known backend response (loading, error, empty state), (b) the upstream is unstable or rate-limited, (c) you need to test edge cases the real backend can't produce (500 errors, slow responses). Hit real when: (a) you're validating the end-to-end contract, (b) the test is part of a smoke suite gating deployment, (c) the response shape changes frequently and a mock would drift. A mature suite uses both — most UI tests mock, a small "real backend" smoke runs against staging.</div></details>
+
+<details class="qa"><summary>Show me how you'd modify a real API response without fully mocking it.</summary>
+<div class="answer"><pre data-lang="ts">await page.route('**/api/products', async (route) =&gt; {
+  const response = await route.fetch();
+  const json = await response.json();
+  json.items = json.items.filter(p =&gt; p.inStock); <span class="tok-comment">// mutate</span>
+  await route.fulfill({ response, json });
+});</pre>Useful for testing UI given partial data without writing a fake fixture for the whole payload.</div></details>
+
+<details class="qa"><summary>How do you intercept a WebSocket message? (1.48+ feature)</summary>
+<div class="answer"><code class="inline">page.routeWebSocket('wss://api.example.com', ws =&gt; { ... })</code> gives you handlers for messages flowing both ways. You can <code class="inline">ws.send()</code> a custom message back to the client, or pass-through with <code class="inline">ws.connectToServer()</code>. Critical for testing live-updating dashboards or chat features without standing up a real ws server.</div></details>
+
+<details class="qa"><summary>How do you assert on a network request the page makes?</summary>
+<div class="answer"><pre data-lang="ts">const [request] = await Promise.all([
+  page.waitForRequest('**/api/orders'),
+  page.getByRole('button', { name: 'Submit' }).click(),
+]);
+expect(request.method()).toBe('POST');
+expect(request.postDataJSON()).toMatchObject({ items: expect.any(Array) });
+expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inline">Promise.all</code> pattern is the trick — register the listener <em>before</em> triggering the action so the request isn't missed.</div></details>
+
+<details class="qa"><summary>API test in Playwright — when and why?</summary>
+<div class="answer">Use <code class="inline">request</code> fixture / <code class="inline">APIRequestContext</code> when you need: (a) pure backend tests with no browser, (b) setup data via API before a UI test, (c) tear-down via API after a UI test, (d) chained API flows (login -&gt; create -&gt; list -&gt; delete). Faster than UI (no rendering), same fixtures and reporters, runs in the same parallel pipeline. Cuts UI test count by 60-70% for typical SaaS apps.</div></details>
+
+<details class="qa"><summary>Hybrid test pattern — what does it look like?</summary>
+<div class="answer">Use API to set up state, UI to verify rendering. Example: create 50 orders via <code class="inline">request.post()</code>, then load the dashboard via <code class="inline">page.goto()</code> and assert the pagination shows "1 of 3 pages". Much faster than clicking through 50 order creations in the UI, and the API path is independently tested elsewhere. Cleanup via API too.</div></details>
+
+<h4>33.4.5 Flakiness — root-cause playbook</h4>
+
+<details class="qa"><summary>A test passes locally but fails in CI. What's your debug sequence?</summary>
+<div class="answer">Six checks, in order. (1) Pull the trace artifact — open <code class="inline">trace.zip</code> in the trace viewer; the action and DOM state at the moment of failure usually tells the story. (2) Compare CPU/memory: CI runners are often slower; expand timeouts targeted to the slow assertion. (3) Compare viewport — local dev uses full screen, CI uses 1280x720; an off-viewport element won't <code class="inline">toBeVisible</code>. (4) Compare locale/timezone — CI is UTC by default; tests asserting on dates need explicit <code class="inline">TZ=America/New_York</code>. (5) Compare network — staging from CI may have stricter rate limits than your laptop. (6) Compare browser version — if CI uses Docker image v1.61.0-jammy and you're on v1.60 locally, behaviour differs. The trace solves 80% of cases on first read.</div></details>
+
+<details class="qa"><summary>What's your strategy for fixing a flaky test?</summary>
+<div class="answer">Never silence — root-cause. Step 1: reproduce with <code class="inline">npx playwright test name --repeat-each=20</code>. Step 2: open the trace from a failing run; look for the action where state diverges from expectation. Step 3: identify root cause — race condition, animation, network jitter, shared data. Step 4: fix appropriately — usually replacing a <code class="inline">waitForTimeout</code> with a proper web-first assertion, scoping a locator more tightly, or moving state setup into a fixture for isolation. Step 5: gate the merge on <code class="inline">--repeat-each=50</code> passing in CI. Step 6: track the flake metric over time so we know if it returns.</div></details>
+
+<details class="qa"><summary>You see a 12% flake rate. How do you bring it under 1%?</summary>
+<div class="answer">Three-phase plan. Phase 1 (week 1): instrument — log every test's pass/fail across last 100 CI runs, rank by failure frequency, quarantine top-10 worst offenders so they stop blocking PRs. Phase 2 (weeks 2-4): root-cause the top 10 one by one, each fix verified with <code class="inline">--repeat-each=50</code>. Phase 3 (ongoing): trend the flake metric weekly; any test that flakes twice in a rolling 14 days gets auto-quarantined and a ticket assigned. In practice 80% of flakes come from 20% of patterns: waitForTimeout, shared test data, animations, surprise dialogs. Fix those patterns at the framework level (linters, fixtures) and the metric stays low.</div></details>
+
+<details class="qa"><summary>How do retries hide flakiness — and when are they OK?</summary>
+<div class="answer">Retries are a band-aid. <code class="inline">retries: 2</code> means a test passing 1/3 times still shows green — you've lost signal. They're acceptable for <em>known</em> transient infra issues (a flaky upstream API you can't fix) but every retry should be tracked. I gate the metric: "max 2% of runs use any retry; if higher, investigation required". Playwright's <code class="inline">retry: 'on-first-failure'</code> via <code class="inline">test.fail.fixme</code> + retry analytics gives the right balance — auto-recovery with a paper trail.</div></details>
+
+<details class="qa"><summary>How do you handle animations and transitions?</summary>
+<div class="answer">Three tools. (1) <code class="inline">animations: 'disabled'</code> in <code class="inline">toHaveScreenshot</code> options — disables CSS animations during visual asserts. (2) <code class="inline">page.emulateMedia({ reducedMotion: 'reduce' })</code> at the project level — many apps respect this. (3) For unavoidable animations, assert on the post-animation state with a longer timeout. Never <code class="inline">waitForTimeout(500)</code> — it's fragile and slows the suite linearly with the number of tests.</div></details>
+
+<h4>33.4.6 Parallelism, sharding, and CI/CD</h4>
+
+<details class="qa"><summary>Explain workers vs sharding.</summary>
+<div class="answer"><strong>Workers</strong> are parallel processes <em>within one CI runner</em>. <code class="inline">workers: 4</code> means 4 browser instances on the same machine. <strong>Sharding</strong> splits tests <em>across multiple CI runners</em>. <code class="inline">--shard=1/4</code> runs the first 1/4 of tests on this runner; spawn 4 runners and they cover the whole suite in parallel. Total parallelism = shards × workers. A 1000-test suite at 4 shards × 4 workers = 16 concurrent tests, finishes in ~1/16 the time.</div></details>
+
+<details class="qa"><summary>How do you merge reports across shards?</summary>
+<div class="answer">Each shard runs with <code class="inline">--reporter=blob</code>, producing an opaque <code class="inline">.zip</code> artifact. After all shards finish, a final CI job downloads every blob and runs <code class="inline">npx playwright merge-reports --reporter=html ./blob-reports</code>. The output is a single unified HTML report covering all tests across all shards. Critically, the trace artifacts are also merged — you can click on any failed test and see its trace, regardless of which shard ran it.</div></details>
+
+<details class="qa"><summary>What does your GitHub Actions matrix look like for sharded Playwright?</summary>
+<div class="answer"><pre data-lang="yaml">jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - run: npx playwright test --shard=${{ matrix.shard }}/4 --reporter=blob
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blob-${{ matrix.shard }}
+          path: blob-report/
+  merge:
+    needs: test
+    if: always()
+    steps:
+      - uses: actions/download-artifact@v4
+      - run: npx playwright merge-reports --reporter=html ./all-blob-reports
+      - uses: actions/upload-artifact@v4
+        with: { name: html-report, path: playwright-report/ }</pre><code class="inline">if: always()</code> on the merge job is critical — you want the report even when tests fail.</div></details>
+
+<details class="qa"><summary>How do you choose the number of shards/workers?</summary>
+<div class="answer">Math + cost. Goal: PR feedback under 10 minutes. If total runtime = T seconds at 1 worker, sharded = T / (shards × workers / overhead). Overhead per shard is ~30-60s (setup, browser install on cache miss). Sweet spot: enough shards to hit the SLA, capped by CI cost. Practical heuristic: 4 shards × 4 workers for a 500-test suite, scale up linearly. Always measure — don't over-shard, because each shard has fixed overhead.</div></details>
+
+<details class="qa"><summary>What's "fully parallel" mode and when do you turn it off?</summary>
+<div class="answer"><code class="inline">fullyParallel: true</code> means tests <em>within</em> a file also run in parallel across workers, not just across files. Default in modern configs. Turn it off (<code class="inline">test.describe.configure({ mode: 'serial' })</code>) only for tests that genuinely depend on order — e.g. a sequence creating a user, logging in, deleting. Even then, prefer rewriting as independent tests that each set up their own state.</div></details>
+
+<h4>33.4.7 Debugging mastery</h4>
+
+<details class="qa"><summary>Walk me through using the Trace Viewer.</summary>
+<div class="answer">Trace captures every action, screenshot before/after, network calls, console logs, and source location. Enable with <code class="inline">trace: 'on-first-retry'</code> in config. After a failed run, open with <code class="inline">npx playwright show-trace trace.zip</code>. Three panels: timeline (every action), DOM snapshot (clickable, inspectable like Chrome DevTools at that moment), and network/console. The DOM snapshot is the killer feature — you can hover-inspect elements as they were at the failure, no reproduction needed.</div></details>
+
+<details class="qa"><summary>How do you use Playwright's UI Mode for development?</summary>
+<div class="answer"><code class="inline">npx playwright test --ui</code>. Pick tests visually, watch them run live, step through actions, pick locators inside the running browser, edit-and-rerun without restart. Replaces 90% of headed-mode + console.log debugging. Pairs especially well with <code class="inline">test.only</code> when iterating on one test.</div></details>
+
+<details class="qa"><summary>What's the difference between <code class="inline">--debug</code>, <code class="inline">--ui</code>, and <code class="inline">PWDEBUG=1</code>?</summary>
+<div class="answer"><code class="inline">--ui</code>: the modern UI Mode app — visual, persistent, pickable. <code class="inline">--debug</code>: opens Playwright Inspector with the test paused at the first action; step-through, see actionability checks. <code class="inline">PWDEBUG=1</code>: same as --debug but as an env var (works for non-Playwright runners too) and disables timeouts. Use UI Mode for daily development; Inspector when debugging actionability issues; <code class="inline">PWDEBUG=1</code> for one-off CI debug runs without changing scripts.</div></details>
+
+<details class="qa"><summary>How do you debug a "click is intercepted" error?</summary>
+<div class="answer">The error means another element is on top of the target. Three diagnostics. (1) Open the trace and inspect the DOM at the moment of failure — usually a modal, cookie banner, or floating chat icon. (2) Use <code class="inline">page.locator('xxx').click({ force: true })</code> as a temporary unblocker, but never as the fix. (3) Register a <code class="inline">page.addLocatorHandler()</code> (1.42+) for the interceptor — Playwright auto-dismisses it before retrying the click. Final fix is usually closing the dialog programmatically in beforeEach or via the handler.</div></details>
+
+<h4>33.4.8 Performance, visual, accessibility &amp; cross-browser</h4>
+
+<details class="qa"><summary>How do you do visual regression in Playwright?</summary>
+<div class="answer"><code class="inline">await expect(page).toHaveScreenshot('login.png', { maxDiffPixels: 100 })</code>. First run creates the baseline; subsequent runs compare. Tune <code class="inline">maxDiffPixels</code> or <code class="inline">maxDiffPixelRatio</code> to absorb anti-aliasing differences. <em>Critical</em>: snapshots are platform-specific (font rendering differs between Linux and macOS) — always generate baselines inside the Playwright Docker image to match CI. Mask volatile regions (timestamps, ads) with <code class="inline">mask: [locator]</code>.</div></details>
+
+<details class="qa"><summary>How do you integrate accessibility testing?</summary>
+<div class="answer"><code class="inline">@axe-core/playwright</code> — run <code class="inline">new AxeBuilder({ page }).analyze()</code> after the page is in a stable state. Returns a violations array. Fail the test if critical/serious violations exceed zero; warn on moderate/minor. For per-component testing, scope to a selector: <code class="inline">new AxeBuilder({ page }).include('main').analyze()</code>. Gate the PR in CI on the critical-violations count not going up. The 1.44+ web-first matchers like <code class="inline">toHaveAccessibleName</code> complement axe — they catch specific regressions axe might miss.</div></details>
+
+<details class="qa"><summary>How do you measure page performance in Playwright?</summary>
+<div class="answer">Three layers. (1) Page-level: <code class="inline">page.evaluate(() =&gt; performance.timing)</code> for Navigation Timing metrics (DOMContentLoaded, load). (2) Web Vitals: inject the web-vitals library and read LCP, CLS, INP from JS. (3) Lighthouse via <code class="inline">playwright-lighthouse</code> — full audit, scores, budgets. Hook these into the same test run and fail on threshold breach. For ongoing perf monitoring, log to Datadog/Grafana, not just CI.</div></details>
+
+<details class="qa"><summary>Cross-browser strategy — what runs where?</summary>
+<div class="answer">Tiered. (1) Every PR: full suite on Chromium only — fastest feedback. (2) Nightly: full suite on Chromium + Firefox + WebKit. (3) Pre-release: add real Safari and real Edge via BrowserStack. Most bugs are Chromium-platform-agnostic; the cross-browser passes catch the ~5% of CSS/JS engine quirks. Don't run the full suite three times on every PR — wasteful and slow.</div></details>
+
+<details class="qa"><summary>How do you test on mobile?</summary>
+<div class="answer">Two paths. (1) Mobile emulation: <code class="inline">use: { ...devices['iPhone 15'] }</code> — viewport, user-agent, touch events, device pixel ratio. Catches 80% of responsive bugs without a real device. (2) Real device: Appium for native, or cloud farms (BrowserStack, Sauce Labs) for real mobile browsers via Playwright's remote endpoint. Emulation for PRs, real devices weekly. Don't conflate emulation with "tested on mobile" in a status report — be precise.</div></details>
+
+<h4>33.4.9 System design questions (5y SDET often gets a scaled-down version)</h4>
+
+<details class="qa"><summary>Design a test platform that runs 5,000 tests in &lt; 10 minutes.</summary>
+<div class="answer">Components. (1) Orchestrator — REST API receives "run suite X on commit Y", emits jobs. (2) Test runner pool — Kubernetes pods, each running Playwright in Docker, autoscaled on a queue depth metric. (3) Test selector — given a code diff, computes affected tests via a dependency graph (or a tag heuristic) so PRs run a subset. (4) Result store — Postgres for metadata (run id, test id, status, duration), S3 for artifacts (traces, screenshots, videos). (5) Reporter — merges blob reports, publishes HTML, posts PR comment with summary. (6) Flake detector — separate pipeline reading the result store, computing per-test failure rate, auto-quarantining outliers. Capacity math: 5000 tests × avg 8s = 40,000 test-seconds. To finish in 600s, need 67 concurrent slots → 17 pods × 4 workers. Plus 30% headroom = 22 pods. Cost-wise, ~$0.50/PR on spot instances.</div></details>
+
+<details class="qa"><summary>Design a test data management system.</summary>
+<div class="answer">Layered. (1) Static reference data in JSON, version-controlled. (2) Dynamic generation: Faker, seeded per worker with a per-run salt so two parallel runs don't collide. (3) API-created entities via a <code class="inline">dataFactory</code> service — POST to backend, return entity ID, register cleanup hook to DELETE in <code class="inline">afterEach</code>. (4) Per-env isolation: separate database schema per test run on shared infra, or namespaced records (<code class="inline">test_run_id</code> column). (5) PII rules: synthetic data only, lint-check repos for hard-coded real names/emails/SSNs. (6) Cleanup safety: scheduled "garbage collection" job deletes orphaned test data older than 1 hour, catches anything fixtures missed.</div></details>
+
+<details class="qa"><summary>Design a flaky-test detection pipeline.</summary>
+<div class="answer">Pipeline. (1) Every CI run writes per-test results to a results DB (run_id, test_id, status, duration, retried_bool). (2) Nightly batch job computes, per test, the failure rate over the rolling 14-day window. (3) If failure_rate &gt; 5% AND total_runs &gt;= 20 → mark as flaky, file a JIRA ticket auto-assigned to the test author. (4) Quarantine list lives in a config file; CI reads it to skip those tests on PRs (still runs nightly to track if fixed). (5) Dashboard surfaces top 20 flakiest tests, trend over time, time-to-fix per ticket. KPI: "flake rate of trunk &lt; 1%". This makes flakiness visible and creates accountability.</div></details>
+
+<details class="qa"><summary>Design a self-healing locator system.</summary>
+<div class="answer">On every green run, snapshot for each locator: role, accessible name, text content, attributes, position relative to landmark elements. On a future failure, compute similarity between the failed locator's intent and current DOM candidates. If a single candidate exceeds 0.85 confidence, suggest it in the trace viewer — don't auto-apply. Auto-apply only with human approval via a PR-bot that opens a "self-healing suggestion" PR. Always keep humans in the loop — silent self-healing has a bad failure mode (false negatives that hide real bugs).</div></details>
+
+<h4>33.4.10 Scenario / "How would you test X" questions</h4>
+
+<details class="qa"><summary>How would you test a file upload feature?</summary>
+<div class="answer">Five tests. (1) Happy path: <code class="inline">setInputFiles('file.png')</code>, assert success message and that the file appears in the list. (2) File-too-large: synthetic 100MB file, assert error message. (3) Wrong type: <code class="inline">setInputFiles('malware.exe')</code>, assert rejection. (4) Drag-and-drop: <code class="inline">page.dispatchEvent('drop', {...})</code> with DataTransfer. (5) Backend: <code class="inline">request.post('/upload', { multipart: {...} })</code> independently asserts the API handles edge cases without the UI. For files that need to come from disk, store small fixtures in the repo; for large files, generate in beforeEach with <code class="inline">fs.writeFile</code>.</div></details>
+
+<details class="qa"><summary>How would you test a payment flow?</summary>
+<div class="answer">Tiered. (1) Unit/API: validate every payment-state transition (initiated → authorised → captured → settled) with mocked gateway responses. Edge cases: declined, expired card, fraud-flag, partial capture, refund, chargeback. (2) UI: happy path with the gateway's test mode (Stripe/Adyen sandbox). Never use real cards. (3) Resilience: gateway timeout, gateway 500 — verify the order doesn't get corrupted state. (4) Idempotency: simulate double-submit; verify only one charge. (5) Manual exploratory once per release; auditing logs is the most important check.</div></details>
+
+<details class="qa"><summary>How would you test a search feature?</summary>
+<div class="answer">Several axes. (1) Exact match — query returns the expected single result. (2) Partial match — substring queries return the right set. (3) No results — assert empty-state UI. (4) Special chars — unicode, quotes, SQL injection attempts (the test gates a security regression too). (5) Pagination — query returning 100+ results paginates correctly. (6) Latency — assert search responds within an SLA (e.g. 95th percentile &lt; 500ms via <code class="inline">page.waitForResponse</code> timing). (7) Debounce — type fast, verify only one API call fires after the pause.</div></details>
+
+<details class="qa"><summary>How would you test a real-time chat?</summary>
+<div class="answer">Three browsers, one test. <code class="inline">browser.newContext()</code> twice creates two isolated user sessions. User A sends a message; assert that User B's page shows it within a timeout. Test direction both ways. For WebSocket-level testing, <code class="inline">page.routeWebSocket</code> (1.48+) lets you inject messages or simulate disconnects. Negative tests: send a message while User B's WS is disconnected → reconnect → assert backlog delivery.</div></details>
+
+<details class="qa"><summary>How would you test a multi-step wizard / checkout?</summary>
+<div class="answer">Each step is an independent test that starts via API at the prior step's state. Don't run the wizard end-to-end in every test — slow and shifts focus from the step under test. One full E2E "happy path" test runs the whole flow in order. The rest are step-isolated: "given a cart with items, when on shipping page, then can submit a US address and proceed". Negative cases per step: invalid postcode on shipping, expired card on payment, out-of-stock between cart and confirmation.</div></details>
+
+<details class="qa"><summary>How would you test a complex date picker?</summary>
+<div class="answer">Five tests. (1) Default state — placeholder visible, no selection. (2) Open → select today → verify input shows today's date in the locale-correct format. (3) Open → navigate to next month → select a date — verify both display and the underlying value. (4) Disabled dates — assert past dates can't be selected. (5) Keyboard a11y — open with Enter, navigate with arrows, select with Enter, close with Esc. The aria snapshot (<code class="inline">toMatchAriaSnapshot</code>) is great for asserting the picker's structure without coupling to CSS.</div></details>
+
+<h4>33.4.11 Leadership &amp; cross-team collaboration (real at 5y)</h4>
+
+<details class="qa"><summary>How do you partner with developers on test ownership?</summary>
+<div class="answer">Shared accountability. Devs write unit tests; SDETs own integration/E2E. Both pair on framework design. PR check: any new feature ships with at least one E2E happy-path test. The SDET reviews it; devs maintain it (it's code, like any code). The SDET role is to provide the rails (framework, fixtures, patterns), unblock devs, and own the integration test infrastructure — not to be a bottleneck writing every test.</div></details>
+
+<details class="qa"><summary>How do you onboard a new SDET to your framework in their first week?</summary>
+<div class="answer">Day 1: README, dev setup, run the suite, browse the trace viewer on a recent failure. Day 2: pair on writing one E2E test for an existing feature. Day 3: review their first PR — but pair-review, not gate-review. Days 4-5: pair on debugging a real flaky test using the trace. End of week 2: they own a small feature area's tests. Pair-review first 5 PRs. Never throw a doc at them and expect mastery — pairing accelerates everything 5×.</div></details>
+
+<details class="qa"><summary>A developer says "this test is flaky, just ignore it". How do you respond?</summary>
+<div class="answer">Three steps. (1) Pull the trace — facts, not opinions. (2) Classify: is it the test's fault (race in the spec) or the system's fault (race in the product)? Both happen. If system race, file as a real bug. If test race, accept it's an SDET-owned fix. (3) Never silently ignore — that erodes trust in the whole suite. Quarantine with a ticket, fix, lift quarantine. The SDET role here is to be the calm root-cause investigator, not to win arguments.</div></details>
+
+<details class="qa"><summary>How do you justify SDET investment to leadership?</summary>
+<div class="answer">Business metrics, not test metrics. Bad: "100% of tests pass". Good: "Flake rate dropped from 12% to 1%, allowing PRs to ship same-day instead of next-day. That's ~10 more deploys per dev per month, or ~2x team throughput." Connect to DORA metrics: deploy frequency, lead time, change failure rate, MTTR. The dollar value: "blocking 30% of PRs from same-day ship cost us X engineer-hours/month at $Y/hour = $Z." Numbers leadership recognises.</div></details>
+
+<details class="qa"><summary>How do you decide what NOT to test?</summary>
+<div class="answer">Cost vs payoff. Don't E2E-test pure UI styling — visual regression covers it cheaper. Don't write a UI test for a backend edge case — API test, same coverage, 10× faster. Don't test the framework or the browser itself. Don't duplicate coverage already in unit tests. The rule: every test must answer "what bug would this catch that nothing else does?" If the answer is none, delete the test.</div></details>
+
+<h4>33.4.12 STAR stories — five ready-to-deliver narratives</h4>
+
+<details class="qa"><summary>STAR: "Tell me about a time you reduced test flakiness."</summary>
+<div class="answer"><strong>Situation:</strong> Our 800-test Playwright suite had a 12% flake rate; PRs averaged 3 retries to merge. <strong>Task:</strong> Bring flake rate under 2% in one quarter. <strong>Action:</strong> Built a flake-detection pipeline (per-test failure rate over rolling 14d, dashboard, auto-quarantine). Audited top-20 worst offenders — found 70% used <code class="inline">waitForTimeout</code> or shared test data. Replaced <code class="inline">waitForTimeout</code> with web-first assertions; moved data setup into per-test fixtures with API cleanup; added <code class="inline">page.addLocatorHandler()</code> for a recurring cookie banner. Wrote a lint rule to ban <code class="inline">waitForTimeout</code> in new tests. <strong>Result:</strong> Flake rate to 0.8% in 11 weeks. PR median merge time 38m → 7m. Eliminated ~6 engineer-hours/day of "rerun the test" toil.</div></details>
+
+<details class="qa"><summary>STAR: "Tell me about scaling a test suite."</summary>
+<div class="answer"><strong>Situation:</strong> 1,200-test suite, 90 minutes on a single runner — too slow for our same-day deploy goal. <strong>Task:</strong> Cut PR feedback to under 10 minutes. <strong>Action:</strong> Migrated to 4-shard sharding (<code class="inline">--shard=1/4</code>) with blob reports + <code class="inline">merge-reports</code>. Cached browser binaries in GitHub Actions keyed on Playwright version. Introduced a setup project to log in once and reuse storageState via <code class="inline">dependencies: ['setup']</code> — eliminated ~12 minutes of repeated UI logins. Removed retries on stable tests to recover ~5 minutes of hidden retry time. <strong>Result:</strong> 90m → 8m PR feedback. Same test count, same coverage. CI cost rose 35% but engineer-hours saved &gt;&gt; CI cost.</div></details>
+
+<details class="qa"><summary>STAR: "Tell me about a difficult production bug your tests caught — or missed."</summary>
+<div class="answer"><strong>Situation:</strong> An order-creation race condition only manifested under concurrent load — never reproduced in our test suite. <strong>Task:</strong> Catch this class of bug going forward without slowing the test suite. <strong>Action:</strong> Added a small concurrent-load layer using <code class="inline">request.post()</code> in parallel from a single test, asserting on database invariants (no duplicate order IDs, no inconsistent totals). Built a "Friday chaos" job that runs once weekly and includes random delays, retries, and simulated downstream failures. <strong>Result:</strong> Caught two similar race conditions in the next quarter before they hit prod. Cost: one small test file + 4 minutes of weekly chaos time.</div></details>
+
+<details class="qa"><summary>STAR: "Tell me about a time you disagreed with a senior engineer."</summary>
+<div class="answer"><strong>Situation:</strong> A senior engineer wanted to ship a major refactor with "we'll test it in prod with a feature flag". <strong>Task:</strong> Push back without escalating. <strong>Action:</strong> Acknowledged the value of canarying. Proposed instead: ship behind the flag, but require an automated test suite covering the new path before flipping the flag past 1% traffic. Wrote the spec, prototyped the missing test infrastructure, demo'd in two days. <strong>Result:</strong> Adopted as policy. The next refactor caught a regression in the test suite that would've affected ~5% of users.</div></details>
+
+<details class="qa"><summary>STAR: "Tell me about a framework or pattern you introduced."</summary>
+<div class="answer"><strong>Situation:</strong> Engineers were duplicating fixture setup across 20+ specs — each manually creating users, products, and auth state. <strong>Task:</strong> Make this composable and reusable. <strong>Action:</strong> Built a typed <code class="inline">test.extend</code>-based fixture library: <code class="inline">user</code>, <code class="inline">authenticatedUser</code>, <code class="inline">product</code>, <code class="inline">cart</code>, each with API-driven setup and afterEach cleanup. Documented the patterns and pair-migrated five teams over a month. <strong>Result:</strong> Average new-test PR size dropped from 80 lines to 25. Test data leakage between tests dropped to zero. New SDETs ramping in a week instead of a month.</div></details>
+
+<h4>33.4.13 Rapid-fire (expect these in screens)</h4>
+
+<details class="qa"><summary>What's <code class="inline">test.use()</code>?</summary>
+<div class="answer">Per-describe or per-file fixture override. <code class="inline">test.use({ viewport: { width: 360, height: 800 } })</code> at the top of a file gives all tests in it a mobile viewport without touching the global config.</div></details>
+
+<details class="qa"><summary>What's the difference between <code class="inline">test.skip</code> and <code class="inline">test.fixme</code>?</summary>
+<div class="answer"><code class="inline">test.skip</code>: skipped, no expected behaviour. <code class="inline">test.fixme</code>: skipped, but documented as "known broken, must fix later". Surfaces in reports differently — fixme acts as a TODO marker.</div></details>
+
+<details class="qa"><summary><code class="inline">test.beforeAll</code> vs <code class="inline">test.beforeEach</code>?</summary>
+<div class="answer"><code class="inline">beforeAll</code>: once per file (or describe block). <code class="inline">beforeEach</code>: before every test. With <code class="inline">fullyParallel: true</code>, beforeAll runs once <em>per worker</em> that picks up tests from this file — so a file run across 4 workers can run beforeAll 4 times. Don't rely on beforeAll for unique-resource creation in parallel suites.</div></details>
+
+<details class="qa"><summary>How do you handle env vars in tests?</summary>
+<div class="answer"><code class="inline">dotenv</code> loaded at the top of <code class="inline">playwright.config.ts</code>. Different <code class="inline">.env.staging</code> / <code class="inline">.env.production</code> files; the active one chosen via <code class="inline">NODE_ENV</code>. Never commit secrets — use CI secrets and inject via env. <code class="inline">env</code> is also commonly added as a project metadata to fixture decisions ("if env is prod, skip destructive tests").</div></details>
+
+<details class="qa"><summary>What's the most underrated Playwright API?</summary>
+<div class="answer"><code class="inline">page.addInitScript()</code>. Runs JS in the page before any navigation, before any user script. Use it to mock <code class="inline">Date.now()</code> for deterministic time-based UI, to seed a feature flag, to inject mock analytics, or to stub <code class="inline">localStorage</code> before the app reads it. The 1.46 <code class="inline">page.clock</code> API is the modern replacement for time mocking but addInitScript still rules for general "patch the page before it runs" needs.</div></details>
+
+<details class="qa"><summary>If interviewer asks "what's the latest Playwright feature you've used?"</summary>
+<div class="answer">Pick something genuine. Three solid candidates: <strong>(a)</strong> <code class="inline">page.clock</code> for time-based UI testing (1.46) — "we had a countdown timer test that took 30 seconds; clock.fastForward made it instant". <strong>(b)</strong> <code class="inline">toMatchAriaSnapshot</code> (1.49) — "replaced 200 lines of brittle CSS-coupled assertions with a single accessibility-tree snapshot". <strong>(c)</strong> <code class="inline">page.addLocatorHandler</code> (1.42) — "auto-dismissed a cookie banner that was causing ~12 flaky failures/week". Honest specifics &gt; vague claims.</div></details>
+
+<details class="qa"><summary>Walk me through your CV / projects (60 sec).</summary>
+<div class="answer">"I'm an SDET with N years, currently at X focused on Y. My biggest impact has been Z. I work in TS/Playwright primarily, with experience in API testing, CI/CD, and framework design. Open to roles where I can [reason for moving]."</div></details>
+
+<details class="qa"><summary>What's a recent technical challenge you solved?</summary>
+<div class="answer">Concrete STAR; pick something specific with a number. Avoid abstract platitudes.</div></details>
+
+<details class="qa"><summary>Why are you leaving your current role?</summary>
+<div class="answer">Forward-looking — what you want next, not what's wrong now. "I want a role where I can own the test infrastructure end-to-end."</div></details>
+
+<details class="qa"><summary>What's your salary expectation?</summary>
+<div class="answer">Range based on market research for the role/level/location. Anchor with the upper bound you'd accept. Be ready to discuss flexibility on equity/cash mix.</div></details>
+
+<h3>33.5 Behavioral — STAR examples</h3>
+
+<details class="qa"><summary>"Tell me about a time you disagreed with a colleague."</summary>
+<div class="answer">S: Dev wanted to ship a feature flag-off behind "we'll test in prod". T: Push back without escalating. A: Proposed a 1% canary with monitoring; demo'd the dashboard. R: Adopted; caught a 500-error regression that would have hit all users.</div></details>
+
+<details class="qa"><summary>"Tell me about a time you missed a deadline."</summary>
+<div class="answer">Own it. S: 3-week test infra migration ran 1 week late. T: Communicate and recover. A: Status update day 1 of slip; cut scope (deferred visual regression); pulled in a teammate for paired sessions. R: Shipped MVP on day 22; deferred items shipped 1 week later.</div></details>
+
+<details class="qa"><summary>"Tell me about a time you had to learn something quickly."</summary>
+<div class="answer">Specific tech and outcome. "Had to add Cucumber to a Playwright project in two days because a client demanded BDD. Read the docs, prototyped the World class, wired hooks, demo'd. Hit the deadline."</div></details>
+
+<details class="qa"><summary>"Why this company?"</summary>
+<div class="answer">Researched, specific. Reference the product, the engineering blog, or a public talk. Connect to your goals. Avoid "great culture / fast-paced" generics.</div></details>
+
+<details class="qa"><summary>"Do you have any questions for us?" (always yes)</summary>
+<div class="answer">Ask about: team structure, how SDET partners with dev, the test pyramid as it stands, what success looks like at 6 months, the hardest current challenge they want help solving. Shows you're thinking about the actual job, not just the offer.</div></details>
+    </main>
+  </div>
+
+  <script>
+/* ===== Playground init — runs once DOM is fully built ===== */
+window.__playgroundInit = function(){
+const $ = id => document.getElementById(id);
+if (!$('lp-html')) return;
+if (window.__pwgReady) return;
+window.__pwgReady = true;
+
+const sample = [
+  '<header>',
+  '  <h1>Acme Storefront</h1>',
+  '  <nav>',
+  '    <a href="/">Home</a>',
+  '    <a href="/help">Help center</a>',
+  '  </nav>',
+  '</header>',
+  '<main>',
+  '  <h2>Sign in</h2>',
+  '  <form>',
+  '    <label>Email',
+  '      <input type="email" name="email" placeholder="you@example.com">',
+  '    </label>',
+  '    <label for="pw">Password</label>',
+  '    <input id="pw" type="password" placeholder="">',
+  '    <label><input type="checkbox"> Remember me</label>',
+  '    <button type="submit">Sign in</button>',
+  '    <a href="/forgot">Forgot password?</a>',
+  '  </form>',
+  '  <img src="logo.png" alt="Company logo" title="Acme">',
+  '  <ul>',
+  '    <li>Apples</li>',
+  '    <li>Bananas</li>',
+  '    <li>Cherries</li>',
+  '  </ul>',
+  '  <div data-testid="cart-count">3</div>',
+  '  <table>',
+  '    <thead><tr><th>User</th><th>Role</th><th></th></tr></thead>',
+  '    <tbody>',
+  '      <tr><td>alice@test.com</td><td>admin</td><td><button>Delete</button></td></tr>',
+  '      <tr><td>bob@test.com</td><td>user</td><td><button>Delete</button></td></tr>',
+  '    </tbody>',
+  '  </table>',
+  '</mai' + 'n>'
+].join('\n');
+
+$('lp-html').value = sample;
+
+/* ===== Role + accessible name approximation ===== */
+const ROLES = {
+  a:        el => el.hasAttribute('href') ? 'link' : null,
+  button:   'button',
+  textarea: 'textbox',
+  select:   'combobox',
+  img:      el => (el.getAttribute('alt')||'').length ? 'img' : 'presentation',
+  h1:'heading',h2:'heading',h3:'heading',h4:'heading',h5:'heading',h6:'heading',
+  ul:'list',ol:'list',li:'listitem',
+  table:'table',tr:'row',td:'cell',th:'columnheader',
+  thead:'rowgroup',tbody:'rowgroup',
+  dialog:'dialog',
+  nav:'navigation',main:'main',header:'banner',footer:'contentinfo',
+  form:'form',section:'region',article:'article',aside:'complementary',
+  fieldset:'group',
+  input: el => {
+    const t = (el.getAttribute('type')||'text').toLowerCase();
+    return ({
+      text:'textbox',email:'textbox',password:'textbox',tel:'textbox',url:'textbox',
+      search:'searchbox',number:'spinbutton',range:'slider',
+      checkbox:'checkbox',radio:'radio',
+      submit:'button',button:'button',reset:'button',
+      file:'button',
+      hidden:null,
+    })[t] || 'textbox';
+  },
+};
+
+function roleOf(el){
+  if (!el || el.nodeType !== 1) return null;
+  const explicit = el.getAttribute('role');
+  if (explicit) return explicit;
+  const tag = el.tagName.toLowerCase();
+  const r = ROLES[tag];
+  if (typeof r === 'function') return r(el);
+  return r || null;
+}
+
+function accessibleName(el){
+  if (!el || el.nodeType !== 1) return '';
+  /* aria-labelledby */
+  const lb = el.getAttribute('aria-labelledby');
+  if (lb){
+    const target = el.ownerDocument.getElementById(lb);
+    if (target) return (target.textContent||'').trim().replace(/\s+/g,' ');
+  }
+  /* aria-label */
+  const al = el.getAttribute('aria-label');
+  if (al) return al.trim();
+  /* form control: associated label */
+  if (/^(input|textarea|select)$/i.test(el.tagName)){
+    if (el.id){
+      const lbl = el.ownerDocument.querySelector('label[for="' + cssEscape(el.id) + '"]');
+      if (lbl) return cleanLabel(lbl);
+    }
+    const wrap = el.closest('label');
+    if (wrap) return cleanLabel(wrap);
+    /* fallback: placeholder, title */
+    return (el.getAttribute('placeholder')||el.getAttribute('title')||'').trim();
+  }
+  /* img: alt or title */
+  if (el.tagName === 'IMG') return (el.getAttribute('alt')||el.getAttribute('title')||'').trim();
+  /* default: visible text */
+  return (el.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cleanLabel(lbl){
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+  return (clone.textContent||'').trim().replace(/\s+/g,' ');
+}
+function cssEscape(s){ return s.replace(/[!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~]/g, m => '\\'+m); }
+
+function compareName(actual, expected, exact){
+  if (!expected) return true;
+  const a = (actual||'').toLowerCase();
+  const e = expected.toLowerCase();
+  return exact ? a === e : a.includes(e);
+}
+
+/* ===== Query strategies ===== */
+function findMatches(doc, strat, query, exact){
+  const all = Array.from(doc.querySelectorAll('body, body *'));
+  switch(strat){
+    case 'role': {
+      const role = $('lp-role').value;
+      return all.filter(el => roleOf(el) === role && compareName(accessibleName(el), query, exact));
+    }
+    case 'label': {
+      return all.filter(el => /^(input|textarea|select)$/i.test(el.tagName) && compareName(accessibleName(el), query, exact));
+    }
+    case 'placeholder': {
+      return all.filter(el => compareName(el.getAttribute && el.getAttribute('placeholder'), query, exact));
+    }
+    case 'text': {
+      return all.filter(el => {
+        const own = Array.from(el.childNodes).filter(n => n.nodeType===3).map(n => n.textContent).join('').trim().replace(/\s+/g,' ');
+        if (!own) return false;
+        return compareName(own, query, exact);
+      });
+    }
+    case 'alt':       return all.filter(el => compareName(el.getAttribute && el.getAttribute('alt'), query, exact));
+    case 'title':     return all.filter(el => compareName(el.getAttribute && el.getAttribute('title'), query, exact));
+    case 'testid':    return all.filter(el => compareName(el.getAttribute && el.getAttribute('data-testid'), query, exact));
+    case 'css': {
+      try { return Array.from(doc.querySelectorAll(query)); } catch(e){ return null; }
+    }
+    case 'xpath': {
+      try {
+        const it = doc.evaluate(query, doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const out = []; for (let i=0; i<it.snapshotLength; i++) out.push(it.snapshotItem(i));
+        return out.filter(n => n && n.nodeType===1);
+      } catch(e){ return null; }
+    }
+  }
+  return [];
+}
+
+function pwCode(strat, query, exact){
+  const ex = exact ? ', exact: true' : '';
+  const q = JSON.stringify(query||'');
+  switch(strat){
+    case 'role':        return "page.getByRole('" + $('lp-role').value + "', { name: " + q + ex + " })";
+    case 'label':       return "page.getByLabel(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'placeholder': return "page.getByPlaceholder(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'text':        return "page.getByText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'alt':         return "page.getByAltText(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'title':       return "page.getByTitle(" + q + (exact ? ", { exact: true }" : "") + ")";
+    case 'testid':      return "page.getByTestId(" + q + ")";
+    case 'css':         return "page.locator(" + q + ")";
+    case 'xpath':       return "page.locator(" + JSON.stringify('xpath=' + (query||'')) + ")";
+  }
+  return '';
+}
+
+/* ===== Render + highlight ===== */
+function render(){
+  const html = $('lp-html').value || '';
+  const css = '<style>'
+    + '.__pw-match{outline:3px solid #ff7b72 !important;outline-offset:2px;position:relative}'
+    + '.__pw-match::after{content:attr(data-pw-idx);position:absolute;top:-10px;left:-10px;'
+    + 'background:#ff7b72;color:#fff;font:bold 10px sans-serif;padding:2px 6px;border-radius:10px;z-index:9999}'
+    + 'body{font-family:-apple-system,sans-serif;color:#111;margin:12px;font-size:14px}'
+    + 'input,button,select,textarea{font:inherit;padding:4px 6px;margin:2px}'
+    + 'table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px}'
+    + '</' + 'style>';
+  $('lp-preview').srcdoc = css + html;
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runQuery(){
+  const strat = $('lp-strat').value;
+  const query = $('lp-name').value;
+  const exact = $('lp-exact').checked;
+  const doc = $('lp-preview').contentDocument;
+  if (!doc || !doc.body){ setTimeout(runQuery, 80); return; }
+  /* clear old highlights */
+  doc.querySelectorAll('.__pw-match').forEach(el => { el.classList.remove('__pw-match'); el.removeAttribute('data-pw-idx'); });
+  const matches = findMatches(doc, strat, query, exact);
+  const r = $('lp-result');
+  if (matches === null){
+    r.innerHTML = '<div class="count bad">Invalid selector</div><p style="color:var(--fg-3)">Check syntax — the browser refused this query.</p>';
+    return;
+  }
+  matches.forEach((el, i) => { el.classList.add('__pw-match'); el.setAttribute('data-pw-idx', String(i+1)); });
+  let countCls = 'count'; let countNote = '';
+  if (matches.length === 0){ countCls += ' bad'; countNote = ' — no matches'; }
+  else if (matches.length === 1){ countNote = ' — strict-mode OK'; }
+  else { countCls += ' warn'; countNote = ' — strict-mode VIOLATION (Playwright would throw, listing all ' + matches.length + ')'; }
+  let html = '<div class="' + countCls + '">' + matches.length + ' match' + (matches.length===1?'':'es') + '</div>'
+           + '<div style="color:var(--fg-3);margin-bottom:10px">' + countNote + '</div>'
+           + '<div class="pw-code">await ' + escHtml(pwCode(strat, query, exact)) + '.click();</div>';
+  if (matches.length){
+    html += '<div style="margin-top:14px;font-weight:600">Matched elements</div>';
+    matches.slice(0, 20).forEach((el, i) => {
+      const tag = el.tagName.toLowerCase();
+      const role = roleOf(el) || '—';
+      const name = accessibleName(el) || '—';
+      html += '<div class="match">'
+            + '<span class="lbl">#' + (i+1) + '</span><b>&lt;' + tag + '&gt;</b>'
+            + '<span class="lbl">role</span><span>' + escHtml(role) + '</span>'
+            + '<span class="lbl">name</span><span>' + escHtml(name.slice(0,80)) + '</span>'
+            + '</div>';
+    });
+    if (matches.length > 20) html += '<div style="color:var(--fg-3)">…and ' + (matches.length-20) + ' more</div>';
+  }
+  r.innerHTML = html;
+}
+
+function loadSample(){
+  $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+}
+function runAll(){
+  render();
+  setTimeout(runQuery, 150);
+}
+
+$('lp-load').addEventListener('click', loadSample);
+$('lp-run').addEventListener('click', runAll);
+$('lp-strat').addEventListener('change', () => {
+  const isRole = $('lp-strat').value === 'role';
+  $('lp-role').style.display = isRole ? '' : 'none';
+  $('lp-l-role').style.display = isRole ? '' : 'none';
+});
+
+/* expose so the nav can re-trigger when m11 becomes visible */
+window.__pwgReshow = function(){
+  if (!$('lp-html').value) $('lp-html').value = sample;
+  render();
+  setTimeout(runQuery, 150);
+};
+
+/* initial setup */
+$('lp-name').value = 'Sign in';
+$('lp-strat').dispatchEvent(new Event('change'));
+render();
+setTimeout(runQuery, 200);
+};   /* end __playgroundInit */
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.__playgroundInit);
+} else {
+  window.__playgroundInit();
+}
+
+/* ===== Navigation ===== */
+const links=document.querySelectorAll('#navlist a');
+const modules=document.querySelectorAll('.module');
+function show(id){
+  modules.forEach(m=>m.classList.toggle('active',m.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  window.scrollTo({top:0,behavior:'instant'});
+  /* Playground: re-render iframe when m11 becomes visible (some browsers
+     defer srcdoc loading while the iframe is in display:none). */
+  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
+    setTimeout(window.__pwgReshow, 30);
+  }
+}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
+const initial=(location.hash||'#m0').slice(1);
+show(document.getElementById(initial)?initial:'m0');
+
+/* ===== Search ===== */
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLowerCase();
+  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
+  links.forEach(a=>{
+    const id=a.dataset.id;
+    const mod=document.getElementById(id);
+    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
+    a.parentElement.classList.toggle('hidden',!text.includes(q));
+  });
+  /* jump first matching */
+  const first=document.querySelector('#navlist li:not(.hidden) a');
+  if(first)show(first.dataset.id);
+});
+
+/* ===== Syntax highlighter (custom, offline) ===== */
+const HL={
+  js:{
+    keyword:/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|super|this|import|export|from|as|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|yield|static|public|private|protected|readonly|interface|type|enum|implements|namespace|declare|abstract|override)\b/g,
+    builtin:/\b(console|Promise|Array|Object|String|Number|Boolean|Map|Set|Date|JSON|Math|window|document|process|require|module|exports|globalThis)\b/g,
+    string:/(`(?:\\.|\$\{[^}]*\}|[^`\\])*`|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  ts:'js',
+  java:{
+    keyword:/\b(public|private|protected|class|interface|extends|implements|static|final|void|return|if|else|for|while|do|switch|case|break|continue|new|this|super|import|package|throws|throw|try|catch|finally|null|true|false|abstract|synchronized|volatile|transient|native|enum|instanceof|default)\b/g,
+    type:/\b(String|Integer|Long|Double|Float|Boolean|Object|List|Map|Set|ArrayList|HashMap|HashSet|int|long|double|float|boolean|char|byte|short)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    comment:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*[fFlLdD]?)\b/g,
+    function:/\b([a-zA-Z_$][\w$]*)(?=\s*\()/g,
+    decorator:/@[a-zA-Z_$][\w$]*/g
+  },
+  sql:{
+    keyword:/\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AND|OR|NOT|IN|LIKE|IS|NULL|AS|DISTINCT|COUNT|SUM|AVG|MIN|MAX|LIMIT|OFFSET|UNION|ALL|CASE|WHEN|THEN|ELSE|END|EXISTS|BETWEEN)\b/gi,
+    string:/('(?:''|[^'])*')/g,
+    comment:/(--[^\n]*|\/\*[\s\S]*?\*\/)/g,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  yaml:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/^(\s*)([\w.-]+)(?=\s*:)/gm,
+    number:/\b(\d+\.?\d*)\b/g
+  },
+  json:{
+    string:/("(?:\\.|[^"\\])*")(?=\s*:)/g,
+    string2:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(-?\d+\.?\d*([eE][+-]?\d+)?)\b/g,
+    keyword:/\b(true|false|null)\b/g
+  },
+  bash:{
+    comment:/(#[^\n]*)/g,
+    string:/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g,
+    keyword:/\b(if|then|else|fi|for|do|done|while|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|npm|npx|node|git|docker)\b/g,
+    number:/\b(\d+)\b/g
+  },
+  python:{
+    comment:/(#[^\n]*)/g,
+    string:/('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")/g,
+    keyword:/\b(def|class|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|global|nonlocal|assert|async|await)\b/g,
+    builtin:/\b(print|len|range|list|dict|set|tuple|str|int|float|bool|self|cls|super|isinstance|type|enumerate|zip|map|filter|open|input|sum|min|max|abs|round)\b/g,
+    decorator:/@[a-zA-Z_][\w]*/g,
+    number:/\b(\d+\.?\d*)\b/g,
+    function:/\b([a-zA-Z_][\w]*)(?=\s*\()/g
+  },
+  gherkin:{
+    comment:/(#[^\n]*)/g,
+    keyword:/\b(Feature|Background|Scenario|Scenario Outline|Examples|Given|When|Then|And|But|Rule)\b/g,
+    string:/("(?:\\.|[^"\\])*")/g,
+    number:/\b(\d+)\b/g
+  },
+  xpath:{
+    string:/('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g,
+    keyword:/\b(ancestor|ancestor-or-self|attribute|child|descendant|descendant-or-self|following|following-sibling|namespace|parent|preceding|preceding-sibling|self|and|or|not|div|mod)\b/g,
+    builtin:/\b(normalize-space|contains|starts-with|ends-with|text|name|local-name|count|string-length|substring|substring-before|substring-after|translate|position|last|number|boolean|true|false)\b/g,
+    number:/\b(\d+)\b/g
+  }
+};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function highlight(code,lang){
+  let rules=HL[lang]; if(typeof rules==='string')rules=HL[rules]; if(!rules)return esc(code);
+  /* Build combined regex with named groups, one per rule. Track each rule's
+     starting offset in the match groups so we can identify which fired. */
+  const order=['comment','string','string2','number','keyword','builtin','type','function','decorator','prop','operator'];
+  const used=order.filter(k=>rules[k]);
+  if(!used.length)return esc(code);
+  const sources=used.map(k=>'(?<__'+k+'>'+rules[k].source+')');
+  let needI=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('i')>=0) needI=true; });
+  let needM=false; used.forEach(k=>{ if(rules[k].flags && rules[k].flags.indexOf('m')>=0) needM=true; });
+  const flags='g'+(needI?'i':'')+(needM?'m':'');
+  let combined;
+  try { combined=new RegExp(sources.join('|'),flags); }
+  catch(e){ return esc(code); }
+  const out=[];
+  let last=0,m;
+  while((m=combined.exec(code))!==null){
+    if(m.index>last) out.push(esc(code.slice(last,m.index)));
+    let kind=null;
+    if(m.groups){
+      for(const k of used){ if(m.groups['__'+k]!==undefined){ kind=k; break; } }
+    }
+    /* normalize variant names */
+    const cls=kind==='string2'?'string':kind;
+    out.push(cls?'<span class="tok-'+cls+'">'+esc(m[0])+'</span>':esc(m[0]));
+    last=m.index+m[0].length;
+    if(m[0].length===0) combined.lastIndex++;
+  }
+  if(last<code.length) out.push(esc(code.slice(last)));
+  return out.join('');
+}
+document.querySelectorAll('pre[data-lang]').forEach(pre=>{
+  const lang=pre.dataset.lang;
+  const code=pre.textContent;
+  pre.innerHTML='<span class="lang">'+lang+'</span>'+highlight(code,lang);
+});
+
+/* ===== Sidebar toggle ===== */
+const toggleBtn=document.getElementById('nav-toggle');
+const sidebar=document.getElementById('sidebar');
+const backdrop=document.getElementById('sidebar-backdrop');
+const layout=document.querySelector('.layout');
+const topbarTitle=document.getElementById('topbar-title');
+
+function isMobile(){return window.innerWidth<=768}
+
+function closeMobileSidebar(){
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('visible');
+  toggleBtn.innerHTML='&#9776;';
+}
+
+function openMobileSidebar(){
+  sidebar.classList.add('mobile-open');
+  backdrop.classList.add('visible');
+  toggleBtn.innerHTML='&#10005;';
+}
+
+toggleBtn.addEventListener('click',()=>{
+  if(isMobile()){
+    if(sidebar.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    const collapsed=layout.classList.toggle('sidebar-collapsed');
+    toggleBtn.innerHTML=collapsed?'&#9776;':'&#10005;';
+    // Save preference
+    try{localStorage.setItem('pw-sdet-sidebar',collapsed?'0':'1')}catch(e){}
+  }
+});
+
+// Close mobile sidebar when backdrop clicked
+backdrop.addEventListener('click',closeMobileSidebar);
+
+// Close mobile sidebar when a nav link is clicked
+document.querySelectorAll('#navlist a').forEach(a=>a.addEventListener('click',()=>{
+  if(isMobile()) closeMobileSidebar();
+}));
+
+// Update topbar title when module changes
+const _origShow=window.show||show;
+function showWithTopbar(id){
+  _origShow(id);
+  const activeLink=document.querySelector(`#navlist a[data-id="${id}"]`);
+  if(topbarTitle&&activeLink){
+    topbarTitle.textContent=activeLink.textContent.trim().replace(/^\d+\s*/,'');
+  }
+}
+// Patch show() to also update topbar
+window.show=showWithTopbar;
+
+// Restore sidebar state on desktop
+try{
+  const saved=localStorage.getItem('pw-sdet-sidebar');
+  if(!isMobile()&&saved==='0') layout.classList.add('sidebar-collapsed');
+}catch(e){}
+
+// Handle resize (switch between mobile/desktop modes cleanly)
+let lastMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(nowMobile!==lastMobile){
+    lastMobile=nowMobile;
+    if(!nowMobile){
+      // switched to desktop — close any mobile state
+      sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('visible');
+      toggleBtn.innerHTML=layout.classList.contains('sidebar-collapsed')?'&#9776;':'&#10005;';
+    } else {
+      // switched to mobile — reset desktop state
+      layout.classList.remove('sidebar-collapsed');
+      toggleBtn.innerHTML='&#9776;';
+    }
+  }
+});
+  </script>
+  <script>
+    (function() {
+      // Patch: when a nav link is clicked on a multi-page site,
+      // the page already loaded — just scroll to top
+      document.querySelectorAll('#navlist a').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({top: 0, behavior: 'instant'});
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
