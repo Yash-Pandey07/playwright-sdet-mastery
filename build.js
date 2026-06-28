@@ -154,10 +154,10 @@ MODULE_REGISTRY.forEach((m, i) => {
 
 function loadSource() {
   if (!fs.existsSync(SOURCE_FILE)) {
-    console.error(`❌ Source file not found: ${SOURCE_FILE}`);
-    console.error(`   Run from: ${SCRIPT_DIR}`);
-    console.error(`   Or: node build.js /full/path/to/playwright-sdet-ebook.html`);
-    process.exit(1);
+    console.log(`\n⚠️ Source file not found: ${SOURCE_FILE}`);
+    console.log(`   This is expected in Vercel/CI environments where the private source ebook is not available.`);
+    console.log(`   Skipping build. Pre-built files in 'docs/' will be deployed directly.`);
+    process.exit(0);
   }
   return fs.readFileSync(SOURCE_FILE, 'utf-8');
 }
