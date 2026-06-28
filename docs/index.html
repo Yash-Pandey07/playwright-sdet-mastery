@@ -210,6 +210,7 @@ main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
     transform:translateX(-100%);
   }
   aside.mobile-open{transform:translateX(0)}
+  aside .brand{padding-top:52px}
   main{margin-left:0;padding:60px 16px 32px}
   .nav-toggle{top:12px;left:12px}
   h2.module-title{font-size:22px;padding-bottom:12px;margin-bottom:18px}
@@ -333,7 +334,7 @@ main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
   <div class="brand">
     <h1>Playwright SDET</h1>
     <p>Mastery ebook · open source</p>
-    <p style="font-size:11px;color:var(--fg-3);margin-top:6px">Created by <a href="https://portfolio-yash-sage.vercel.app/" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;padding:0;display:inline">Yash Pandey</a></p>
+    <p style="font-size:11px;color:var(--fg-3);margin-top:6px">Created by <a href="https://portfolio-yash-sage.vercel.app/" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;padding:0;display:inline">Yash Pandey</a> · <a href="https://github.com/Yash-Pandey07/playwright-sdet-mastery" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;padding:0;display:inline">⭐ Star on GitHub</a></p>
   </div>
   <div class="search-wrap">
     <input type="search" id="search" placeholder="Search topics, code, Q&A…">
@@ -436,8 +437,8 @@ This is a single, offline, self-contained reference for becoming a strong SDET s
 </p>
 
 <div class="note" style="border-left-color:var(--green);background:rgba(126,231,135,.06);font-size:15px;line-height:1.7">
-<b style="color:var(--green)">📌 Your Playwright Version — 1.61.0</b>
-<p style="margin-top:8px">Across every project in this workspace (<code class="inline">Manual QA Test Plan</code>, <code class="inline">Playwright BDD E2E Suite</code>, <code class="inline">Playwright API Test Suite</code>, <code class="inline">Playwright Component Test Suite</code>, <code class="inline">Playwright Accessibility Test Suite</code>), the resolved <code class="inline">@playwright/test</code> version is <strong>1.61.0</strong> (released <strong>November 2025</strong>). Most <code class="inline">package.json</code> files declare <code class="inline">^1.61.0</code>, and a few legacy ones (<code class="inline">^1.43.0</code>, <code class="inline">^1.45.0</code>) still resolve up to 1.61.0 via the caret range.</p>
+<b style="color:var(--green)">📌 Playwright Version — Written for v1.61.0</b>
+<p style="margin-top:8px">This book and its associated project workspaces (<code class="inline">Manual QA Test Plan</code>, <code class="inline">Playwright BDD E2E Suite</code>, <code class="inline">Playwright API Test Suite</code>, <code class="inline">Playwright Component Test Suite</code>, <code class="inline">Playwright Accessibility Test Suite</code>) are written and tested against <code class="inline">@playwright/test</code> version <strong>1.61.0</strong> (released <strong>November 2025</strong>). Most project configurations declare <code class="inline">^1.61.0</code> to ensure compatibility with modern features.</p>
 
 <h4 style="margin-top:14px">Why 1.61.0 specifically?</h4>
 <table style="margin-top:6px">
@@ -454,7 +455,7 @@ This is a single, offline, self-contained reference for becoming a strong SDET s
 <tr><td><strong>Node.js 18+ requirement</strong></td><td>Modern async, native fetch, structuredClone — your existing Node version is already compatible.</td></tr>
 </table>
 
-<h4 style="margin-top:14px">How to verify on your machine</h4>
+<h4 style="margin-top:14px">How to verify your version</h4>
 <pre data-lang="bash">npx playwright --version            <span class="tok-comment"># prints: Version 1.61.0</span>
 npm ls @playwright/test             <span class="tok-comment"># shows resolved version + tree</span>
 cat node_modules/@playwright/test/package.json | grep '"version"'</pre>
@@ -485,35 +486,35 @@ cat node_modules/@playwright/test/package.json | grep '"version"'</pre>
 <div class="col">
 <h5>Path A · Beginner → Job-ready (8–12 weeks)</h5>
 <ol>
-<li>Manual Testing Foundations (24)</li>
-<li>JavaScript Masterclass (18)</li>
-<li>TypeScript Crash Course (19)</li>
-<li>Playwright Architecture (1)</li>
-<li>Locators &amp; UI (2) + Playground (11)</li>
-<li>Fixtures &amp; Config (3)</li>
-<li>Network &amp; Advanced (4)</li>
-<li>API Testing (5) + HTTP Codes (25) + Postman (17)</li>
-<li>CI/CD (8) + Flakiness (32)</li>
-<li>DB Testing (7)</li>
-<li>Behavioral (10) + Coding Round (9)</li>
-<li>Interview by Experience (33) + Cheat Sheet (34)</li>
+<li>Manual Testing Foundations (33)</li>
+<li>JavaScript Masterclass (2)</li>
+<li>TypeScript Crash Course (3)</li>
+<li>Playwright Architecture (4)</li>
+<li>Locators &amp; UI (6) + Playground (9)</li>
+<li>Fixtures &amp; Config (7)</li>
+<li>Network &amp; Advanced (8)</li>
+<li>API Testing (17) + HTTP Codes (18) + Postman (20)</li>
+<li>CI/CD (26) + Flakiness (32)</li>
+<li>DB Testing (21)</li>
+<li>Behavioral (67) + Coding Round (62)</li>
+<li>Interview by Experience (69) + Cheat Sheet (16)</li>
 </ol>
 </div>
 <div class="col">
 <h5>Path B · Senior / 5+ years interview prep (2–3 weeks)</h5>
 <ol>
-<li>Architecture (1) — be sharp on internals</li>
-<li>Locators / Strict / Narrowing (2)</li>
-<li>Fixtures (3) + Architecture (20)</li>
-<li>API Chaining (12) + REST Assured (6)</li>
-<li>System Design (26) — the differentiator</li>
-<li>Test Data Management (31)</li>
-<li>BDD/Cucumber (27) + AI testing (28)</li>
-<li>Cloud Execution (29)</li>
+<li>Architecture (4) — be sharp on internals</li>
+<li>Locators / Strict / Narrowing (6)</li>
+<li>Fixtures (7) + Architecture (34)</li>
+<li>API Chaining (19) + REST Assured (24)</li>
+<li>System Design (36) — the differentiator</li>
+<li>Test Data Management (38)</li>
+<li>BDD/Cucumber (35) + AI testing (43)</li>
+<li>Cloud Execution (31)</li>
 <li>Flakiness deep-dive (32)</li>
-<li>Extended Coding Round (23)</li>
-<li>Interview Q&amp;A by Experience (33)</li>
-<li>Behavioral &amp; Scenario (10)</li>
+<li>Extended Coding Round (63)</li>
+<li>Interview Q&amp;A by Experience (69)</li>
+<li>Behavioral &amp; Scenario (67)</li>
 </ol>
 </div>
 </div>
@@ -522,22 +523,22 @@ cat node_modules/@playwright/test/package.json | grep '"version"'</pre>
 <div class="col">
 <h5>Path C · Already-know-Playwright, going broad</h5>
 <ol>
-<li>API Chaining (12)</li>
-<li>Visual (13) + A11y (14) + Performance (15) + Mobile (16)</li>
-<li>Popups deep-dive (22)</li>
-<li>Postman (17) + HTTP Codes (25)</li>
-<li>AI &amp; MCP (28)</li>
-<li>System Design (26)</li>
+<li>API Chaining (19)</li>
+<li>Visual (11) + A11y (12) + Performance (13) + Mobile (14)</li>
+<li>Popups deep-dive (10)</li>
+<li>Postman (20) + HTTP Codes (18)</li>
+<li>AI &amp; MCP (43)</li>
+<li>System Design (36)</li>
 </ol>
 </div>
 <div class="col">
 <h5>Path D · Coding round only</h5>
 <ol>
-<li>Coding Round (9) — patterns + 12 problems</li>
-<li>Extended Coding Round (23) — 24 more problems</li>
-<li>JavaScript (18) — language pitfalls in interviews</li>
-<li>TypeScript (19) — types for solutions</li>
-<li>Behavioral (10) — soft skill</li>
+<li>Coding Round (62) — patterns + 12 problems</li>
+<li>Extended Coding Round (63) — 24 more problems</li>
+<li>JavaScript (2) — language pitfalls in interviews</li>
+<li>TypeScript (3) — types for solutions</li>
+<li>Behavioral (67) — soft skill</li>
 </ol>
 </div>
 </div>
@@ -549,96 +550,96 @@ cat node_modules/@playwright/test/package.json | grep '"version"'</pre>
 <tr><td>★</td><td>Home</td><td>This page — orientation + reading paths</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">PLAYWRIGHT CORE</td></tr>
-<tr><td>1</td><td>Architecture &amp; Internals</td><td>Client–server, CDP vs WebDriver, Browser/Context/Page, auto-wait</td></tr>
-<tr><td>2</td><td>Locators &amp; UI Testing</td><td>All locators, strict mode, narrowing, every UI interaction, web-first assertions</td></tr>
-<tr><td>3</td><td>Fixtures, Parallelism, Config</td><td>Custom fixtures, workers, storageState, projects, full config</td></tr>
-<tr><td>4</td><td>Network &amp; Advanced</td><td>page.route, mocking, HAR, Trace Viewer, debugging tools</td></tr>
-<tr><td>11</td><td>Locator Playground</td><td>Interactive — paste HTML, try locators live</td></tr>
-<tr><td>13</td><td>Visual Regression</td><td>toHaveScreenshot, baselines, masking, CI diffs</td></tr>
-<tr><td>14</td><td>Accessibility Testing</td><td>axe-core, role checks, keyboard, CI gating</td></tr>
-<tr><td>15</td><td>Performance Testing</td><td>Web Vitals, Lighthouse, throttling, budgets</td></tr>
-<tr><td>16</td><td>Mobile &amp; Device Emulation</td><td>Profiles, touch, geo, orientation, dark mode</td></tr>
-<tr><td>22</td><td>Popups, Alerts, Windows</td><td>Every event, dialog edge cases, tab-with-waiting-alert</td></tr>
-<tr><td>34</td><td>Playwright Cheat Sheet</td><td>Quick reference of all APIs</td></tr>
+<tr><td>4</td><td>Architecture &amp; Internals</td><td>Client–server, CDP vs WebDriver, Browser/Context/Page, auto-wait</td></tr>
+<tr><td>6</td><td>Locators &amp; UI Testing</td><td>All locators, strict mode, narrowing, every UI interaction, web-first assertions</td></tr>
+<tr><td>7</td><td>Fixtures, Parallelism, Config</td><td>Custom fixtures, workers, storageState, projects, full config</td></tr>
+<tr><td>8</td><td>Network &amp; Advanced</td><td>page.route, mocking, HAR, Trace Viewer, debugging tools</td></tr>
+<tr><td>9</td><td>Locator Playground</td><td>Interactive — paste HTML, try locators live</td></tr>
+<tr><td>11</td><td>Visual Regression</td><td>toHaveScreenshot, baselines, masking, CI diffs</td></tr>
+<tr><td>12</td><td>Accessibility Testing</td><td>axe-core, role checks, keyboard, CI gating</td></tr>
+<tr><td>13</td><td>Performance Testing</td><td>Web Vitals, Lighthouse, throttling, budgets</td></tr>
+<tr><td>14</td><td>Mobile &amp; Device Emulation</td><td>Profiles, touch, geo, orientation, dark mode</td></tr>
+<tr><td>10</td><td>Popups, Alerts, Windows</td><td>Every event, dialog edge cases, tab-with-waiting-alert</td></tr>
+<tr><td>16</td><td>Playwright Cheat Sheet</td><td>Quick reference of all APIs</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">API &amp; BACKEND</td></tr>
-<tr><td>5</td><td>API Testing</td><td>REST principles, APIRequestContext, schema, hybrid tests</td></tr>
-<tr><td>6</td><td>REST Assured (Java)</td><td>Given/When/Then, JSONPath, OAuth, POJO, vs Playwright</td></tr>
-<tr><td>12</td><td>API Chaining</td><td>Sequential vs DAG chains, fixtures, cleanup, idempotency</td></tr>
-<tr><td>17</td><td>Postman Deep-Dive</td><td>Every auth type, JWT, OAuth1 vs OAuth2, Newman, mocks</td></tr>
-<tr><td>25</td><td>HTTP Status Codes</td><td>Every 1xx-5xx, headers, methods, caching, idempotency</td></tr>
-<tr><td>7</td><td>Database Testing</td><td>JDBC, Node pg, SQL essentials, data integrity assertions</td></tr>
+<tr><td>17</td><td>API Testing</td><td>REST principles, APIRequestContext, schema, hybrid tests</td></tr>
+<tr><td>24</td><td>REST Assured (Java)</td><td>Given/When/Then, JSONPath, OAuth, POJO, vs Playwright</td></tr>
+<tr><td>19</td><td>API Chaining</td><td>Sequential vs DAG chains, fixtures, cleanup, idempotency</td></tr>
+<tr><td>20</td><td>Postman Deep-Dive</td><td>Every auth type, JWT, OAuth1 vs OAuth2, Newman, mocks</td></tr>
+<tr><td>18</td><td>HTTP Status Codes</td><td>Every 1xx-5xx, headers, methods, caching, idempotency</td></tr>
+<tr><td>21</td><td>Database Testing</td><td>JDBC, Node pg, SQL essentials, data integrity assertions</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">LANGUAGES</td></tr>
-<tr><td>18</td><td>JavaScript Masterclass</td><td>Scope, closures, this, event loop, async, modules, pitfalls</td></tr>
-<tr><td>19</td><td>TypeScript Crash Course</td><td>Types, generics, narrowing, utility types, tsconfig</td></tr>
-<tr><td>21</td><td>Playwright with Python</td><td>Sync/async API, pytest fixtures, parity with TS</td></tr>
+<tr><td>2</td><td>JavaScript Masterclass</td><td>Scope, closures, this, event loop, async, modules, pitfalls</td></tr>
+<tr><td>3</td><td>TypeScript Crash Course</td><td>Types, generics, narrowing, utility types, tsconfig</td></tr>
+<tr><td>15</td><td>Playwright with Python</td><td>Sync/async API, pytest fixtures, parity with TS</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">CI / DEVOPS / CLOUD</td></tr>
-<tr><td>8</td><td>CI/CD with GitHub Actions</td><td>Full pipeline, sharding, caching, artifacts, retries</td></tr>
-<tr><td>29</td><td>Cloud Execution &amp; BrowserStack</td><td>Remote runners, cloud parallelism, cross-device farms</td></tr>
+<tr><td>26</td><td>CI/CD with GitHub Actions</td><td>Full pipeline, sharding, caching, artifacts, retries</td></tr>
+<tr><td>31</td><td>Cloud Execution &amp; BrowserStack</td><td>Remote runners, cloud parallelism, cross-device farms</td></tr>
 <tr><td>32</td><td>Flakiness: Local vs CI</td><td>Diagnostic playbook — why tests pass locally and fail on CI</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">SDET FOUNDATIONS</td></tr>
-<tr><td>24</td><td>Manual Testing Foundations</td><td>SDLC/STLC, test types, defect lifecycle, agile testing</td></tr>
-<tr><td>30</td><td>Left-Shift &amp; Right-Shift</td><td>Shift-left in dev, contract tests, prod observability</td></tr>
-<tr><td>31</td><td>Test Data Management</td><td>Strategies, synthetic data, PII masking, env separation</td></tr>
-<tr><td>20</td><td>Test Automation Architecture</td><td>Framework layers, POM, patterns, anti-patterns</td></tr>
-<tr><td>26</td><td>SDET System Design</td><td>Designing a test platform end-to-end</td></tr>
+<tr><td>33</td><td>Manual Testing Foundations</td><td>SDLC/STLC, test types, defect lifecycle, agile testing</td></tr>
+<tr><td>37</td><td>Left-Shift &amp; Right-Shift</td><td>Shift-left in dev, contract tests, prod observability</td></tr>
+<tr><td>38</td><td>Test Data Management</td><td>Strategies, synthetic data, PII masking, env separation</td></tr>
+<tr><td>34</td><td>Test Automation Architecture</td><td>Framework layers, POM, patterns, anti-patterns</td></tr>
+<tr><td>36</td><td>SDET System Design</td><td>Designing a test platform end-to-end</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">ADVANCED &amp; MODERN</td></tr>
-<tr><td>27</td><td>BDD with Cucumber</td><td>Gherkin, steps, hooks, Cucumber + Playwright</td></tr>
-<tr><td>28</td><td>AI in Testing · MCP · Agents</td><td>LLM testing, MCP, Playwright Agents, AI-assisted authoring</td></tr>
+<tr><td>35</td><td>BDD with Cucumber</td><td>Gherkin, steps, hooks, Cucumber + Playwright</td></tr>
+<tr><td>43</td><td>AI in Testing · MCP · Agents</td><td>LLM testing, MCP, Playwright Agents, AI-assisted authoring</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">INTERVIEW PREP</td></tr>
-<tr><td>9</td><td>Coding Round (DSA)</td><td>Patterns + 12 worked TS problems with explanations</td></tr>
-<tr><td>23</td><td>Extended Coding Round</td><td>24 more problems including SDET-flavoured (debounce, retry, deep-equal)</td></tr>
-<tr><td>10</td><td>Behavioral &amp; Scenario</td><td>OOP-in-POM, flaky-test answers, "how would you test X"</td></tr>
-<tr><td>33</td><td>Interview Q&amp;A by Experience</td><td>1y / 3y / 5y / 8y questions tiered with answers</td></tr>
-<tr><td>35</td><td>Final Review &amp; Gaps</td><td>Self-review notes, what's missing, where to go next</td></tr>
+<tr><td>62</td><td>Coding Round (DSA)</td><td>Patterns + 12 worked TS problems with explanations</td></tr>
+<tr><td>63</td><td>Extended Coding Round</td><td>24 more problems including SDET-flavoured (debounce, retry, deep-equal)</td></tr>
+<tr><td>67</td><td>Behavioral &amp; Scenario</td><td>OOP-in-POM, flaky-test answers, "how would you test X"</td></tr>
+<tr><td>69</td><td>Interview Q&amp;A by Experience</td><td>1y / 3y / 5y / 8y questions tiered with answers</td></tr>
+<tr><td>71</td><td>Final Review &amp; Gaps</td><td>Self-review notes, what's missing, where to go next</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">DEEP-DIVES &amp; EXTRAS</td></tr>
-<tr><td>36</td><td>Blockchain &amp; DLT</td><td>Bitcoin, Ethereum, EVM, smart contracts, ERC standards, testing dApps</td></tr>
-<tr><td>37</td><td>DSA Fundamentals</td><td>Complexity, data structures, sorting, recursion, DP</td></tr>
-<tr><td>38</td><td>System Design Fundamentals</td><td>Scaling, sharding, caching, CAP, queues, consistency</td></tr>
+<tr><td>60</td><td>Blockchain &amp; DLT</td><td>Bitcoin, Ethereum, EVM, smart contracts, ERC standards, testing dApps</td></tr>
+<tr><td>61</td><td>DSA Fundamentals</td><td>Complexity, data structures, sorting, recursion, DP</td></tr>
+<tr><td>65</td><td>System Design Fundamentals</td><td>Scaling, sharding, caching, CAP, queues, consistency</td></tr>
 <tr><td>39</td><td>Mocking Strategies</td><td>Mock vs stub vs fake vs spy, network/DB/time mocking</td></tr>
 <tr><td>40</td><td>Reporting &amp; Observability</td><td>All reporters, dashboards, KPIs</td></tr>
-<tr><td>41</td><td>Git for SDETs</td><td>Branches, rebase, bisect, stash, hooks</td></tr>
-<tr><td>42</td><td>XPath Deep-Dive Practice</td><td>Every axis, function, edge case with code</td></tr>
+<tr><td>25</td><td>Git for SDETs</td><td>Branches, rebase, bisect, stash, hooks</td></tr>
+<tr><td>50</td><td>XPath Deep-Dive Practice</td><td>Every axis, function, edge case with code</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">OTHER TOOLS &amp; FRAMEWORKS</td></tr>
-<tr><td>43</td><td>Selenium WebDriver</td><td>Architecture, Selenium 4, locators, waits, Grid</td></tr>
-<tr><td>44</td><td>Java for SDET</td><td>OOP, collections, generics, streams, threading</td></tr>
+<tr><td>44</td><td>Selenium WebDriver</td><td>Architecture, Selenium 4, locators, waits, Grid</td></tr>
+<tr><td>47</td><td>Java for SDET</td><td>OOP, collections, generics, streams, threading</td></tr>
 <tr><td>45</td><td>Cypress (full)</td><td>In-browser architecture, cy.intercept, cy.session</td></tr>
 <tr><td>46</td><td>Appium / Mobile Native</td><td>UiAutomator2, XCUITest, gestures, contexts</td></tr>
-<tr><td>47</td><td>Karate Framework</td><td>Feature-file API testing, match operator, parallel</td></tr>
-<tr><td>48</td><td>GraphQL &amp; gRPC Testing</td><td>Queries, mutations, schemas, Protobuf, grpcurl</td></tr>
-<tr><td>49</td><td>Contract Testing (Pact)</td><td>Consumer-driven contracts, broker, can-i-deploy</td></tr>
+<tr><td>49</td><td>Karate Framework</td><td>Feature-file API testing, match operator, parallel</td></tr>
+<tr><td>22</td><td>GraphQL &amp; gRPC Testing</td><td>Queries, mutations, schemas, Protobuf, grpcurl</td></tr>
+<tr><td>23</td><td>Contract Testing (Pact)</td><td>Consumer-driven contracts, broker, can-i-deploy</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">INFRA &amp; PERFORMANCE</td></tr>
-<tr><td>50</td><td>Docker for Testing</td><td>Containers, Dockerfile, compose, Testcontainers</td></tr>
-<tr><td>51</td><td>Linux &amp; Shell for SDET</td><td>find, grep, sed, awk, processes, ssh, scripting</td></tr>
-<tr><td>52</td><td>Kubernetes for Testers</td><td>Pods, services, jobs, helm, port-forward</td></tr>
-<tr><td>53</td><td>Security Testing (OWASP)</td><td>Top 10, XSS, SQLi, CSRF, ZAP, Burp, sqlmap</td></tr>
-<tr><td>54</td><td>JMeter</td><td>Thread groups, load profiles, CSV, distributed runs</td></tr>
-<tr><td>55</td><td>k6 &amp; Gatling (full)</td><td>Modern load testing, scenarios, thresholds</td></tr>
-<tr><td>56</td><td>Microservices &amp; Kafka Testing</td><td>Event-driven flows, schema registry, idempotency</td></tr>
+<tr><td>27</td><td>Docker for Testing</td><td>Containers, Dockerfile, compose, Testcontainers</td></tr>
+<tr><td>29</td><td>Linux &amp; Shell for SDET</td><td>find, grep, sed, awk, processes, ssh, scripting</td></tr>
+<tr><td>28</td><td>Kubernetes for Testers</td><td>Pods, services, jobs, helm, port-forward</td></tr>
+<tr><td>52</td><td>Security Testing (OWASP)</td><td>Top 10, XSS, SQLi, CSRF, ZAP, Burp, sqlmap</td></tr>
+<tr><td>53</td><td>JMeter</td><td>Thread groups, load profiles, CSV, distributed runs</td></tr>
+<tr><td>54</td><td>k6 &amp; Gatling (full)</td><td>Modern load testing, scenarios, thresholds</td></tr>
+<tr><td>51</td><td>Microservices &amp; Kafka Testing</td><td>Event-driven flows, schema registry, idempotency</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">FRAMEWORKS &amp; STACK</td></tr>
-<tr><td>57</td><td>Vitest</td><td>Modern unit testing, mocks, fake timers, snapshots</td></tr>
-<tr><td>58</td><td>Jira for SDET</td><td>Issue hierarchy, bug reports, JQL, sprints</td></tr>
-<tr><td>59</td><td>React for SDET</td><td>Hooks, reconciliation, RTL, common bugs</td></tr>
-<tr><td>60</td><td>Node.js for SDET</td><td>Event loop, modules, async, Express, workers</td></tr>
-<tr><td>61</td><td>Next.js for SDET</td><td>App Router, Server Components, Server Actions</td></tr>
-<tr><td>62</td><td>Jenkins</td><td>Pipelines, agents, credentials, shared libraries</td></tr>
-<tr><td>63</td><td>MongoDB</td><td>Documents, queries, aggregation, indexes</td></tr>
-<tr><td>64</td><td>Allure Reports (deep)</td><td>Annotations, history, categories, hosting</td></tr>
-<tr><td>65</td><td>Chaos Engineering</td><td>Failure injection, steady-state, game days</td></tr>
-<tr><td>66</td><td>OpenTelemetry &amp; Grafana</td><td>Logs/metrics/traces, OTLP, SLO/SLI/error budget</td></tr>
+<tr><td>48</td><td>Vitest</td><td>Modern unit testing, mocks, fake timers, snapshots</td></tr>
+<tr><td>59</td><td>Jira for SDET</td><td>Issue hierarchy, bug reports, JQL, sprints</td></tr>
+<tr><td>56</td><td>React for SDET</td><td>Hooks, reconciliation, RTL, common bugs</td></tr>
+<tr><td>1</td><td>Node.js for SDET</td><td>Event loop, modules, async, Express, workers</td></tr>
+<tr><td>57</td><td>Next.js for SDET</td><td>App Router, Server Components, Server Actions</td></tr>
+<tr><td>30</td><td>Jenkins</td><td>Pipelines, agents, credentials, shared libraries</td></tr>
+<tr><td>58</td><td>MongoDB</td><td>Documents, queries, aggregation, indexes</td></tr>
+<tr><td>41</td><td>Allure Reports (deep)</td><td>Annotations, history, categories, hosting</td></tr>
+<tr><td>55</td><td>Chaos Engineering</td><td>Failure injection, steady-state, game days</td></tr>
+<tr><td>42</td><td>OpenTelemetry &amp; Grafana</td><td>Logs/metrics/traces, OTLP, SLO/SLI/error budget</td></tr>
 
 <tr><td colspan="3" style="background:var(--bg-3);color:var(--orange);font-weight:700;letter-spacing:1px">PRO MASTERY</td></tr>
-<tr><td>67</td><td>DSA Pro (complete)</td><td>Full algorithm code, all patterns, sort/search/strings/graphs/DP/backtracking/greedy/bits/math/geometry, 50+ problems</td></tr>
-<tr><td>68</td><td>System Design Pro (complete)</td><td>Building blocks deep, DB internals, distributed systems, networking, 15+ end-to-end designs, real-world case studies, 40+ Q&amp;A</td></tr>
+<tr><td>64</td><td>DSA Pro (complete)</td><td>Full algorithm code, all patterns, sort/search/strings/graphs/DP/backtracking/greedy/bits/math/geometry, 50+ problems</td></tr>
+<tr><td>66</td><td>System Design Pro (complete)</td><td>Building blocks deep, DB internals, distributed systems, networking, 15+ end-to-end designs, real-world case studies, 40+ Q&amp;A</td></tr>
 </table>
 
 <h3>Pro tips while you read</h3>

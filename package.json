@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "dev": "npx http-server docs -p 3000",
+    "build": "node build.js"
+  },
   "dependencies": {
     "@vercel/analytics": "^2.0.1"
   }

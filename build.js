@@ -325,7 +325,7 @@ function buildNavSidebar(currentSlug) {
   <div class="brand">
     <h1>Playwright SDET</h1>
     <p>Mastery ebook · open source</p>
-    <p style="font-size:11px;color:var(--fg-3);margin-top:6px">Created by <a href="https://portfolio-yash-sage.vercel.app/" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;padding:0;display:inline">Yash Pandey</a></p>
+    <p style="font-size:11px;color:var(--fg-3);margin-top:6px">Created by <a href="https://portfolio-yash-sage.vercel.app/" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;padding:0;display:inline">Yash Pandey</a> · <a href="https://github.com/Yash-Pandey07/playwright-sdet-mastery" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;padding:0;display:inline">⭐ Star on GitHub</a></p>
   </div>
   <div class="search-wrap">
     <input type="search" id="search" placeholder="Search topics, code, Q&A…">
