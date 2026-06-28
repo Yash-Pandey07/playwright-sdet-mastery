@@ -328,6 +328,11 @@ function generatePage(moduleContent, module, css, js) {
   <style>
 ${css}
   </style>
+  <!-- Vercel Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <!-- Sidebar toggle button -->
@@ -375,6 +380,11 @@ function generateIndexPage(moduleContent, css, js) {
   <style>
 ${css}
   </style>
+  <!-- Vercel Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <!-- Sidebar toggle button -->
