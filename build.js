@@ -196,7 +196,49 @@ function getSharedJS() {
   while ((match = scriptRegex.exec(source)) !== null) {
     jsMatches.push(match[1].trim());
   }
-  return jsMatches.join('\n\n');
+  const js = jsMatches.join('\n\n');
+
+  // Replace single-page navigation and search logic with multi-page equivalents
+  const navSearchRegex = /\/\* ===== Navigation ===== \*\/[\s\S]*?(?=\/\* ===== Syntax highlighter)/;
+  const multiPageNavSearch = `/* ===== Navigation (Multi-page) ===== */
+const links = document.querySelectorAll('#navlist a');
+
+function show(id) {
+  const activeLink = document.querySelector(\`#navlist a[data-id="\${id}"]\`);
+  if (activeLink) {
+    links.forEach(a => a.classList.remove('active'));
+    activeLink.classList.add('active');
+  }
+}
+
+links.forEach(a => {
+  a.addEventListener('click', e => {
+    // If the clicked link is the active page, just scroll to top and prevent reload
+    if (a.classList.contains('active') || a.pathname === window.location.pathname) {
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  });
+});
+
+/* ===== Search ===== */
+const search = document.getElementById('search');
+if (search) {
+  search.addEventListener('input', () => {
+    const q = search.value.trim().toLowerCase();
+    if (!q) {
+      links.forEach(a => a.parentElement.classList.remove('hidden'));
+      return;
+    }
+    links.forEach(a => {
+      const text = a.textContent.toLowerCase();
+      a.parentElement.classList.toggle('hidden', !text.includes(q));
+    });
+  });
+}
+
+`;
+  return js.replace(navSearchRegex, multiPageNavSearch);
 }
 
 // ─── Meta description generator ──────────────────────────────────
@@ -288,6 +330,17 @@ ${css}
   </style>
 </head>
 <body>
+  <!-- Sidebar toggle button -->
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <span class="topbar-title" id="topbar-title">${module.title}</span>
+  </div>
+
+  <!-- Sidebar backdrop -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
   <div class="layout">
     ${buildNavSidebar(module.slug)}
     <main>
@@ -297,18 +350,6 @@ ${css}
 
   <script>
 ${js}
-  </script>
-  <script>
-    (function() {
-      // Patch: when a nav link is clicked on a multi-page site,
-      // the page already loaded — just scroll to top
-      document.querySelectorAll('#navlist a').forEach(function(a) {
-        a.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.scrollTo({top: 0, behavior: 'instant'});
-        });
-      });
-    })();
   </script>
 </body>
 </html>`;
@@ -336,6 +377,17 @@ ${css}
   </style>
 </head>
 <body>
+  <!-- Sidebar toggle button -->
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <span class="topbar-title" id="topbar-title">Home & How to Use</span>
+  </div>
+
+  <!-- Sidebar backdrop -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
   <div class="layout">
     ${buildNavSidebar('index')}
     <main>

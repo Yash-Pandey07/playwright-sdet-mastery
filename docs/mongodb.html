@@ -251,6 +251,17 @@ main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
   </style>
 </head>
 <body>
+  <!-- Sidebar toggle button -->
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <span class="topbar-title" id="topbar-title">MongoDB</span>
+  </div>
+
+  <!-- Sidebar backdrop -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
   <div class="layout">
     <aside id="sidebar">
   <div class="brand">
@@ -794,38 +805,42 @@ if (document.readyState === 'loading') {
   window.__playgroundInit();
 }
 
-/* ===== Navigation ===== */
-const links=document.querySelectorAll('#navlist a');
-const modules=document.querySelectorAll('.module');
-function show(id){
-  modules.forEach(m=>m.classList.toggle('active',m.id===id));
-  links.forEach(a=>a.classList.toggle('active',a.dataset.id===id));
-  window.scrollTo({top:0,behavior:'instant'});
-  /* Playground: re-render iframe when m11 becomes visible (some browsers
-     defer srcdoc loading while the iframe is in display:none). */
-  if (id === 'm11' && typeof window.__pwgReshow === 'function') {
-    setTimeout(window.__pwgReshow, 30);
+/* ===== Navigation (Multi-page) ===== */
+const links = document.querySelectorAll('#navlist a');
+
+function show(id) {
+  const activeLink = document.querySelector(`#navlist a[data-id="${id}"]`);
+  if (activeLink) {
+    links.forEach(a => a.classList.remove('active'));
+    activeLink.classList.add('active');
   }
 }
-links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.dataset.id);location.hash=a.dataset.id}));
-const initial=(location.hash||'#m0').slice(1);
-show(document.getElementById(initial)?initial:'m0');
+
+links.forEach(a => {
+  a.addEventListener('click', e => {
+    // If the clicked link is the active page, just scroll to top and prevent reload
+    if (a.classList.contains('active') || a.pathname === window.location.pathname) {
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  });
+});
 
 /* ===== Search ===== */
-const search=document.getElementById('search');
-search.addEventListener('input',()=>{
-  const q=search.value.trim().toLowerCase();
-  if(!q){links.forEach(a=>a.parentElement.classList.remove('hidden'));return}
-  links.forEach(a=>{
-    const id=a.dataset.id;
-    const mod=document.getElementById(id);
-    const text=(a.textContent+' '+(mod?mod.textContent:'')).toLowerCase();
-    a.parentElement.classList.toggle('hidden',!text.includes(q));
+const search = document.getElementById('search');
+if (search) {
+  search.addEventListener('input', () => {
+    const q = search.value.trim().toLowerCase();
+    if (!q) {
+      links.forEach(a => a.parentElement.classList.remove('hidden'));
+      return;
+    }
+    links.forEach(a => {
+      const text = a.textContent.toLowerCase();
+      a.parentElement.classList.toggle('hidden', !text.includes(q));
+    });
   });
-  /* jump first matching */
-  const first=document.querySelector('#navlist li:not(.hidden) a');
-  if(first)show(first.dataset.id);
-});
+}
 
 /* ===== Syntax highlighter (custom, offline) ===== */
 const HL={
@@ -1009,18 +1024,6 @@ window.addEventListener('resize',()=>{
     }
   }
 });
-  </script>
-  <script>
-    (function() {
-      // Patch: when a nav link is clicked on a multi-page site,
-      // the page already loaded — just scroll to top
-      document.querySelectorAll('#navlist a').forEach(function(a) {
-        a.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.scrollTo({top: 0, behavior: 'instant'});
-        });
-      });
-    })();
   </script>
 </body>
 </html>
