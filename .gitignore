@@ -1,0 +1,14 @@
+# Node.js
+node_modules/
+*.log
+
+# Build artifacts — the source file is outside this repo
+# (it lives in ../playwright-sdet-ebook.html)
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
