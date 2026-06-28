@@ -237,6 +237,15 @@ if (search) {
   });
 }
 
+// Scroll active sidebar link into view on page load
+setTimeout(() => {
+  const activeLinkOnLoad = document.querySelector('#navlist a.active');
+  if (activeLinkOnLoad) {
+    activeLinkOnLoad.scrollIntoView({ block: 'nearest' });
+  }
+}, 50);
+
+
 `;
   return js.replace(navSearchRegex, multiPageNavSearch);
 }
@@ -244,7 +253,42 @@ if (search) {
 // ─── Console noise suppression (extension logs) ──────────────────
 function getConsoleSuppression() {
   return `<script>
-(function(){var _e=console.error,_w=console.warn,_r=[/AdUnit/i,/("sentence"|'sentence')/i,/message channel closed/i];function _s(a){return _r.some(function(p){return p.test(String(a[0]))})}console.error=function(){for(var _len=arguments.length,a=new Array(_len),_key=0;_key<_len;_key++){a[_key]=arguments[_key]}return _s(a)?void 0:_e.apply(console,a)};console.warn=function(){for(var _len2=arguments.length,a=new Array(_len2),_key2=0;_key2<_len2;_key2++){a[_key2]=arguments[_key2]}return _s(a)?void 0:_w.apply(console,a)}})();
+(function(){
+  var _e = console.error, _w = console.warn;
+  var _r = [/AdUnit/i, /sentence/i, /message channel closed/i];
+  function _s(a) {
+    if (!a) return false;
+    var str = String(a);
+    return _r.some(function(p) { return p.test(str); });
+  }
+  console.error = function() {
+    for (var i = 0; i < arguments.length; i++) {
+      if (_s(arguments[i])) return;
+    }
+    _e.apply(console, arguments);
+  };
+  console.warn = function() {
+    for (var i = 0; i < arguments.length; i++) {
+      if (_s(arguments[i])) return;
+    }
+    _w.apply(console, arguments);
+  };
+  window.addEventListener('unhandledrejection', function(e) {
+    var r = e.reason;
+    var m = r ? (r.message || String(r)) : '';
+    if (_s(m)) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+  window.addEventListener('error', function(e) {
+    var m = e.message || '';
+    if (_s(m)) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+})();
 <\/script>`;
 }
 
@@ -334,6 +378,34 @@ function generatePage(moduleContent, module, css, js) {
 
   <style>
 ${css}
+
+/* Custom layout overrides */
+.nav-toggle {
+  position: fixed;
+  top: 14px;
+  left: 314px; /* Desktop: position button to the right of the 300px sidebar */
+  z-index: 1002;
+  transition: left .25s cubic-bezier(.4,0,.2,1), background .15s, border-color .15s, color .15s;
+}
+
+@media(min-width:769px) and (max-width:1024px) {
+  .nav-toggle {
+    left: 274px; /* Tablet: position button to the right of the 260px sidebar */
+  }
+}
+
+@media(max-width:768px) {
+  .nav-toggle {
+    top: 12px;
+    left: 12px; /* Mobile: position button in the topbar */
+  }
+}
+
+@media(min-width:769px) {
+  .layout.sidebar-collapsed ~ .nav-toggle {
+    left: 14px; /* Collapsed: position button in the top-left corner */
+  }
+}
   </style>
   <!-- Vercel Analytics -->
   <script>
@@ -343,9 +415,6 @@ ${css}
   ${getConsoleSuppression()}
 </head>
 <body>
-  <!-- Sidebar toggle button -->
-  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
-
   <!-- Mobile top bar -->
   <div class="mobile-topbar">
     <span class="topbar-title" id="topbar-title">${module.title}</span>
@@ -360,6 +429,9 @@ ${css}
       ${moduleContent}
     </main>
   </div>
+
+  <!-- Sidebar toggle button -->
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
 
   <script>
 ${js}
@@ -387,6 +459,34 @@ function generateIndexPage(moduleContent, css, js) {
 
   <style>
 ${css}
+
+/* Custom layout overrides */
+.nav-toggle {
+  position: fixed;
+  top: 14px;
+  left: 314px; /* Desktop: position button to the right of the 300px sidebar */
+  z-index: 1002;
+  transition: left .25s cubic-bezier(.4,0,.2,1), background .15s, border-color .15s, color .15s;
+}
+
+@media(min-width:769px) and (max-width:1024px) {
+  .nav-toggle {
+    left: 274px; /* Tablet: position button to the right of the 260px sidebar */
+  }
+}
+
+@media(max-width:768px) {
+  .nav-toggle {
+    top: 12px;
+    left: 12px; /* Mobile: position button in the topbar */
+  }
+}
+
+@media(min-width:769px) {
+  .layout.sidebar-collapsed ~ .nav-toggle {
+    left: 14px; /* Collapsed: position button in the top-left corner */
+  }
+}
   </style>
   <!-- Vercel Analytics -->
   <script>
@@ -396,9 +496,6 @@ ${css}
   ${getConsoleSuppression()}
 </head>
 <body>
-  <!-- Sidebar toggle button -->
-  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
-
   <!-- Mobile top bar -->
   <div class="mobile-topbar">
     <span class="topbar-title" id="topbar-title">Home & How to Use</span>
@@ -413,6 +510,9 @@ ${css}
       ${moduleContent}
     </main>
   </div>
+
+  <!-- Sidebar toggle button -->
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
 
   <script>
 ${js}
