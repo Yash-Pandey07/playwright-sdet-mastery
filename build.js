@@ -325,6 +325,7 @@ function buildNavSidebar(currentSlug) {
   <div class="brand">
     <h1>Playwright SDET</h1>
     <p>Mastery ebook · open source</p>
+    <p style="font-size:11px;color:var(--fg-3);margin-top:6px">Created by <a href="https://portfolio-yash-sage.vercel.app/" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;padding:0;display:inline">Yash Pandey</a></p>
   </div>
   <div class="search-wrap">
     <input type="search" id="search" placeholder="Search topics, code, Q&A…">
@@ -367,7 +368,7 @@ function generatePage(moduleContent, module, css, js) {
   <title>${pageTitle}</title>
   <meta name="description" content="${meta.description}">
   <meta name="keywords" content="${meta.keywords}">
-  <meta name="author" content="Playwright SDET">
+  <meta name="author" content="Yash Pandey">
   <meta property="og:title" content="${module.title} — Playwright SDET">
   <meta property="og:description" content="${meta.description}">
   <meta property="og:type" content="article">
@@ -448,6 +449,7 @@ function generateIndexPage(moduleContent, css, js) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Yash Pandey">
   <title>Playwright SDET Mastery — Open Source Ebook</title>
   <meta name="description" content="Free, open-source Playwright SDET ebook covering 72+ modules: architecture, locators, API testing, CI/CD, system design, and interview prep for QA engineers.">
   <meta name="keywords" content="playwright, sdet, ebook, testing, automation, open source, api testing, ci-cd, system design">
