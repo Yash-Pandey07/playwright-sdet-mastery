@@ -201,7 +201,7 @@ function getSharedJS() {
 
   // Replace single-page navigation and search logic with multi-page equivalents
   const navSearchRegex = /\/\* ===== Navigation ===== \*\/[\s\S]*?(?=\/\* ===== Syntax highlighter)/;
-  const multiPageNavSearch = `/* ===== Navigation (Multi-page) ===== */
+    const multiPageNavSearch = `/* ===== Navigation (Multi-page) ===== */
 const links = document.querySelectorAll('#navlist a');
 
 function show(id) {
@@ -222,19 +222,127 @@ links.forEach(a => {
   });
 });
 
+/* ===== Search Highlight Helper ===== */
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^\\\${}()|[\\]\\\\]/g, '\\\\$$&');
+}
+
+function getSnippetHtml(bodyText, q) {
+  if (!bodyText || !q) return '';
+  const idx = bodyText.toLowerCase().indexOf(q);
+  if (idx === -1) {
+    let snippet = bodyText.slice(0, 80);
+    if (bodyText.length > 80) snippet += '...';
+    return snippet
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  const start = Math.max(0, idx - 40);
+  const end = Math.min(bodyText.length, idx + q.length + 60);
+  let snippet = bodyText.slice(start, end);
+  if (start > 0) snippet = '...' + snippet;
+  if (end < bodyText.length) snippet = snippet + '...';
+  let escaped = snippet
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  const regex = new RegExp('(' + escapeRegExp(q) + ')', 'gi');
+  return escaped.replace(regex, '<mark>$$1</mark>');
+}
+
 /* ===== Search ===== */
 const search = document.getElementById('search');
 if (search) {
+  // Restore search query on page load
+  try {
+    const savedQuery = sessionStorage.getItem('pw-sdet-search');
+    if (savedQuery) {
+      search.value = savedQuery;
+      // Trigger search filtering after a short delay
+      setTimeout(() => {
+        search.dispatchEvent(new Event('input'));
+      }, 50);
+    }
+  } catch (e) {}
+
   search.addEventListener('input', () => {
     const q = search.value.trim().toLowerCase();
+
+    // Persist query in sessionStorage
+    try {
+      if (q) {
+        sessionStorage.setItem('pw-sdet-search', search.value);
+      } else {
+        sessionStorage.removeItem('pw-sdet-search');
+      }
+    } catch (e) {}
+
     if (!q) {
-      links.forEach(a => a.parentElement.classList.remove('hidden'));
+      links.forEach(a => {
+        a.parentElement.classList.remove('hidden');
+        const snippetDiv = a.querySelector('.search-snippet');
+        if (snippetDiv) {
+          snippetDiv.innerHTML = '';
+          snippetDiv.style.display = 'none';
+        }
+      });
+      document.querySelectorAll('#navlist li.cat').forEach(cat => cat.classList.remove('hidden'));
       return;
     }
+
     links.forEach(a => {
-      const text = a.textContent.toLowerCase();
-      a.parentElement.classList.toggle('hidden', !text.includes(q));
+      const id = a.dataset.id;
+      const titleEl = a.querySelector('.title-text');
+      const title = (titleEl ? titleEl.textContent : a.textContent).toLowerCase();
+      const originalBody = (window.SEARCH_INDEX && window.SEARCH_INDEX[id]) ? window.SEARCH_INDEX[id] : '';
+      const bodyText = originalBody.toLowerCase();
+      const text = title + ' ' + bodyText;
+      const matches = text.includes(q);
+      
+      a.parentElement.classList.toggle('hidden', !matches);
+
+      const snippetDiv = a.querySelector('.search-snippet');
+      if (snippetDiv) {
+        if (matches) {
+          const snippetHtml = getSnippetHtml(originalBody, q);
+          if (snippetHtml) {
+            snippetDiv.innerHTML = snippetHtml;
+            snippetDiv.style.display = 'block';
+          } else {
+            snippetDiv.innerHTML = '';
+            snippetDiv.style.display = 'none';
+          }
+        } else {
+          snippetDiv.innerHTML = '';
+          snippetDiv.style.display = 'none';
+        }
+      }
     });
+
+    // Toggle category headers visibility based on whether they contain visible links
+    const navlist = document.getElementById('navlist');
+    if (navlist) {
+      const children = Array.from(navlist.children);
+      let activeCat = null;
+      let hasVisibleLink = false;
+      children.forEach(child => {
+        if (child.classList.contains('cat')) {
+          if (activeCat) {
+            activeCat.classList.toggle('hidden', !hasVisibleLink);
+          }
+          activeCat = child;
+          hasVisibleLink = false;
+        } else if (child.tagName === 'LI' && !child.classList.contains('hidden')) {
+          hasVisibleLink = true;
+        }
+      });
+      if (activeCat) {
+        activeCat.classList.toggle('hidden', !hasVisibleLink);
+      }
+    }
   });
 }
 
@@ -245,8 +353,6 @@ setTimeout(() => {
     activeLinkOnLoad.scrollIntoView({ block: 'center' });
   }
 }, 50);
-
-
 `;
   return js.replace(navSearchRegex, multiPageNavSearch);
 }
@@ -345,7 +451,7 @@ function buildNavSidebar(currentSlug) {
     const num = m.num;
     // Link to the page
     const href = m.slug === 'index' ? SITE_BASE : `${SITE_BASE}${m.slug}.html`;
-    html += `\n      <li><a href="${href}" data-id="${m.id}" class="${activeClass}"><span class="num">${num}</span>${m.title}</a></li>`;
+    html += `\n      <li><a href="${href}" data-id="${m.id}" class="${activeClass}"><span class="num">${num}</span><span class="title-text">${m.title}</span><div class="search-snippet"></div></a></li>`;
   });
 
   html += `\n    </ul>
@@ -382,6 +488,36 @@ function generatePage(moduleContent, module, css, js) {
 ${css}
 
 /* Custom layout overrides */
+mark.search-highlight {
+  background: var(--yellow);
+  color: #0d1117;
+  padding: 0 2px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.search-snippet {
+  font-size: 11.5px;
+  color: var(--fg-3);
+  margin-top: 4px;
+  margin-left: 24px;
+  line-height: 1.4;
+  font-weight: normal;
+  white-space: normal;
+  word-break: break-word;
+  display: none;
+}
+a.active .search-snippet {
+  color: var(--fg-2);
+}
+.search-snippet mark {
+  background: var(--yellow);
+  color: #0d1117;
+  padding: 0 1px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
 .nav-toggle {
   position: fixed;
   top: 14px;
@@ -435,6 +571,7 @@ ${css}
   <!-- Sidebar toggle button -->
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
 
+  <script src="/search-index.js"></script>
   <script>
 ${js}
   </script>
@@ -464,6 +601,36 @@ function generateIndexPage(moduleContent, css, js) {
 ${css}
 
 /* Custom layout overrides */
+mark.search-highlight {
+  background: var(--yellow);
+  color: #0d1117;
+  padding: 0 2px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.search-snippet {
+  font-size: 11.5px;
+  color: var(--fg-3);
+  margin-top: 4px;
+  margin-left: 24px;
+  line-height: 1.4;
+  font-weight: normal;
+  white-space: normal;
+  word-break: break-word;
+  display: none;
+}
+a.active .search-snippet {
+  color: var(--fg-2);
+}
+.search-snippet mark {
+  background: var(--yellow);
+  color: #0d1117;
+  padding: 0 1px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
 .nav-toggle {
   position: fixed;
   top: 14px;
@@ -517,6 +684,7 @@ ${css}
   <!-- Sidebar toggle button -->
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
 
+  <script src="/search-index.js"></script>
   <script>
 ${js}
   </script>
@@ -527,6 +695,17 @@ ${js}
 // ═══════════════════════════════════════════════════════════════════
 // MAIN
 // ═══════════════════════════════════════════════════════════════════
+
+function stripHtml(htmlStr) {
+  return htmlStr
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 function build() {
   console.log('📖 Playwright SDET Mastery — Site Builder');
@@ -546,7 +725,21 @@ function build() {
   }
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  // 3. Generate each module page
+  // 3. Generate search index
+  const searchIndex = {};
+  NAV_ORDER.forEach((mod) => {
+    const raw = extracted[mod.id];
+    if (raw) {
+      const innerMatch = raw.match(/<section\s+class="module"\s+id="m\d+"[^>]*>([\s\S]*?)<\/section>/);
+      const innerContent = innerMatch ? innerMatch[1].trim() : raw;
+      searchIndex[mod.id] = stripHtml(innerContent);
+    }
+  });
+  const searchIndexJs = `window.SEARCH_INDEX = ${JSON.stringify(searchIndex, null, 2)};`;
+  fs.writeFileSync(path.join(OUT_DIR, 'search-index.js'), searchIndexJs, 'utf-8');
+  console.log('  ✅ search-index.js');
+
+  // 4. Generate each module page
   const generated = [];
   const moduleCount = Object.keys(MODULES_BY_ID).length;
 
@@ -559,7 +752,10 @@ function build() {
 
     // Strip the outer <section> tags to get inner content
     const innerMatch = raw.match(/<section\s+class="module"\s+id="m\d+"[^>]*>([\s\S]*?)<\/section>/);
-    const innerContent = innerMatch ? innerMatch[1].trim() : raw;
+    let innerContent = innerMatch ? innerMatch[1].trim() : raw;
+
+    // Update the header badge number to match mod.num
+    innerContent = innerContent.replace(/<span class="badge">[^]*?<\/span>/, `<span class="badge">${mod.num}</span>`);
 
     // Generate page
     const fileName = mod.slug === 'index' ? 'index.html' : `${mod.slug}.html`;
@@ -577,7 +773,7 @@ function build() {
     console.log(`  ✅ ${fileName} — ${mod.title}`);
   });
 
-  // 4. Generate sitemap.xml
+  // 5. Generate sitemap.xml
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -594,7 +790,7 @@ ${NAV_ORDER.filter(m => m.slug !== 'index').map(m => `  <url>
   fs.writeFileSync(path.join(OUT_DIR, 'sitemap.xml'), sitemap, 'utf-8');
   console.log('  ✅ sitemap.xml');
 
-  // 5. Generate robots.txt
+  // 6. Generate robots.txt
   const robots = `User-agent: *
 Allow: /
 
@@ -602,7 +798,7 @@ Sitemap: ${SITE_URL}/sitemap.xml`;
   fs.writeFileSync(path.join(OUT_DIR, 'robots.txt'), robots, 'utf-8');
   console.log('  ✅ robots.txt');
 
-  // 6. Summary
+  // 7. Summary
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log(`📁 Output: ${OUT_DIR}/`);
   console.log(`📄 Pages: ${generated.length}`);

@@ -251,6 +251,36 @@ main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
 }
 
 /* Custom layout overrides */
+mark.search-highlight {
+  background: var(--yellow);
+  color: #0d1117;
+  padding: 0 2px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.search-snippet {
+  font-size: 11.5px;
+  color: var(--fg-3);
+  margin-top: 4px;
+  margin-left: 24px;
+  line-height: 1.4;
+  font-weight: normal;
+  white-space: normal;
+  word-break: break-word;
+  display: none;
+}
+a.active .search-snippet {
+  color: var(--fg-2);
+}
+.search-snippet mark {
+  background: var(--yellow);
+  color: #0d1117;
+  padding: 0 1px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
 .nav-toggle {
   position: fixed;
   top: 14px;
@@ -344,95 +374,95 @@ main{transition:margin-left .25s cubic-bezier(.4,0,.2,1),padding .25s}
   <nav>
     <ul id="navlist">
       <li class="cat">Home</li>
-      <li><a href="/" data-id="m0" class=""><span class="num">★</span>Home & How to Use</a></li>
+      <li><a href="/" data-id="m0" class=""><span class="num">★</span><span class="title-text">Home & How to Use</span><div class="search-snippet"></div></a></li>
       <li class="cat">① Prerequisites</li>
-      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span>Node.js for SDET — Start Here</a></li>
-      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span>JavaScript Masterclass</a></li>
-      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span>TypeScript Crash Course</a></li>
+      <li><a href="/nodejs-sdet.html" data-id="m60" class=""><span class="num">1</span><span class="title-text">Node.js for SDET — Start Here</span><div class="search-snippet"></div></a></li>
+      <li><a href="/javascript.html" data-id="m18" class=""><span class="num">2</span><span class="title-text">JavaScript Masterclass</span><div class="search-snippet"></div></a></li>
+      <li><a href="/typescript.html" data-id="m19" class=""><span class="num">3</span><span class="title-text">TypeScript Crash Course</span><div class="search-snippet"></div></a></li>
       <li class="cat">② Playwright Core</li>
-      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span>Architecture & Internals</a></li>
-      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span>Deep Internals: CDP, Workers, Headless</a></li>
-      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span>Locators & UI Testing</a></li>
-      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span>Fixtures, Parallelism, Config</a></li>
-      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span>Network & Advanced</a></li>
-      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span>Locator Playground</a></li>
-      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span>Popups, Alerts, Windows</a></li>
-      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span>Visual Regression</a></li>
-      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span>Accessibility Testing</a></li>
-      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span>Performance Testing</a></li>
-      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span>Mobile & Device</a></li>
-      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span>Playwright with Python</a></li>
-      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span>Playwright Cheat Sheet</a></li>
+      <li><a href="/architecture.html" data-id="m1" class=""><span class="num">4</span><span class="title-text">Architecture & Internals</span><div class="search-snippet"></div></a></li>
+      <li><a href="/cdp-internals.html" data-id="m70" class=""><span class="num">5</span><span class="title-text">Deep Internals: CDP, Workers, Headless</span><div class="search-snippet"></div></a></li>
+      <li><a href="/locators.html" data-id="m2" class=""><span class="num">6</span><span class="title-text">Locators & UI Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/fixtures.html" data-id="m3" class=""><span class="num">7</span><span class="title-text">Fixtures, Parallelism, Config</span><div class="search-snippet"></div></a></li>
+      <li><a href="/network.html" data-id="m4" class=""><span class="num">8</span><span class="title-text">Network & Advanced</span><div class="search-snippet"></div></a></li>
+      <li><a href="/locator-playground.html" data-id="m11" class=""><span class="num">9</span><span class="title-text">Locator Playground</span><div class="search-snippet"></div></a></li>
+      <li><a href="/popups.html" data-id="m22" class=""><span class="num">10</span><span class="title-text">Popups, Alerts, Windows</span><div class="search-snippet"></div></a></li>
+      <li><a href="/visual-regression.html" data-id="m13" class=""><span class="num">11</span><span class="title-text">Visual Regression</span><div class="search-snippet"></div></a></li>
+      <li><a href="/accessibility.html" data-id="m14" class=""><span class="num">12</span><span class="title-text">Accessibility Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/performance.html" data-id="m15" class=""><span class="num">13</span><span class="title-text">Performance Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/mobile.html" data-id="m16" class=""><span class="num">14</span><span class="title-text">Mobile & Device</span><div class="search-snippet"></div></a></li>
+      <li><a href="/python.html" data-id="m21" class=""><span class="num">15</span><span class="title-text">Playwright with Python</span><div class="search-snippet"></div></a></li>
+      <li><a href="/cheat-sheet.html" data-id="m34" class=""><span class="num">16</span><span class="title-text">Playwright Cheat Sheet</span><div class="search-snippet"></div></a></li>
       <li class="cat">③ API & Backend Testing</li>
-      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span>API Testing</a></li>
-      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span>HTTP Status Codes</a></li>
-      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span>API Chaining</a></li>
-      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span>Postman Deep-Dive</a></li>
-      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span>Database Testing</a></li>
-      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span>GraphQL & gRPC Testing</a></li>
-      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span>Contract Testing (Pact)</a></li>
-      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span>REST Assured (Java)</a></li>
+      <li><a href="/api-testing.html" data-id="m5" class=""><span class="num">17</span><span class="title-text">API Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/http-status.html" data-id="m25" class=""><span class="num">18</span><span class="title-text">HTTP Status Codes</span><div class="search-snippet"></div></a></li>
+      <li><a href="/api-chaining.html" data-id="m12" class=""><span class="num">19</span><span class="title-text">API Chaining</span><div class="search-snippet"></div></a></li>
+      <li><a href="/postman.html" data-id="m17" class=""><span class="num">20</span><span class="title-text">Postman Deep-Dive</span><div class="search-snippet"></div></a></li>
+      <li><a href="/database.html" data-id="m7" class=""><span class="num">21</span><span class="title-text">Database Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/graphql-grpc.html" data-id="m48" class=""><span class="num">22</span><span class="title-text">GraphQL & gRPC Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/contract-testing.html" data-id="m49" class=""><span class="num">23</span><span class="title-text">Contract Testing (Pact)</span><div class="search-snippet"></div></a></li>
+      <li><a href="/rest-assured.html" data-id="m6" class=""><span class="num">24</span><span class="title-text">REST Assured (Java)</span><div class="search-snippet"></div></a></li>
       <li class="cat">④ Dev & CI</li>
-      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span>Git for SDETs</a></li>
-      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span>CI/CD with GitHub Actions</a></li>
-      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span>Docker for Testing</a></li>
-      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span>Kubernetes for Testers</a></li>
-      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span>Linux & Shell for SDET</a></li>
-      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span>Jenkins</a></li>
-      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span>Cloud Execution & BrowserStack</a></li>
-      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span>Flakiness: Local vs CI</a></li>
+      <li><a href="/git.html" data-id="m41" class=""><span class="num">25</span><span class="title-text">Git for SDETs</span><div class="search-snippet"></div></a></li>
+      <li><a href="/ci-cd.html" data-id="m8" class=""><span class="num">26</span><span class="title-text">CI/CD with GitHub Actions</span><div class="search-snippet"></div></a></li>
+      <li><a href="/docker.html" data-id="m50" class=""><span class="num">27</span><span class="title-text">Docker for Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/kubernetes.html" data-id="m52" class=""><span class="num">28</span><span class="title-text">Kubernetes for Testers</span><div class="search-snippet"></div></a></li>
+      <li><a href="/linux-shell.html" data-id="m51" class=""><span class="num">29</span><span class="title-text">Linux & Shell for SDET</span><div class="search-snippet"></div></a></li>
+      <li><a href="/jenkins.html" data-id="m62" class=""><span class="num">30</span><span class="title-text">Jenkins</span><div class="search-snippet"></div></a></li>
+      <li><a href="/cloud-execution.html" data-id="m29" class=""><span class="num">31</span><span class="title-text">Cloud Execution & BrowserStack</span><div class="search-snippet"></div></a></li>
+      <li><a href="/flakiness.html" data-id="m32" class=""><span class="num">32</span><span class="title-text">Flakiness: Local vs CI</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑤ Testing Foundations</li>
-      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span>Manual Testing Foundations</a></li>
-      <li><a href="/test-automation.html" data-id="m20" class=" active"><span class="num">34</span>Test Automation Architecture</a></li>
-      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span>BDD with Cucumber</a></li>
-      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span>SDET System Design</a></li>
-      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span>Left-Shift & Right-Shift</a></li>
-      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span>Test Data Management</a></li>
-      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span>Mocking Strategies</a></li>
-      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span>Reporting & Observability</a></li>
-      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span>Allure Reports (deep)</a></li>
-      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span>OpenTelemetry & Grafana</a></li>
+      <li><a href="/manual-testing.html" data-id="m24" class=""><span class="num">33</span><span class="title-text">Manual Testing Foundations</span><div class="search-snippet"></div></a></li>
+      <li><a href="/test-automation.html" data-id="m20" class=" active"><span class="num">34</span><span class="title-text">Test Automation Architecture</span><div class="search-snippet"></div></a></li>
+      <li><a href="/bdd.html" data-id="m27" class=""><span class="num">35</span><span class="title-text">BDD with Cucumber</span><div class="search-snippet"></div></a></li>
+      <li><a href="/sdet-system-design.html" data-id="m26" class=""><span class="num">36</span><span class="title-text">SDET System Design</span><div class="search-snippet"></div></a></li>
+      <li><a href="/shift-testing.html" data-id="m30" class=""><span class="num">37</span><span class="title-text">Left-Shift & Right-Shift</span><div class="search-snippet"></div></a></li>
+      <li><a href="/tdm.html" data-id="m31" class=""><span class="num">38</span><span class="title-text">Test Data Management</span><div class="search-snippet"></div></a></li>
+      <li><a href="/mocking.html" data-id="m39" class=""><span class="num">39</span><span class="title-text">Mocking Strategies</span><div class="search-snippet"></div></a></li>
+      <li><a href="/reporting.html" data-id="m40" class=""><span class="num">40</span><span class="title-text">Reporting & Observability</span><div class="search-snippet"></div></a></li>
+      <li><a href="/allure.html" data-id="m64" class=""><span class="num">41</span><span class="title-text">Allure Reports (deep)</span><div class="search-snippet"></div></a></li>
+      <li><a href="/opentelemetry.html" data-id="m66" class=""><span class="num">42</span><span class="title-text">OpenTelemetry & Grafana</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑥ AI & Emerging</li>
-      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span>AI in Testing · MCP · Agents</a></li>
+      <li><a href="/ai-testing.html" data-id="m28" class=""><span class="num">43</span><span class="title-text">AI in Testing · MCP · Agents</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑦ Alternative Tools</li>
-      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span>Selenium WebDriver</a></li>
-      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span>Cypress (full)</a></li>
-      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span>Appium / Mobile Native</a></li>
-      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span>Java for SDET</a></li>
-      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span>Vitest</a></li>
-      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span>Karate Framework</a></li>
-      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span>XPath Deep-Dive Practice</a></li>
+      <li><a href="/selenium.html" data-id="m43" class=""><span class="num">44</span><span class="title-text">Selenium WebDriver</span><div class="search-snippet"></div></a></li>
+      <li><a href="/cypress.html" data-id="m45" class=""><span class="num">45</span><span class="title-text">Cypress (full)</span><div class="search-snippet"></div></a></li>
+      <li><a href="/appium.html" data-id="m46" class=""><span class="num">46</span><span class="title-text">Appium / Mobile Native</span><div class="search-snippet"></div></a></li>
+      <li><a href="/java.html" data-id="m44" class=""><span class="num">47</span><span class="title-text">Java for SDET</span><div class="search-snippet"></div></a></li>
+      <li><a href="/vitest.html" data-id="m57" class=""><span class="num">48</span><span class="title-text">Vitest</span><div class="search-snippet"></div></a></li>
+      <li><a href="/karate.html" data-id="m47" class=""><span class="num">49</span><span class="title-text">Karate Framework</span><div class="search-snippet"></div></a></li>
+      <li><a href="/xpath.html" data-id="m42" class=""><span class="num">50</span><span class="title-text">XPath Deep-Dive Practice</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑧ Advanced & Specialized</li>
-      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span>Microservices & Kafka Testing</a></li>
-      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span>Security Testing (OWASP)</a></li>
-      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span>JMeter</a></li>
-      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span>k6 & Gatling</a></li>
-      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span>Chaos Engineering</a></li>
+      <li><a href="/kafka-testing.html" data-id="m56" class=""><span class="num">51</span><span class="title-text">Microservices & Kafka Testing</span><div class="search-snippet"></div></a></li>
+      <li><a href="/security.html" data-id="m53" class=""><span class="num">52</span><span class="title-text">Security Testing (OWASP)</span><div class="search-snippet"></div></a></li>
+      <li><a href="/jmeter.html" data-id="m54" class=""><span class="num">53</span><span class="title-text">JMeter</span><div class="search-snippet"></div></a></li>
+      <li><a href="/k6-gatling.html" data-id="m55" class=""><span class="num">54</span><span class="title-text">k6 & Gatling</span><div class="search-snippet"></div></a></li>
+      <li><a href="/chaos.html" data-id="m65" class=""><span class="num">55</span><span class="title-text">Chaos Engineering</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑨ Full-stack Dev</li>
-      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span>React for SDET</a></li>
-      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span>Next.js for SDET</a></li>
-      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span>MongoDB</a></li>
-      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span>Jira for SDET</a></li>
-      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span>Blockchain & DLT</a></li>
+      <li><a href="/react.html" data-id="m59" class=""><span class="num">56</span><span class="title-text">React for SDET</span><div class="search-snippet"></div></a></li>
+      <li><a href="/nextjs.html" data-id="m61" class=""><span class="num">57</span><span class="title-text">Next.js for SDET</span><div class="search-snippet"></div></a></li>
+      <li><a href="/mongodb.html" data-id="m63" class=""><span class="num">58</span><span class="title-text">MongoDB</span><div class="search-snippet"></div></a></li>
+      <li><a href="/jira.html" data-id="m58" class=""><span class="num">59</span><span class="title-text">Jira for SDET</span><div class="search-snippet"></div></a></li>
+      <li><a href="/blockchain.html" data-id="m36" class=""><span class="num">60</span><span class="title-text">Blockchain & DLT</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑩ DSA & Coding</li>
-      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span>DSA Fundamentals</a></li>
-      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span>Coding Round (DSA)</a></li>
-      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span>Extended Coding Round</a></li>
-      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span>DSA Pro (complete)</a></li>
+      <li><a href="/dsa.html" data-id="m37" class=""><span class="num">61</span><span class="title-text">DSA Fundamentals</span><div class="search-snippet"></div></a></li>
+      <li><a href="/coding-round.html" data-id="m9" class=""><span class="num">62</span><span class="title-text">Coding Round (DSA)</span><div class="search-snippet"></div></a></li>
+      <li><a href="/extended-coding.html" data-id="m23" class=""><span class="num">63</span><span class="title-text">Extended Coding Round</span><div class="search-snippet"></div></a></li>
+      <li><a href="/dsa-pro.html" data-id="m67" class=""><span class="num">64</span><span class="title-text">DSA Pro (complete)</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑪ System Design</li>
-      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span>System Design Fundamentals</a></li>
-      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span>System Design Pro (complete)</a></li>
+      <li><a href="/system-design.html" data-id="m38" class=""><span class="num">65</span><span class="title-text">System Design Fundamentals</span><div class="search-snippet"></div></a></li>
+      <li><a href="/system-design-pro.html" data-id="m68" class=""><span class="num">66</span><span class="title-text">System Design Pro (complete)</span><div class="search-snippet"></div></a></li>
       <li class="cat">⑫ Interview Prep</li>
-      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span>Behavioral & Scenario</a></li>
-      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span>Scenario Interview Masterclass</a></li>
-      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span>Interview Q&A by Experience</a></li>
-      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span>Interview Q&A Mega-Bank</a></li>
-      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span>Final Review & Gaps</a></li>
+      <li><a href="/behavioral.html" data-id="m10" class=""><span class="num">67</span><span class="title-text">Behavioral & Scenario</span><div class="search-snippet"></div></a></li>
+      <li><a href="/scenario-masterclass.html" data-id="m71" class=""><span class="num">68</span><span class="title-text">Scenario Interview Masterclass</span><div class="search-snippet"></div></a></li>
+      <li><a href="/interview-qa.html" data-id="m33" class=""><span class="num">69</span><span class="title-text">Interview Q&A by Experience</span><div class="search-snippet"></div></a></li>
+      <li><a href="/interview-mega-bank.html" data-id="m69" class=""><span class="num">70</span><span class="title-text">Interview Q&A Mega-Bank</span><div class="search-snippet"></div></a></li>
+      <li><a href="/final-review.html" data-id="m35" class=""><span class="num">71</span><span class="title-text">Final Review & Gaps</span><div class="search-snippet"></div></a></li>
     </ul>
   </nav>
 </aside>
     <main>
-      <h2 class="module-title"><span class="badge">20</span>Test Automation Architecture</h2>
+      <h2 class="module-title"><span class="badge">34</span>Test Automation Architecture</h2>
 
 <div class="toc">
 <h4>What you will master here</h4>
@@ -689,6 +719,7 @@ export const env = Env.parse(process.env);
   <!-- Sidebar toggle button -->
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" title="Toggle sidebar">&#9776;</button>
 
+  <script src="/search-index.js"></script>
   <script>
 /* ===== Playground init — runs once DOM is fully built ===== */
 window.__playgroundInit = function(){
@@ -984,19 +1015,127 @@ links.forEach(a => {
   });
 });
 
+/* ===== Search Highlight Helper ===== */
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^\${}()|[\]\\]/g, '\\$&');
+}
+
+function getSnippetHtml(bodyText, q) {
+  if (!bodyText || !q) return '';
+  const idx = bodyText.toLowerCase().indexOf(q);
+  if (idx === -1) {
+    let snippet = bodyText.slice(0, 80);
+    if (bodyText.length > 80) snippet += '...';
+    return snippet
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  const start = Math.max(0, idx - 40);
+  const end = Math.min(bodyText.length, idx + q.length + 60);
+  let snippet = bodyText.slice(start, end);
+  if (start > 0) snippet = '...' + snippet;
+  if (end < bodyText.length) snippet = snippet + '...';
+  let escaped = snippet
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  const regex = new RegExp('(' + escapeRegExp(q) + ')', 'gi');
+  return escaped.replace(regex, '<mark>$1</mark>');
+}
+
 /* ===== Search ===== */
 const search = document.getElementById('search');
 if (search) {
+  // Restore search query on page load
+  try {
+    const savedQuery = sessionStorage.getItem('pw-sdet-search');
+    if (savedQuery) {
+      search.value = savedQuery;
+      // Trigger search filtering after a short delay
+      setTimeout(() => {
+        search.dispatchEvent(new Event('input'));
+      }, 50);
+    }
+  } catch (e) {}
+
   search.addEventListener('input', () => {
     const q = search.value.trim().toLowerCase();
+
+    // Persist query in sessionStorage
+    try {
+      if (q) {
+        sessionStorage.setItem('pw-sdet-search', search.value);
+      } else {
+        sessionStorage.removeItem('pw-sdet-search');
+      }
+    } catch (e) {}
+
     if (!q) {
-      links.forEach(a => a.parentElement.classList.remove('hidden'));
+      links.forEach(a => {
+        a.parentElement.classList.remove('hidden');
+        const snippetDiv = a.querySelector('.search-snippet');
+        if (snippetDiv) {
+          snippetDiv.innerHTML = '';
+          snippetDiv.style.display = 'none';
+        }
+      });
+      document.querySelectorAll('#navlist li.cat').forEach(cat => cat.classList.remove('hidden'));
       return;
     }
+
     links.forEach(a => {
-      const text = a.textContent.toLowerCase();
-      a.parentElement.classList.toggle('hidden', !text.includes(q));
+      const id = a.dataset.id;
+      const titleEl = a.querySelector('.title-text');
+      const title = (titleEl ? titleEl.textContent : a.textContent).toLowerCase();
+      const originalBody = (window.SEARCH_INDEX && window.SEARCH_INDEX[id]) ? window.SEARCH_INDEX[id] : '';
+      const bodyText = originalBody.toLowerCase();
+      const text = title + ' ' + bodyText;
+      const matches = text.includes(q);
+      
+      a.parentElement.classList.toggle('hidden', !matches);
+
+      const snippetDiv = a.querySelector('.search-snippet');
+      if (snippetDiv) {
+        if (matches) {
+          const snippetHtml = getSnippetHtml(originalBody, q);
+          if (snippetHtml) {
+            snippetDiv.innerHTML = snippetHtml;
+            snippetDiv.style.display = 'block';
+          } else {
+            snippetDiv.innerHTML = '';
+            snippetDiv.style.display = 'none';
+          }
+        } else {
+          snippetDiv.innerHTML = '';
+          snippetDiv.style.display = 'none';
+        }
+      }
     });
+
+    // Toggle category headers visibility based on whether they contain visible links
+    const navlist = document.getElementById('navlist');
+    if (navlist) {
+      const children = Array.from(navlist.children);
+      let activeCat = null;
+      let hasVisibleLink = false;
+      children.forEach(child => {
+        if (child.classList.contains('cat')) {
+          if (activeCat) {
+            activeCat.classList.toggle('hidden', !hasVisibleLink);
+          }
+          activeCat = child;
+          hasVisibleLink = false;
+        } else if (child.tagName === 'LI' && !child.classList.contains('hidden')) {
+          hasVisibleLink = true;
+        }
+      });
+      if (activeCat) {
+        activeCat.classList.toggle('hidden', !hasVisibleLink);
+      }
+    }
   });
 }
 
@@ -1007,8 +1146,6 @@ setTimeout(() => {
     activeLinkOnLoad.scrollIntoView({ block: 'center' });
   }
 }, 50);
-
-
 /* ===== Syntax highlighter (custom, offline) ===== */
 const HL={
   js:{
