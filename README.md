@@ -21,7 +21,7 @@ This repository hosts the **multi-page static website** generated from the maste
 
 ## 📚 What is Covered? (72+ Modules Roadmap)
 
-The curriculum is structured into 13 curated sections, guiding you from programming fundamentals to senior architect-level concepts:
+The curriculum is structured into 12 curated sections (plus a bonus module), guiding you from programming fundamentals to senior architect-level concepts:
 
 ### 1. ⚙️ Prerequisites & Languages
 * **Module 1-3:** Node.js for SDETs, JavaScript Masterclass (Closures, Event Loop, Promises), and TypeScript Crash Course (Types, Generics).
@@ -29,10 +29,10 @@ The curriculum is structured into 13 curated sections, guiding you from programm
 ### 2. 🎭 Playwright Core
 * **Module 4-5:** Client-Server Architecture, CDP (Chrome DevTools Protocol) vs Webdriver, Deep Internals (Workers, Headless).
 * **Module 6-10:** Locators, Web-First Assertions, Custom Fixtures, Network Mocking (`page.route`), Locator Playground, Popups, and Window events.
-* **Module 11-16:** Visual Regression Testing, Accessibility (axe-core, ARIA Snapshots), Performance (Lighthouse, Web Vitals), Mobile Emulation, and Playwright with Python.
+* **Module 11-16:** Visual Regression Testing, Accessibility (axe-core, ARIA Snapshots), Performance (Lighthouse, Web Vitals), Mobile Emulation, Playwright with Python, and Playwright Cheat Sheet.
 
 ### 3. 🌐 API & Backend Testing
-* **Module 17-20:** REST APIs, APIRequestContext, Schema Validation, API Chaining, and Postman/Newman Deep-Dive.
+* **Module 17-20:** REST APIs, APIRequestContext, Schema Validation, API Chaining, HTTP Status Codes, and Postman Deep-Dive.
 * **Module 21-24:** Database Testing (JDBC, pg client), GraphQL, gRPC/Protobuf, Contract Testing (Pact), and REST Assured (Java comparison).
 
 ### 4. 🚀 CI/CD & DevOps
@@ -53,8 +53,8 @@ The curriculum is structured into 13 curated sections, guiding you from programm
 ### 8. 🌩️ Advanced Topics
 * **Module 51-55:** Microservices & Kafka Event Testing, OWASP Top 10 Security Testing, JMeter Performance, k6 & Gatling Load Testing, and Chaos Engineering.
 
-### 9. 💻 Full-stack Stack Integration
-* **Module 56-60:** React, Next.js (App Router, Server Components), MongoDB, Jira Integration, and Blockchain & dApp Testing.
+### 9. 💻 Full-stack Dev Integration
+* **Module 56-60:** React, Next.js (App Router, Server Components), MongoDB, Jira for SDET, and Blockchain & DLT.
 
 ### 10. 🧠 DSA & Coding Round Preparation
 * **Module 61-64:** Big-O Complexity, Data Structures, JavaScript/TypeScript Coding Problems (debounce, retry, deep-equal), and DSA Pro (sort, search, graphs, DP).
@@ -63,15 +63,17 @@ The curriculum is structured into 13 curated sections, guiding you from programm
 * **Module 65-66:** System Design Fundamentals (Load Balancers, Sharding, CAP theorem), DB Internals, and 15+ real-world distributed architectures.
 
 ### 12. 💼 Interview Preparation
-* **Module 67-71:** Behavioral & Scenario questions, tiered questions by experience level (1y / 3y / 5y / 8y), 5-Year SDET Deep Q&A, and Final Review Checklist.
+* **Module 67-71:** Behavioral & Scenario questions, Scenario Interview Masterclass, tiered Q&A by experience level (1y / 3y / 5y / 8y), Interview Q&A Mega-Bank, and Final Review Checklist.
 
 ---
 
 ## ✨ Premium UX Features
 
 * **Offline-Ready:** The master copy is a single self-contained HTML file that runs anywhere without internet.
-* **Live Search:** Fast, client-side keyword filtering in the navigation sidebar.
-* **Smart Sidebar Scrolling:** Restores scroll position and automatically centers the active module link in the viewport.
+* **Live Search with Snippets:** Fast, client-side keyword filtering with content preview snippets in the navigation sidebar.
+* **Collapsible Sidebar Nav:** Toggle sidebar on/off — adapts seamlessly across mobile, tablet, and desktop viewports.
+* **Smart Sidebar Scrolling:** Restores scroll position and auto-centers the active module link in the viewport.
+* **Fully Responsive:** Dedicated layouts for mobile, tablet, and desktop — no horizontal scroll, no broken elements.
 * **Clean Console Noise Suppression:** Prevents standard browser extension warnings from cluttering developer tools.
 
 ---
