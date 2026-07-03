@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Postman Deep-Dive | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Postman Deep-Dive — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, postman, testing, automation, playwright postman deep dive">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>17.1 Anatomy of a Postman request</h3>
+<h3>20.1 Anatomy of a Postman request</h3>
 <table>
 <tr><th>Tab</th><th>What lives here</th></tr>
 <tr><td>Params</td><td>URL query string (?key=value), URL path variables (:id)</td></tr>
@@ -490,7 +491,7 @@ a.active .search-snippet {
 <tr><td>Settings</td><td>Per-request: SSL verify, automatic redirect, timeout, cookies</td></tr>
 </table>
 
-<h3>17.2 Authorization types — exhaustive</h3>
+<h3>20.2 Authorization types — exhaustive</h3>
 <table>
 <tr><th>Type</th><th>What it sends</th><th>When to use</th></tr>
 <tr><td>No auth</td><td>Nothing</td><td>Public endpoints</td></tr>
@@ -508,7 +509,7 @@ a.active .search-snippet {
 <tr><td>Inherit auth from parent</td><td>Use folder/collection's auth</td><td>Apply once at collection, inherit in every request</td></tr>
 </table>
 
-<h3>17.3 JWT — what's inside that token</h3>
+<h3>20.3 JWT — what's inside that token</h3>
 <p>A JWT (JSON Web Token) is just three base64-url chunks joined by dots:</p>
 <pre data-lang="bash">eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0Iiwicm9sZSI6ImFkbWluIn0.4Adcj3UFYzPUVaVF43FmMab6RlaQD8A9V8wFzzht-KQ
 └──── header ────┘ └──────── payload ────────┘ └────────── signature ──────────┘</pre>
@@ -540,7 +541,7 @@ a.active .search-snippet {
 <li>On other requests, Authorization → Bearer Token → <code class="inline">{{token}}</code></li>
 </ol>
 
-<h3>17.4 OAuth 1.0a vs OAuth 2.0 — the real difference</h3>
+<h3>20.4 OAuth 1.0a vs OAuth 2.0 — the real difference</h3>
 
 <div class="cmp">
 <div class="col">
@@ -580,7 +581,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>Interview one-liner</b>"OAuth1 signs every request with HMAC; OAuth2 obtains an access token once and sends it as a Bearer header per request. OAuth2 wins on simplicity but depends on TLS for security."</div>
 
-<h3>17.5 Variables &amp; scopes</h3>
+<h3>20.5 Variables &amp; scopes</h3>
 <table>
 <tr><th>Scope</th><th>Lifetime</th><th>Use for</th></tr>
 <tr><td>Global</td><td>Workspace-wide</td><td>Truly cross-collection constants (rare)</td></tr>
@@ -592,7 +593,7 @@ a.active .search-snippet {
 
 <p>Reference: <code class="inline">{{baseUrl}}/users/{{userId}}</code>. Resolution order: data → local → environment → collection → global.</p>
 
-<h3>17.6 Pre-request &amp; Tests scripts</h3>
+<h3>20.6 Pre-request &amp; Tests scripts</h3>
 
 <h4>Pre-request — runs BEFORE sending</h4>
 <pre data-lang="javascript">// Compute a signed HMAC header
@@ -621,7 +622,7 @@ pm.collectionVariables.set('token', token);
 postman.setNextRequest('Verify Token');   // skip to a specific request in the run
 // postman.setNextRequest(null);          // stop the runner</pre>
 
-<h3>17.7 Collections, folders, runner</h3>
+<h3>20.7 Collections, folders, runner</h3>
 <ul>
 <li><strong>Collection</strong> — a group of related requests with optional collection-level auth and variables</li>
 <li><strong>Folder</strong> — nested grouping inside a collection (e.g. "Users", "Orders")</li>
@@ -637,7 +638,7 @@ bob@test.com,user
 carol@test.com,viewer</pre>
 <p>Request body becomes <code class="inline">{"email": "{{email}}", "role": "{{role}}"}</code>. Three iterations run automatically.</p>
 
-<h3>17.8 Newman — Postman in CI</h3>
+<h3>20.8 Newman — Postman in CI</h3>
 <p><strong>Newman</strong> is Postman's CLI. Export the collection JSON, commit it, and run on CI.</p>
 <pre data-lang="bash">npm i -g newman
 newman run my-collection.json -e staging.postman_environment.json \
@@ -654,13 +655,13 @@ newman run my-collection.json -e staging.postman_environment.json \
   if: always()
   with: { name: newman-report, path: newman/ }</pre>
 
-<h3>17.9 Mock servers and monitors</h3>
+<h3>20.9 Mock servers and monitors</h3>
 <ul>
 <li><strong>Mock server</strong> — Postman hosts a fake endpoint that returns saved example responses. Useful for parallel front-end development.</li>
 <li><strong>Monitor</strong> — schedule a collection to run on Postman's cloud (every N minutes). Sends alerts on failures. Lightweight uptime/synthetic monitoring.</li>
 </ul>
 
-<h3>17.10 When to use Postman vs Playwright API vs REST Assured</h3>
+<h3>20.10 When to use Postman vs Playwright API vs REST Assured</h3>
 <table>
 <tr><th>Use Postman when</th><th>Use Playwright/REST Assured when</th></tr>
 <tr><td>Exploring an API manually</td><td>Automated regression in CI</td></tr>

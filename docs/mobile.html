@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Mobile & Device | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Mobile & Device — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, mobile, testing, automation, playwright mobile device">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>16.1 Device profiles</h3>
+<h3>14.1 Device profiles</h3>
 <pre data-lang="ts">// playwright.config.ts
 import { defineConfig, devices } from '@playwright/test';
 
@@ -491,7 +492,7 @@ export default defineConfig({
 
 <p>Each device profile bundles: viewport (375×667 etc.), userAgent, deviceScaleFactor (Retina = 2 or 3), <code class="inline">isMobile</code> (changes meta-viewport handling), <code class="inline">hasTouch</code> (enables touch events).</p>
 
-<h3>16.2 What emulation actually changes</h3>
+<h3>14.2 What emulation actually changes</h3>
 <table>
 <tr><th>Property</th><th>Effect</th></tr>
 <tr><td>viewport</td><td>Window dimensions; triggers your responsive CSS breakpoints</td></tr>
@@ -503,7 +504,7 @@ export default defineConfig({
 
 <div class="warn"><b>Emulation is NOT a real device</b>Emulation uses your dev machine's CPU/GPU. iOS-specific Safari bugs, Android keyboard quirks, or hardware sensors won't appear. For real coverage, pair Playwright with BrowserStack / Sauce Labs / a device farm — Playwright supports remote runners.</div>
 
-<h3>16.3 Touch interactions</h3>
+<h3>14.3 Touch interactions</h3>
 <pre data-lang="ts">test('mobile gesture: tap and swipe', async ({ page }) =&gt; {
   await page.goto('/feed');
 
@@ -530,7 +531,7 @@ export default defineConfig({
   }, [start, end]);
 });</pre>
 
-<h3>16.4 Geolocation, permissions, locale, timezone</h3>
+<h3>14.4 Geolocation, permissions, locale, timezone</h3>
 <pre data-lang="ts">test('shows nearby stores using geo', async ({ browser }) =&gt; {
   const context = await browser.newContext({
     ...devices['Pixel 7'],
@@ -544,7 +545,7 @@ export default defineConfig({
   await expect(page.getByText('Bengaluru')).toBeVisible();
 });</pre>
 
-<h3>16.5 Orientation</h3>
+<h3>14.5 Orientation</h3>
 <pre data-lang="ts">test('landscape rendering', async ({ browser }) =&gt; {
   const ctx = await browser.newContext({
     ...devices['Pixel 7 landscape'],   // pre-defined landscape profile
@@ -560,7 +561,7 @@ test('rotate during interaction', async ({ page }) =&gt; {
   await page.setViewportSize({ width: 800, height: 360 });   // landscape
 });</pre>
 
-<h3>16.6 Color scheme, reduced motion, contrast</h3>
+<h3>14.6 Color scheme, reduced motion, contrast</h3>
 <pre data-lang="ts">test('dark mode renders dark theme', async ({ browser }) =&gt; {
   const ctx = await browser.newContext({ colorScheme: 'dark' });
   const page = await ctx.newPage();
@@ -580,7 +581,7 @@ test('forced-colors mode (Windows high contrast)', async ({ browser }) =&gt; {
   /* Test that critical UI is still readable */
 });</pre>
 
-<h3>16.7 Useful built-in device list (samples)</h3>
+<h3>14.7 Useful built-in device list (samples)</h3>
 <ul>
 <li>iPhone 14, iPhone 14 Pro Max, iPhone 14 Plus, iPhone SE</li>
 <li>Pixel 7, Pixel 5, Galaxy S9+</li>
@@ -590,7 +591,7 @@ test('forced-colors mode (Windows high contrast)', async ({ browser }) =&gt; {
 </ul>
 <p>Full list: <code class="inline">import { devices } from '@playwright/test'; console.log(Object.keys(devices));</code></p>
 
-<h3>16.8 Picking what to test on mobile</h3>
+<h3>14.8 Picking what to test on mobile</h3>
 <ul>
 <li>Critical user journeys (auth, checkout, primary CTA) — yes</li>
 <li>Form heavy flows — definitely (mobile keyboards are a regression source)</li>
@@ -630,7 +631,7 @@ test('forced-colors mode (Windows high contrast)', async ({ browser }) =&gt; {
 <div class="answer">Hover-only menus and other mouse-only affordances. On touch, you can't hover — the menu never opens. Always test interactions across both pointer types.</div></details>
 </div>
 
-<h3>16.10 Mobile-specific test patterns</h3>
+<h3>14.10 Mobile-specific test patterns</h3>
 
 <h4>Network throttling per test</h4>
 <pre data-lang="ts">test('works on slow 3G', async ({ page, context }) =&gt; {
@@ -660,7 +661,7 @@ test('forced-colors mode (Windows high contrast)', async ({ browser }) =&gt; {
 await page.setViewportSize({ width: 800, height: 360 });  // landscape
 // Re-assert layout fits</pre>
 
-<h3>16.11 Real-device testing (cloud farms)</h3>
+<h3>14.11 Real-device testing (cloud farms)</h3>
 <ul>
 <li>BrowserStack App Live — real iOS / Android devices, manual + automated</li>
 <li>Sauce Labs Real Devices — same but more enterprise certifications</li>
@@ -669,7 +670,7 @@ await page.setViewportSize({ width: 800, height: 360 });  // landscape
 <li>LambdaTest — competitive pricing</li>
 </ul>
 
-<h3>16.12 Mobile web vs hybrid vs native</h3>
+<h3>14.12 Mobile web vs hybrid vs native</h3>
 <table>
 <tr><th>Type</th><th>Test tool</th></tr>
 <tr><td>Mobile web (Safari/Chrome on phone)</td><td>Playwright device emulation OR cloud farm</td></tr>
@@ -678,7 +679,7 @@ await page.setViewportSize({ width: 800, height: 360 });  // landscape
 <tr><td>Cross-platform (React Native, Flutter)</td><td>Detox (RN), Maestro, Appium</td></tr>
 </table>
 
-<h3>16.13 Common mobile failure modes</h3>
+<h3>14.13 Common mobile failure modes</h3>
 <ul>
 <li><strong>Backgrounding</strong> — app paused/resumed; state preserved?</li>
 <li><strong>Push notification while in app</strong> — popup interferes with flow</li>
@@ -690,7 +691,7 @@ await page.setViewportSize({ width: 800, height: 360 });  // landscape
 <li><strong>Different OS versions</strong> — iOS 15 vs 17, Android 11 vs 14</li>
 </ul>
 
-<h3>16.14 Touch gestures via Playwright</h3>
+<h3>14.14 Touch gestures via Playwright</h3>
 <pre data-lang="ts">// Tap (calls touch events on touch-enabled context)
 await page.getByRole('button', { name: 'Buy' }).tap();
 

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>REST Assured (Java) | Playwright SDET Mastery</title>
   <meta name="description" content="Learn REST Assured (Java) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, rest-assured, testing, automation, playwright rest assured java ">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>6.1 What REST Assured is</h3>
+<h3>24.1 What REST Assured is</h3>
 <p>REST Assured is a <strong>Java DSL (domain-specific language)</strong> for testing HTTP APIs. It is the most popular API testing library in Java/JUnit/TestNG shops. It wraps Apache HTTP Client and adds a readable, fluent BDD-style assertion syntax.</p>
 
 <p>Why teams use it:</p>
@@ -487,7 +488,7 @@ a.active .search-snippet {
 <li>Same Java codebase as the application — shared models, no extra runtime</li>
 </ul>
 
-<h3>6.2 Setup (Maven)</h3>
+<h3>24.2 Setup (Maven)</h3>
 <pre data-lang="java">// pom.xml dependency
 &lt;dependency&gt;
   &lt;groupId&gt;io.rest-assured&lt;/groupId&gt;
@@ -507,7 +508,7 @@ import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.Matchers.*;</pre>
 
-<h3>6.3 The Given–When–Then syntax</h3>
+<h3>24.3 The Given–When–Then syntax</h3>
 <p>REST Assured follows BDD style:</p>
 <ul>
 <li><strong>given()</strong> — set up the request (headers, params, body, auth)</li>
@@ -533,7 +534,7 @@ public void getUserReturns200() {
 
 <div class="tip"><b>Read it out loud</b>"Given a base URI and Accept header, when I GET /users/42, then status code is 200, body.id is 42, body.email is alice@test.com, body.roles has admin, response time is &lt; 500 ms."</div>
 
-<h3>6.4 POST with a JSON body</h3>
+<h3>24.4 POST with a JSON body</h3>
 <pre data-lang="java">@Test
 public void createUser() {
   String payload = "{\"name\":\"Alice\",\"email\":\"alice@test.com\"}";
@@ -549,7 +550,7 @@ public void createUser() {
     .header("Location", containsString("/users/"));
 }</pre>
 
-<h3>6.5 JSONPath — extracting and asserting</h3>
+<h3>24.5 JSONPath — extracting and asserting</h3>
 <p>REST Assured uses Groovy GPath syntax (basically JSONPath with dots):</p>
 
 <pre data-lang="java">// Body: { "orders": [ { "id":1, "total": 99 }, { "id":2, "total": 49 } ] }
@@ -569,7 +570,7 @@ int orderId = given().when().get("/orders").then()
 Response res = given().when().get("/orders");
 List&lt;Integer&gt; totals = res.jsonPath().getList("orders.total");</pre>
 
-<h3>6.6 Auth patterns</h3>
+<h3>24.6 Auth patterns</h3>
 <pre data-lang="java">// Basic
 given().auth().basic("user", "pass").when().get("/secure").then().statusCode(200);
 
@@ -588,7 +589,7 @@ String token = given()
   .when().post("/oauth/token")
   .then().extract().path("access_token");</pre>
 
-<h3>6.7 Serialization with POJOs (Jackson)</h3>
+<h3>24.7 Serialization with POJOs (Jackson)</h3>
 <p>Rather than building JSON strings by hand, define a Java class and let Jackson serialise it:</p>
 
 <pre data-lang="java">public class User {
@@ -610,7 +611,7 @@ public void createUserWithPojo() {
   assertEquals(created.name, "Alice");
 }</pre>
 
-<h3>6.8 Reusable request specs</h3>
+<h3>24.8 Reusable request specs</h3>
 <pre data-lang="java">// Define once
 public class Specs {
   public static RequestSpecification authed() {
@@ -625,7 +626,7 @@ public class Specs {
 // Use in every test
 given().spec(Specs.authed()).when().get("/me").then().statusCode(200);</pre>
 
-<h3>6.9 Logging</h3>
+<h3>24.9 Logging</h3>
 <pre data-lang="java">// Log everything (great for debugging a failing test)
 given().log().all()
   .when().get("/users/42")
@@ -638,7 +639,7 @@ RestAssured.filters(
   new ResponseLoggingFilter(LogDetail.STATUS)
 );</pre>
 
-<h3>6.10 Negative cases</h3>
+<h3>24.10 Negative cases</h3>
 <pre data-lang="java">@Test public void missingEmailReturns400() {
   given().contentType("application/json").body("{\"name\":\"A\"}")
     .when().post("/users")
@@ -654,7 +655,7 @@ RestAssured.filters(
   given().auth().oauth2(userToken).when().delete("/admin/items/1").then().statusCode(403);
 }</pre>
 
-<h3>6.11 REST Assured vs Playwright API — honest comparison</h3>
+<h3>24.11 REST Assured vs Playwright API — honest comparison</h3>
 <table>
 <tr><th>Aspect</th><th>REST Assured</th><th>Playwright request</th></tr>
 <tr><td>Language</td><td>Java (also Kotlin/Scala)</td><td>JS/TS/Python/Java/.NET</td></tr>
@@ -669,7 +670,7 @@ RestAssured.filters(
 
 <div class="tip"><b>The pragmatic take</b>If your application is Java and the API tests live with the service code, REST Assured is excellent. If you're an SDET writing end-to-end suites and UI tests, Playwright's request fixture is enough — and you avoid running two test frameworks.</div>
 
-<h3>6.12 Side-by-side: same test in both</h3>
+<h3>24.12 Side-by-side: same test in both</h3>
 
 <h4>REST Assured</h4>
 <pre data-lang="java">@Test public void getOrders() {

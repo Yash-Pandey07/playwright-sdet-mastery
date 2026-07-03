@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Selenium WebDriver | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Selenium WebDriver — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, selenium, testing, automation, playwright selenium webdriver">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>43.1 WebDriver architecture</h3>
+<h3>44.1 WebDriver architecture</h3>
 <p>Selenium WebDriver is a client–server protocol. Your test (client binding) sends commands as HTTP requests to a <em>browser driver</em> (chromedriver, geckodriver), which translates them into native browser automation and returns JSON.</p>
 
 <pre data-lang="bash">Test code  →  [HTTP + JSON]  →  Browser driver  →  [native API]  →  Browser
@@ -486,7 +487,7 @@ a.active .search-snippet {
 
 <div class="note"><b>Architecture contrast</b>WebDriver pays an HTTP round trip <em>per command</em> and can only poll for state. That single fact explains why per-command latency is higher than Playwright's WebSocket+CDP and why every wait must be written explicitly.</div>
 
-<h3>43.2 What changed in Selenium 4</h3>
+<h3>44.2 What changed in Selenium 4</h3>
 <table>
 <tr><th>Area</th><th>Selenium 3</th><th>Selenium 4</th></tr>
 <tr><td>Protocol</td><td>JSON Wire + W3C dialect</td><td><strong>W3C only</strong></td></tr>
@@ -497,7 +498,7 @@ a.active .search-snippet {
 <tr><td>BiDi (experimental)</td><td>—</td><td>WebDriver BiDi — closer to Playwright's bidirectional events</td></tr>
 </table>
 
-<h3>43.3 Setting up</h3>
+<h3>44.3 Setting up</h3>
 <pre data-lang="java">// Maven dependency
 &lt;dependency&gt;
   &lt;groupId&gt;org.seleniumhq.selenium&lt;/groupId&gt;
@@ -510,7 +511,7 @@ WebDriver driver = new ChromeDriver();
 driver.get("https://example.com");
 driver.quit();</pre>
 
-<h3>43.4 Locators</h3>
+<h3>44.4 Locators</h3>
 <pre data-lang="java">// Standard
 driver.findElement(By.id("user"));
 driver.findElement(By.name("email"));
@@ -527,7 +528,7 @@ By passwordField = By.id("password");
 WebElement label = driver.findElement(with(By.tagName("label")).above(passwordField));
 WebElement nearby = driver.findElement(with(By.tagName("button")).near(passwordField, 100));</pre>
 
-<h3>43.5 Waits — the most-asked Selenium topic</h3>
+<h3>44.5 Waits — the most-asked Selenium topic</h3>
 <div class="cmp">
 <div class="col">
 <h5>Implicit wait</h5>
@@ -552,7 +553,7 @@ WebElement el = fluent.until(d -&gt; d.findElement(By.id("x")));</pre>
 
 <div class="warn"><b>The classic interview trap</b>Mixing implicit + explicit waits causes unpredictable timing — implicit polls inside the explicit wait. Pick one (explicit preferred); don't mix.</div>
 
-<h3>43.6 Common interactions</h3>
+<h3>44.6 Common interactions</h3>
 <pre data-lang="java">// Click, type
 driver.findElement(By.id("user")).sendKeys("alice");
 driver.findElement(By.cssSelector("button.primary")).click();
@@ -590,7 +591,7 @@ JavascriptExecutor js = (JavascriptExecutor) driver;
 js.executeScript("arguments[0].scrollIntoView(true);", el);
 String title = (String) js.executeScript("return document.title;");</pre>
 
-<h3>43.7 Page Object Model (Selenium-style)</h3>
+<h3>44.7 Page Object Model (Selenium-style)</h3>
 <pre data-lang="java">public class LoginPage {
   private final WebDriver driver;
   private final By emailField = By.id("email");
@@ -620,7 +621,7 @@ public class LoginPageFactory {
 
 <div class="warn"><b>PageFactory caveat</b>The proxy fields go stale on re-renders → StaleElementReferenceException. <code class="inline">@CacheLookup</code> makes it worse (caches the WebElement). Many teams now skip PageFactory and use plain <code class="inline">By</code> locators + <code class="inline">findElement</code> on each call.</div>
 
-<h3>43.8 Selenium Grid 4</h3>
+<h3>44.8 Selenium Grid 4</h3>
 <p>Distributed Selenium execution. Hub-node or standalone modes.</p>
 <pre data-lang="bash"># Start a hub
 java -jar selenium-server.jar hub
@@ -638,7 +639,7 @@ WebDriver driver = new RemoteWebDriver(
 
 <p>Selenium Grid 4 added containerised Docker support, observability via OpenTelemetry, and a Studio UI.</p>
 
-<h3>43.9 Staleness — the Selenium-only pain</h3>
+<h3>44.9 Staleness — the Selenium-only pain</h3>
 <p>WebElement is a handle to a found node. When the DOM re-renders, the handle becomes stale → <code class="inline">StaleElementReferenceException</code>. Mitigations:</p>
 <ul>
 <li>Don't cache WebElements long; re-find before each interaction</li>
@@ -647,7 +648,7 @@ WebDriver driver = new RemoteWebDriver(
 <li>Avoid <code class="inline">@CacheLookup</code></li>
 </ul>
 
-<h3>43.10 Selenium vs Playwright — interview summary</h3>
+<h3>44.10 Selenium vs Playwright — interview summary</h3>
 <table>
 <tr><th>Concern</th><th>Selenium</th><th>Playwright</th></tr>
 <tr><td>Protocol</td><td>HTTP + W3C WebDriver</td><td>WebSocket + CDP</td></tr>

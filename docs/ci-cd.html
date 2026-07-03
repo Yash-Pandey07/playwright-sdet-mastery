@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>CI/CD with GitHub Actions | Playwright SDET Mastery</title>
   <meta name="description" content="Learn CI/CD with GitHub Actions — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, ci-cd, testing, automation, playwright ci cd with github actions">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>8.1 The four-part pipeline shape</h3>
+<h3>26.1 The four-part pipeline shape</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -511,7 +512,7 @@ a.active .search-snippet {
 <div class="caption">Figure 8 — Every CI pipeline is these four parts.</div>
 </div>
 
-<h3>8.2 Minimal Playwright pipeline</h3>
+<h3>26.2 Minimal Playwright pipeline</h3>
 <pre data-lang="yaml">name: e2e
 
 on:
@@ -541,7 +542,7 @@ jobs:
 
 <p>This is what most teams ship with. Now let's make it production-grade.</p>
 
-<h3>8.3 Production-grade pipeline with sharding</h3>
+<h3>26.3 Production-grade pipeline with sharding</h3>
 <pre data-lang="yaml">name: e2e
 on:
   push:
@@ -633,7 +634,7 @@ jobs:
           path: playwright-report
           retention-days: 14</pre>
 
-<h3>8.4 Walking through every important line</h3>
+<h3>26.4 Walking through every important line</h3>
 
 <h4>Triggers</h4>
 <ul>
@@ -681,7 +682,7 @@ jobs:
 <h4>blob reports + merge-reports</h4>
 <p>Each shard emits a "blob" report (binary intermediate). The <code class="inline">merge-reports</code> job downloads all of them and merges into a single HTML report — so you have one URL to look at, not four.</p>
 
-<h3>8.5 Retries strategy</h3>
+<h3>26.5 Retries strategy</h3>
 <pre data-lang="ts">// playwright.config.ts
 export default defineConfig({
   retries: process.env.CI ? 2 : 0,
@@ -694,14 +695,14 @@ export default defineConfig({
 <li><strong>Trace on first retry, not every run.</strong> Cheap when tests pass, full trace when they don't.</li>
 </ul>
 
-<h3>8.6 Monitoring retry rates</h3>
+<h3>26.6 Monitoring retry rates</h3>
 <p>Retries hide failures. If a test needs 2 retries to pass, it <em>is</em> flaky — just less visibly. Two practices:</p>
 <ol>
 <li>Add a report that lists tests that needed any retry to pass (parse the JSON report or use a tool like Currents.dev / Sorry Cypress / a custom dashboard).</li>
 <li>Set a threshold: if retry rate &gt; 2% across a week, halt new feature merges until top flakes are fixed or quarantined.</li>
 </ol>
 
-<h3>8.7 Quarantining flaky tests</h3>
+<h3>26.7 Quarantining flaky tests</h3>
 <pre data-lang="ts">// Tag and isolate
 test('checkout flow @quarantine', async ({ page }) =&gt; { /* ... */ });
 
@@ -713,7 +714,7 @@ test('checkout flow @quarantine', async ({ page }) =&gt; { /* ... */ });
 
 <div class="tip"><b>Quarantine is a holding cell, not a graveyard</b>Set a deadline. If a quarantined test isn't fixed in two sprints, delete it — broken tests don't belong in a suite, even silent ones.</div>
 
-<h3>8.8 Debugging remote failures with show-trace</h3>
+<h3>26.8 Debugging remote failures with show-trace</h3>
 <p>Test fails on CI, passes locally. Workflow:</p>
 <ol>
 <li>Open the failing GitHub Actions run.</li>
@@ -723,7 +724,7 @@ test('checkout flow @quarantine', async ({ page }) =&gt; { /* ... */ });
 <li>Scrub the timeline. Inspect the DOM at the failure step. Look at network. The cause is usually obvious in 30 seconds.</li>
 </ol>
 
-<h3>8.9 Other CI niceties</h3>
+<h3>26.9 Other CI niceties</h3>
 <pre data-lang="yaml"># Secrets — never hardcode credentials
 env:
   ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
@@ -737,7 +738,7 @@ env:
 - name: "Tests · shard ${{ matrix.shard }}"
   run: npx playwright test --shard=${{ matrix.shard }}</pre>
 
-<h3>8.10 The 3-line summary you can quote in an interview</h3>
+<h3>26.10 The 3-line summary you can quote in an interview</h3>
 <div class="tip"><b>Concise pitch</b>"On CI we run Playwright in a 4-shard matrix with fail-fast off and 2 retries, capturing traces on first retry. Each shard uploads a blob report; a final job merges them into one HTML report and uploads it as an artifact. We pin Node, use npm ci, and cache both npm and the Playwright browser binaries — a full run is ~8 minutes on a 30-minute serial suite."</div>
 
 <div class="qa-bank">

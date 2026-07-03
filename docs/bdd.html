@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>BDD with Cucumber | Playwright SDET Mastery</title>
   <meta name="description" content="Learn BDD with Cucumber — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, bdd, testing, automation, playwright bdd with cucumber">
@@ -476,11 +477,11 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>27.1 What BDD really is</h3>
+<h3>35.1 What BDD really is</h3>
 <p>Behaviour-Driven Development: a collaboration technique where business, developers and testers agree on behaviour using a shared, near-English vocabulary <em>before</em> writing code. The artifact (a <code class="inline">.feature</code> file) doubles as both the spec and the automated test.</p>
 <p>BDD is NOT just "writing tests in Gherkin". If your business doesn't read or contribute to the .feature files, you're getting all the syntax overhead and none of the collaboration benefit — use plain code tests instead.</p>
 
-<h3>27.2 Gherkin syntax</h3>
+<h3>35.2 Gherkin syntax</h3>
 <pre data-lang="gherkin">Feature: User authentication
   As a registered user
   I want to sign in to my account
@@ -529,7 +530,7 @@ a.active .search-snippet {
 <tr><td>@tag</td><td>Filter / categorise (run only @smoke, exclude @wip)</td></tr>
 </table>
 
-<h3>27.3 Step definitions in TS</h3>
+<h3>35.3 Step definitions in TS</h3>
 <pre data-lang="bash">npm i -D @cucumber/cucumber @playwright/test</pre>
 
 <pre data-lang="ts">// steps/auth.steps.ts
@@ -560,7 +561,7 @@ Then('I should see {string}', async function (this: World, text: string) {
   await expect(this.page.getByText(text)).toBeVisible();
 });</pre>
 
-<h3>27.4 The "World" — per-scenario context</h3>
+<h3>35.4 The "World" — per-scenario context</h3>
 <pre data-lang="ts">// world.ts
 import { setWorldConstructor, World as CW } from '@cucumber/cucumber';
 import { Browser, BrowserContext, Page, chromium, APIRequestContext, request } from 'playwright';
@@ -582,7 +583,7 @@ export class World extends CW {
 }
 setWorldConstructor(World);</pre>
 
-<h3>27.5 Hooks</h3>
+<h3>35.5 Hooks</h3>
 <pre data-lang="ts">// hooks.ts
 import { Before, After, BeforeAll, AfterAll, Status } from '@cucumber/cucumber';
 import { World } from './world';
@@ -600,12 +601,12 @@ After(async function (this: World, scenario) {
   await this.close();
 });</pre>
 
-<h3>27.6 Tags &amp; selective runs</h3>
+<h3>35.6 Tags &amp; selective runs</h3>
 <pre data-lang="bash">npx cucumber-js --tags "@smoke and not @wip"
 npx cucumber-js --tags "@auth or @checkout"
 npx cucumber-js features/auth.feature</pre>
 
-<h3>27.7 Reports</h3>
+<h3>35.7 Reports</h3>
 <pre data-lang="ts">// cucumber.json (config)
 {
   "default": {
@@ -617,7 +618,7 @@ npx cucumber-js features/auth.feature</pre>
 }</pre>
 <p>The HTML report is shareable with non-tech stakeholders — one of the few real BDD wins.</p>
 
-<h3>27.8 Common BDD anti-patterns</h3>
+<h3>35.8 Common BDD anti-patterns</h3>
 <ul>
 <li><strong>Imperative Gherkin</strong> — "When I click the button with id <code class="inline">btn-pri</code>" leaks implementation. Use declarative — "When I submit the form".</li>
 <li><strong>Bloated Background</strong> — runs before every scenario. Keep it small and necessary.</li>
@@ -627,7 +628,7 @@ npx cucumber-js features/auth.feature</pre>
 <li><strong>Scenario as full workflow</strong> — 20-step scenarios collapse. Keep scenarios atomic; one observation per scenario.</li>
 </ul>
 
-<h3>27.9 When NOT to use Cucumber</h3>
+<h3>35.9 When NOT to use Cucumber</h3>
 <table>
 <tr><th>Don't use Cucumber when…</th><th>Do use it when…</th></tr>
 <tr><td>Only engineers maintain tests</td><td>BAs/PMs write or review scenarios</td></tr>

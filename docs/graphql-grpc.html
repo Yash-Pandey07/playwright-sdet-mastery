@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>GraphQL & gRPC Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn GraphQL & gRPC Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, graphql-grpc, testing, automation, playwright graphql grpc testing">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>48.1 GraphQL essentials</h3>
+<h3>22.1 GraphQL essentials</h3>
 <ul>
 <li><strong>Single endpoint</strong> — usually <code class="inline">/graphql</code>. Always POST, body = JSON with <code class="inline">query</code> + <code class="inline">variables</code>.</li>
 <li><strong>Client asks for exactly the fields it needs</strong> — no over/under fetching.</li>
@@ -504,7 +505,7 @@ Content-Type: application/json
   }
 }</pre>
 
-<h3>48.2 Testing GraphQL with Playwright</h3>
+<h3>22.2 Testing GraphQL with Playwright</h3>
 <pre data-lang="ts">test('GraphQL — fetch user with orders', async ({ request }) =&gt; {
   const r = await request.post('/graphql', {
     data: {
@@ -522,7 +523,7 @@ Content-Type: application/json
 
 <div class="warn"><b>GraphQL pitfall</b>Even errors come back with HTTP 200! Check <code class="inline">body.errors</code>, not status. A query with a typo returns 200 + <code class="inline">errors: [{...}]</code>.</div>
 
-<h3>48.3 GraphQL test patterns</h3>
+<h3>22.3 GraphQL test patterns</h3>
 <ul>
 <li><strong>Field selection asymmetry</strong> — ask for a small subset to confirm a field works; ask for everything to detect new required fields the server forces.</li>
 <li><strong>Mutation + immediate read</strong> — POST a mutation, then query the resource and verify state.</li>
@@ -531,7 +532,7 @@ Content-Type: application/json
 <li><strong>Subscriptions</strong> — open WebSocket, subscribe, trigger event via another API, assert payload.</li>
 </ul>
 
-<h3>48.4 Introspection + breaking-change detection</h3>
+<h3>22.4 Introspection + breaking-change detection</h3>
 <pre data-lang="bash">// Introspection query — fetches the whole schema
 { "query": "{ __schema { types { name fields { name type { name } } } } }" }
 
@@ -539,7 +540,7 @@ Content-Type: application/json
 npx graphql-inspector diff schema-old.graphql schema-new.graphql
 // Flags removed fields, type changes — gates breaking changes in CI</pre>
 
-<h3>48.5 gRPC essentials</h3>
+<h3>22.5 gRPC essentials</h3>
 <ul>
 <li><strong>Binary protocol</strong> over HTTP/2; payloads are <strong>Protobuf</strong> (efficient binary).</li>
 <li>4 RPC types: <em>unary</em> (req → res), <em>server streaming</em>, <em>client streaming</em>, <em>bidirectional streaming</em>.</li>
@@ -556,7 +557,7 @@ service Users {
 message GetUserRequest { string id = 1; }
 message User { string id = 1; string email = 2; }</pre>
 
-<h3>48.6 Testing gRPC — tools</h3>
+<h3>22.6 Testing gRPC — tools</h3>
 
 <h4>grpcurl — CLI equivalent of curl</h4>
 <pre data-lang="bash">grpcurl -plaintext -d '{"id": "u_123"}' \
@@ -585,7 +586,7 @@ test('gRPC GetUser', (done) =&gt; {
 <pre data-lang="bash">ghz --insecure --proto users.proto --call users.Users/GetUser \
   -d '{"id":"u_123"}' -c 50 -n 10000 localhost:50051</pre>
 
-<h3>48.7 When each is used</h3>
+<h3>22.7 When each is used</h3>
 <table>
 <tr><th>API style</th><th>Best for</th><th>Tooling</th></tr>
 <tr><td>REST</td><td>Public APIs, broad client compat</td><td>Postman / Playwright request / REST Assured</td></tr>

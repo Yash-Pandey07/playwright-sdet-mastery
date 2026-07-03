@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Cloud Execution & BrowserStack | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Cloud Execution & BrowserStack — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, cloud-execution, testing, automation, playwright cloud execution browserstack">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>29.1 Why run tests in the cloud</h3>
+<h3>31.1 Why run tests in the cloud</h3>
 <ul>
 <li><strong>Cross-browser coverage</strong> — Safari only runs on macOS; IE11 (legacy) only on Windows. Cloud farms have every combination ready.</li>
 <li><strong>Cross-device coverage</strong> — real iPhones, Pixels, Galaxies. Emulation misses iOS-Safari quirks.</li>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <li><strong>Local network bypass</strong> — testing against staging that is geo-blocked elsewhere.</li>
 </ul>
 
-<h3>29.2 The vendor landscape</h3>
+<h3>31.2 The vendor landscape</h3>
 <table>
 <tr><th>Vendor</th><th>Strengths</th><th>Notes</th></tr>
 <tr><td>BrowserStack</td><td>Largest device farm, real iOS/Android, mature Playwright integration</td><td>"Browserstack Automate" for desktop, "App Automate" for mobile native</td></tr>
@@ -496,7 +497,7 @@ a.active .search-snippet {
 <tr><td>Microsoft Playwright Service (Azure)</td><td>First-party — runs Playwright on Azure, integrated with Playwright Test runner</td><td>Pure parallel scaling; no real-device support yet</td></tr>
 </table>
 
-<h3>29.3 Running Playwright on BrowserStack</h3>
+<h3>31.3 Running Playwright on BrowserStack</h3>
 <pre data-lang="ts">// playwright-bs.config.ts
 import { defineConfig, devices } from '@playwright/test';
 
@@ -529,7 +530,7 @@ export default defineConfig({
 
 <p>Run as usual: <code class="inline">npx playwright test --config=playwright-bs.config.ts</code>. Sessions appear in your BrowserStack dashboard with video, network, console.</p>
 
-<h3>29.4 Microsoft Playwright Service (Azure)</h3>
+<h3>31.4 Microsoft Playwright Service (Azure)</h3>
 <pre data-lang="ts">// Microsoft's first-party cloud service for Playwright Test
 import { defineConfig } from '@playwright/test';
 import { getServiceConfig, ServiceOS } from '@azure/microsoft-playwright-testing';
@@ -544,14 +545,14 @@ export default defineConfig(
 );</pre>
 <p>You write tests once; runner farms them to Azure browsers. Reports surface in Azure portal.</p>
 
-<h3>29.5 BrowserStack Local — for staging not on public internet</h3>
+<h3>31.5 BrowserStack Local — for staging not on public internet</h3>
 <p>Your staging URL is private (only reachable from VPN / corp network). BrowserStack Local opens a secure tunnel from the BrowserStack browser to your machine / CI runner.</p>
 <pre data-lang="bash">npm i -D browserstack-local
 # Or download CLI:
 ./BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier acme-pr-123</pre>
 <p>Pass <code class="inline">browserstack.local: true</code> in caps, then BrowserStack browsers can reach <code class="inline">https://staging.internal.acme.com</code>.</p>
 
-<h3>29.6 Self-hosted alternative — Playwright Selenium Grid replacement</h3>
+<h3>31.6 Self-hosted alternative — Playwright Selenium Grid replacement</h3>
 <p>If you can't use a vendor (regulatory, cost), self-host. Options:</p>
 <ul>
 <li><strong>Selenium Grid 4</strong> + <code class="inline">selenium/standalone-chromium</code> Docker images — proven, language-agnostic</li>
@@ -572,7 +573,7 @@ spec:
         command: ["npx","playwright","test","--shard=3/8"]
       restartPolicy: Never</pre>
 
-<h3>29.7 Real-device vs emulator vs cloud-VM</h3>
+<h3>31.7 Real-device vs emulator vs cloud-VM</h3>
 <table>
 <tr><th>Option</th><th>Pros</th><th>Cons</th></tr>
 <tr><td>Real device (BrowserStack, Sauce)</td><td>True iOS Safari, hardware sensors, real touch</td><td>Most expensive; slower; queueing</td></tr>
@@ -583,7 +584,7 @@ spec:
 
 <div class="tip"><b>Practical mix</b>80% on Playwright device emulation (cheap, fast, in CI). 15% on cloud emulator for Safari coverage. 5% on real device sample for critical flows before release.</div>
 
-<h3>29.8 Cost + privacy</h3>
+<h3>31.8 Cost + privacy</h3>
 <ul>
 <li><strong>Cost</strong> — vendors charge per parallel session or per minute. Estimate: 5 parallel sessions × 8 hours/day × 22 days ≈ $400–800/month.</li>
 <li><strong>PII</strong> — anything your test enters into the cloud browser may be captured in the vendor's video/logs. Mask, use synthetic data, or rely on self-hosted.</li>

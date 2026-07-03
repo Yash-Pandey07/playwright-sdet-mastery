@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Docker for Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Docker for Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, docker, testing, automation, playwright docker for testing">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>50.1 Container vs VM</h3>
+<h3>27.1 Container vs VM</h3>
 <table>
 <tr><th>VM</th><th>Container</th></tr>
 <tr><td>Full guest OS + hypervisor</td><td>Process group sharing host kernel</td></tr>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <tr><td>Heavy for transient test envs</td><td>Ideal for transient test envs</td></tr>
 </table>
 
-<h3>50.2 Core vocabulary</h3>
+<h3>27.2 Core vocabulary</h3>
 <ul>
 <li><strong>Image</strong> — read-only template (filesystem + metadata). Built from a Dockerfile.</li>
 <li><strong>Container</strong> — running instance of an image.</li>
@@ -495,7 +496,7 @@ a.active .search-snippet {
 <li><strong>Layer</strong> — each Dockerfile step creates a cached layer. Order matters for cache efficiency.</li>
 </ul>
 
-<h3>50.3 Basic commands</h3>
+<h3>27.3 Basic commands</h3>
 <pre data-lang="bash">docker pull mcr.microsoft.com/playwright:v1.50.0-jammy
 docker images                        # list local
 docker ps                            # running containers
@@ -508,7 +509,7 @@ docker stop mydb &amp;&amp; docker rm mydb
 docker build -t my-tests .
 docker push myregistry/my-tests:1.0</pre>
 
-<h3>50.4 Dockerfile for a Playwright project</h3>
+<h3>27.4 Dockerfile for a Playwright project</h3>
 <pre data-lang="bash">FROM mcr.microsoft.com/playwright:v1.50.0-jammy
 WORKDIR /app
 
@@ -522,7 +523,7 @@ COPY . .
 # Default command
 CMD ["npx", "playwright", "test"]</pre>
 
-<h3>50.5 docker-compose — app + DB + tests</h3>
+<h3>27.5 docker-compose — app + DB + tests</h3>
 <pre data-lang="yaml">version: '3.8'
 services:
   db:
@@ -555,7 +556,7 @@ services:
 
 <pre data-lang="bash">docker compose up --abort-on-container-exit --exit-code-from tests</pre>
 
-<h3>50.6 Testcontainers (Java + others)</h3>
+<h3>27.6 Testcontainers (Java + others)</h3>
 <p>Library that spins up real services (Postgres, Kafka, Selenium Grid) from inside a JUnit test. Each test gets a fresh DB; no shared state.</p>
 
 <pre data-lang="java">@Testcontainers
@@ -571,7 +572,7 @@ class UserRepoTest {
 
 <p>Available containers: Postgres, MySQL, Mongo, Redis, RabbitMQ, Kafka, Localstack (AWS), Selenium Standalone, Playwright (via GenericContainer).</p>
 
-<h3>50.7 Multi-stage builds</h3>
+<h3>27.7 Multi-stage builds</h3>
 <pre data-lang="bash">FROM node:20 AS build
 WORKDIR /app
 COPY package*.json ./
@@ -589,7 +590,7 @@ CMD ["npx", "playwright", "test"]</pre>
 
 <p>Final image is smaller — no build tools, source maps, dev deps.</p>
 
-<h3>50.8 Common pitfalls</h3>
+<h3>27.8 Common pitfalls</h3>
 <ul>
 <li><strong>Wrong base image</strong> — using <code class="inline">node:20-alpine</code> for Playwright → no Chrome dependencies, install fails. Use the official Playwright image.</li>
 <li><strong>Layer cache busting</strong> — copying everything before <code class="inline">npm ci</code> means every code change invalidates the install layer. Copy lockfile first.</li>
@@ -599,7 +600,7 @@ CMD ["npx", "playwright", "test"]</pre>
 <li><strong>Disk bloat</strong> — old layers accumulate. <code class="inline">docker system prune -a</code> weekly.</li>
 </ul>
 
-<h3>50.9 docker for CI</h3>
+<h3>27.9 docker for CI</h3>
 <p>Most CI runners (GitHub Actions, GitLab CI, Jenkins) support running steps inside a container. Pin the version of the Playwright image to match local — keeps trace/screenshot rendering identical and removes "passes locally fails CI" caused by image drift.</p>
 
 <div class="qa-bank">

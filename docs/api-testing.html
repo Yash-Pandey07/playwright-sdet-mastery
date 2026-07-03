@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>API Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn API Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, api-testing, testing, automation, playwright api testing">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>5.1 REST in one screen</h3>
+<h3>17.1 REST in one screen</h3>
 <p>REST = Representational State Transfer. The contract:</p>
 <ul>
 <li><strong>Resources</strong> have URLs: <code class="inline">/users/42</code>, <code class="inline">/orders</code></li>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <li><strong>Representations</strong> — usually JSON, sometimes XML, sometimes Protobuf</li>
 </ul>
 
-<h3>5.2 HTTP status codes (the ladder)</h3>
+<h3>17.2 HTTP status codes (the ladder)</h3>
 <table>
 <tr><th>Class</th><th>Code</th><th>Meaning</th><th>SDET hit-list</th></tr>
 <tr><td rowspan="3">2xx Success</td><td>200 OK</td><td>Generic success</td><td>GET, PUT response</td></tr>
@@ -507,7 +508,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>401 vs 403 — must-know</b>401 = "I don't know who you are" (no/invalid credentials). 403 = "I know who you are, you can't do this". An expired token is 401. A user hitting <code class="inline">/admin/delete</code> is 403.</div>
 
-<h3>5.3 Playwright's request fixture</h3>
+<h3>17.3 Playwright's request fixture</h3>
 <p>Playwright ships an HTTP client called <code class="inline">APIRequestContext</code>, available as the built-in <code class="inline">request</code> fixture or via <code class="inline">playwright.request.newContext()</code>. It is async, returns Playwright Response objects you can assert on.</p>
 
 <pre data-lang="ts">import { test, expect } from '@playwright/test';
@@ -522,7 +523,7 @@ test('GET /users returns a list', async ({ request }) =&gt; {
   expect(json[0]).toHaveProperty('email');
 });</pre>
 
-<h3>5.4 GET / POST / PUT / PATCH / DELETE</h3>
+<h3>17.4 GET / POST / PUT / PATCH / DELETE</h3>
 <pre data-lang="ts">// GET with query
 const res = await request.get('/api/users', { params: { role: 'admin', limit: 10 } });
 
@@ -552,7 +553,7 @@ await request.post('/login', { form: { user: 'a', pass: 'b' } });
 // multipart / file
 await request.post('/upload', { multipart: { file: fs.createReadStream('cv.pdf') } });</pre>
 
-<h3>5.5 Auth patterns</h3>
+<h3>17.5 Auth patterns</h3>
 <pre data-lang="ts">// Bearer token (most common)
 const res = await request.get('/api/me', {
   headers: { Authorization: `Bearer ${token}` },
@@ -571,7 +572,7 @@ const api = await playwright.request.newContext({
 const me = await api.get('/me');
 await api.dispose();</pre>
 
-<h3>5.6 Asserting status, body, headers, time</h3>
+<h3>17.6 Asserting status, body, headers, time</h3>
 <pre data-lang="ts">test('orders endpoint', async ({ request }) =&gt; {
   const start = Date.now();
   const res = await request.get('/api/orders/123');
@@ -601,7 +602,7 @@ await api.dispose();</pre>
   expect(elapsed).toBeLessThan(500);   // SLA: 500 ms
 });</pre>
 
-<h3>5.7 When to API-test vs UI-test</h3>
+<h3>17.7 When to API-test vs UI-test</h3>
 <div class="cmp">
 <div class="col">
 <h5>Use API tests when…</h5>
@@ -627,7 +628,7 @@ await api.dispose();</pre>
 
 <div class="tip"><b>The pyramid</b>Lots of API tests (fast, cheap), some UI E2E (slower, expensive). Don't UI-test a backend bug — write the API test first; it's 100× faster.</div>
 
-<h3>5.8 Hybrid tests — API setup, UI verification</h3>
+<h3>17.8 Hybrid tests — API setup, UI verification</h3>
 <p>This is the SDET sweet spot. Use the API to create the exact pre-conditions (a user, an order, a coupon), then verify the UI renders them correctly. No fragile UI-based setup.</p>
 
 <pre data-lang="ts">import { test, expect } from '@playwright/test';
@@ -659,7 +660,7 @@ test('user sees their 3 recent orders', async ({ request, page }) =&gt; {
   await request.delete(`/api/test/users/${user.id}`);
 });</pre>
 
-<h3>5.9 Schema validation</h3>
+<h3>17.9 Schema validation</h3>
 <p>Manually equalling objects is brittle. Use a schema (Zod / Ajv) to validate shape independent of values.</p>
 
 <pre data-lang="ts">import { z } from 'zod';
@@ -677,7 +678,7 @@ test('order schema', async ({ request }) =&gt; {
   Order.parse(await res.json());   // throws if shape is wrong
 });</pre>
 
-<h3>5.10 Mixing UI + intercepted backend</h3>
+<h3>17.10 Mixing UI + intercepted backend</h3>
 <p>You can also drive the UI but inject API responses via <code class="inline">page.route</code> to isolate frontend bugs from backend variability.</p>
 <pre data-lang="ts">test('UI handles empty orders state', async ({ page }) =&gt; {
   await page.route('**/api/orders', r =&gt; r.fulfill({ status: 200, body: '[]' }));

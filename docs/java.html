@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Java for SDET | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Java for SDET — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, java, testing, automation, playwright java for sdet">
@@ -478,10 +479,10 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>44.1 Why Java for SDET</h3>
+<h3>47.1 Why Java for SDET</h3>
 <p>Java is the lingua franca of enterprise test automation. Selenium, REST Assured, TestNG/JUnit, Cucumber-JVM, Allure — all assume a JVM. Understanding the language well separates someone who copies WebDriver snippets from someone who designs maintainable frameworks.</p>
 
-<h3>44.2 The four OOP pillars</h3>
+<h3>47.2 The four OOP pillars</h3>
 
 <h4>Encapsulation</h4>
 <pre data-lang="java">public class LoginPage {
@@ -532,7 +533,7 @@ class ApiTest extends BaseTest {
 <tr><td>Methods</td><td>Abstract + concrete</td><td>Abstract + default/static (Java 8+)</td></tr>
 </table>
 
-<h3>44.3 Access modifiers</h3>
+<h3>47.3 Access modifiers</h3>
 <table>
 <tr><th>Modifier</th><th>Same class</th><th>Same package</th><th>Subclass</th><th>Everywhere</th></tr>
 <tr><td>public</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
@@ -541,7 +542,7 @@ class ApiTest extends BaseTest {
 <tr><td>private</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
 </table>
 
-<h3>44.4 Collections</h3>
+<h3>47.4 Collections</h3>
 <table>
 <tr><th>Type</th><th>Backed by</th><th>Order</th><th>Duplicates</th><th>Best for</th></tr>
 <tr><td>ArrayList</td><td>resizable array</td><td>insertion</td><td>Y</td><td>random access reads</td></tr>
@@ -563,7 +564,7 @@ class ApiTest extends BaseTest {
 <li><code class="inline">equals()</code> + <code class="inline">hashCode()</code> contract: equal objects MUST have equal hash codes</li>
 </ul>
 
-<h3>44.5 Generics</h3>
+<h3>47.5 Generics</h3>
 <pre data-lang="java">public class Stack&lt;T&gt; {
   private final List&lt;T&gt; data = new ArrayList&lt;&gt;();
   public void push(T x) { data.add(x); }
@@ -579,7 +580,7 @@ public &lt;T extends Comparable&lt;T&gt;&gt; T max(List&lt;T&gt; xs) {
 List&lt;? extends Number&gt; numbers;        // read-only (covariant)
 List&lt;? super Integer&gt; integers;        // write-only (contravariant)</pre>
 
-<h3>44.6 Exceptions</h3>
+<h3>47.6 Exceptions</h3>
 <table>
 <tr><th>Type</th><th>When</th><th>Must catch?</th></tr>
 <tr><td>Checked (Exception, IOException, SQLException)</td><td>Recoverable conditions</td><td>Yes — declare or catch</td></tr>
@@ -595,7 +596,7 @@ try (Connection c = DriverManager.getConnection(url);
   throw new RuntimeException("DB failed", e);
 }</pre>
 
-<h3>44.7 Streams + lambdas</h3>
+<h3>47.7 Streams + lambdas</h3>
 <pre data-lang="java">List&lt;User&gt; admins = users.stream()
   .filter(u -&gt; u.role().equals("admin"))
   .sorted(Comparator.comparing(User::createdAt))
@@ -611,7 +612,7 @@ int total = orders.stream().mapToInt(Order::total).sum();
 // Parallel — be careful
 long count = bigList.parallelStream().filter(predicate).count();</pre>
 
-<h3>44.8 String immutability + equals/hashCode</h3>
+<h3>47.8 String immutability + equals/hashCode</h3>
 <pre data-lang="java">String a = "hello";
 String b = "hello";
 a == b;          // true — string pool
@@ -629,7 +630,7 @@ new String("hello") == "hello";   // false — different object
 }
 @Override public int hashCode() { return Objects.hash(email); }</pre>
 
-<h3>44.9 Threading + ThreadLocal for WebDriver</h3>
+<h3>47.9 Threading + ThreadLocal for WebDriver</h3>
 <pre data-lang="java">// Each thread gets its own WebDriver instance — required for parallel TestNG
 public class DriverFactory {
   private static final ThreadLocal&lt;WebDriver&gt; driver = new ThreadLocal&lt;&gt;();

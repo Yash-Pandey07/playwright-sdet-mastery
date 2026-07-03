@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Architecture & Internals | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Architecture & Internals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, architecture, testing, automation, playwright architecture internals">
@@ -519,7 +520,7 @@ a.active .search-snippet {
 </div>
 </div>
 
-<h3>1.1 The big picture: client and server</h3>
+<h3>4.1 The big picture: client and server</h3>
 <p>Playwright is split into two pieces that talk to each other over a single, persistent connection:</p>
 <ol>
 <li><strong>The Playwright client (your test code)</strong> — a Node.js / Python / Java / .NET library that exposes a friendly API (<code class="inline">page.click()</code>, <code class="inline">expect(locator).toBeVisible()</code>, etc.).</li>
@@ -558,7 +559,7 @@ a.active .search-snippet {
 <div class="caption">Figure 1 — Playwright sends commands to the driver, which speaks each browser's native debug protocol.</div>
 </div>
 
-<h3>1.2 WebSocket + CDP vs Selenium's HTTP/JSON Wire</h3>
+<h3>4.2 WebSocket + CDP vs Selenium's HTTP/JSON Wire</h3>
 <p>This is the single most important architecture point an interviewer will probe.</p>
 
 <div class="cmp">
@@ -590,7 +591,7 @@ a.active .search-snippet {
 <li><strong>Isolation:</strong> Playwright creates a fresh <em>BrowserContext</em> per test in milliseconds — Selenium typically launches a whole new browser process, taking seconds.</li>
 </ul>
 
-<h3>1.3 The Browser → BrowserContext → Page hierarchy</h3>
+<h3>4.3 The Browser → BrowserContext → Page hierarchy</h3>
 <p>This three-level model is what makes Playwright fast <em>and</em> isolated.</p>
 
 <div class="diagram">
@@ -656,7 +657,7 @@ a.active .search-snippet {
   await browser.close();
 })();</pre>
 
-<h3>1.4 Auto-wait internals</h3>
+<h3>4.4 Auto-wait internals</h3>
 <p>"Playwright auto-waits" is the headline feature. Here is what actually happens when you call <code class="inline">await page.click('#buy')</code>:</p>
 
 <ol>
@@ -715,7 +716,7 @@ a.active .search-snippet {
 
 <div class="warn"><b>Common myth</b>"Auto-wait waits for the page to load." No — it waits for <em>actionability</em> of the specific element you targeted. If you wait for a network response or specific state, use <code class="inline">page.waitForResponse</code> / <code class="inline">expect(...).toBeVisible()</code>, not <code class="inline">page.waitForTimeout</code>.</div>
 
-<h3>1.5 Why Playwright is faster and less flaky</h3>
+<h3>4.5 Why Playwright is faster and less flaky</h3>
 <table>
 <tr><th>Cause</th><th>Effect</th></tr>
 <tr><td>Persistent WebSocket vs HTTP-per-command</td><td>~5–10× lower per-command overhead</td></tr>
@@ -726,7 +727,7 @@ a.active .search-snippet {
 <tr><td>Built-in retries + trace viewer</td><td>When a test does fail, you can replay every step</td></tr>
 </table>
 
-<h3>1.6 Playwright vs Selenium vs Cypress (honest)</h3>
+<h3>4.6 Playwright vs Selenium vs Cypress (honest)</h3>
 <table>
 <tr><th>Dimension</th><th>Playwright</th><th>Selenium</th><th>Cypress</th></tr>
 <tr><td>Architecture</td><td>Out-of-process driver, WebSocket+CDP</td><td>Out-of-process, HTTP+WebDriver</td><td>In-browser, runs alongside app</td></tr>
@@ -743,7 +744,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>One-line interview answer</b>"Playwright runs out-of-process like Selenium, but speaks each browser's native debug protocol over a persistent WebSocket, so commands are cheaper and events stream back in real time — that's how auto-wait can be precise. Cypress runs <em>inside</em> the browser, which is fast but constrains it to one tab and one origin."</div>
 
-<h3>1.7 First test — proves the architecture</h3>
+<h3>4.7 First test — proves the architecture</h3>
 <pre data-lang="ts">// tests/architecture.spec.ts
 import { test, expect } from '@playwright/test';
 
@@ -908,14 +909,14 @@ test('admin dashboard loads', async ({ page }) =&gt; {
 </div></details>
 </div>
 
-<h3>1.9 Playwright versioning, release cadence &amp; what's new (interview-ready)</h3>
+<h3>4.9 Playwright versioning, release cadence &amp; what's new (interview-ready)</h3>
 
 <div class="note">
 <b>Why this section matters for interviews</b>
 <p>Senior interviewers love asking "which version are you on and why?" — it surfaces whether you treat Playwright as a black box or as a dependency you actively manage. Be ready to discuss your <em>exact</em> version, your upgrade cadence, and at least 2–3 features tied to specific releases.</p>
 </div>
 
-<h4>1.9.1 Your version — 1.61.0 (Nov 2025)</h4>
+<h4>4.9.1 Your version — 1.61.0 (Nov 2025)</h4>
 <p>Across this workspace, every Playwright project resolves <code class="inline">@playwright/test</code> to <strong>1.61.0</strong>. Some <code class="inline">package.json</code> files declare older minimums (<code class="inline">^1.43.0</code>, <code class="inline">^1.45.0</code>) but the caret allows minor/patch upgrades, so the lock files all settle on 1.61.0.</p>
 
 <pre data-lang="bash"><span class="tok-comment"># Verify quickly</span>
@@ -923,7 +924,7 @@ npx playwright --version          <span class="tok-comment"># Version 1.61.0</sp
 npm ls @playwright/test           <span class="tok-comment"># shows resolved version</span>
 node -p "require('@playwright/test/package.json').version"</pre>
 
-<h4>1.9.2 Release cadence</h4>
+<h4>4.9.2 Release cadence</h4>
 <ul>
   <li><strong>Minor releases</strong> roughly every 4–6 weeks (1.40, 1.41, 1.42 …). Each ships features + browser-binary updates.</li>
   <li><strong>Patch releases</strong> (1.61.x) come for bug fixes / security only — safe to take automatically.</li>
@@ -931,7 +932,7 @@ node -p "require('@playwright/test/package.json').version"</pre>
   <li><strong>Browser binaries are pinned</strong> to a Playwright version. <code class="inline">npx playwright install</code> downloads the exact Chromium/Firefox/WebKit builds the library was tested against.</li>
 </ul>
 
-<h4>1.9.3 Feature timeline (memorise the headline features per version)</h4>
+<h4>4.9.3 Feature timeline (memorise the headline features per version)</h4>
 <table>
 <tr><th>Version</th><th>Released</th><th>Headline features (interview-grade)</th></tr>
 <tr><td>1.30</td><td>Jan 2023</td><td><code class="inline">page.getByRole/getByLabel/...</code> stable, <code class="inline">test.step</code></td></tr>
@@ -957,7 +958,7 @@ node -p "require('@playwright/test/package.json').version"</pre>
 <tr><td><strong>1.61</strong></td><td><strong>Nov 2025</strong></td><td><strong>← Your version.</strong> Latest stable. Mature Agents/MCP, refined aria snapshots, hardened sharding</td></tr>
 </table>
 
-<h4>1.9.4 What to do <em>before</em> upgrading (the checklist)</h4>
+<h4>4.9.4 What to do <em>before</em> upgrading (the checklist)</h4>
 <ol>
   <li><strong>Read the release notes</strong> — <code class="inline">github.com/microsoft/playwright/releases</code>. Most upgrades are zero-change; some (1.40 → 1.41) tweaked default timeouts.</li>
   <li><strong>Match the Docker tag</strong> — bump <code class="inline">mcr.microsoft.com/playwright:v1.61.0-jammy</code> in your CI <em>and</em> the npm version in the same PR. Mismatched versions cause "works locally, breaks in CI" failures.</li>
@@ -967,7 +968,7 @@ node -p "require('@playwright/test/package.json').version"</pre>
   <li><strong>Run on one CI shard first</strong>, not all 8 simultaneously — to spot version-incompatibility before you waste a full pipeline.</li>
 </ol>
 
-<h4>1.9.5 Common interview prompts about version (and how to answer)</h4>
+<h4>4.9.5 Common interview prompts about version (and how to answer)</h4>
 
 <details class="qa"><summary>"What Playwright version are you using and why?"</summary>
 <div class="answer">

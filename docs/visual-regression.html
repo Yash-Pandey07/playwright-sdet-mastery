@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Visual Regression | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Visual Regression — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, visual-regression, testing, automation, playwright visual regression">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>13.1 Why visual testing exists</h3>
+<h3>11.1 Why visual testing exists</h3>
 <p>DOM assertions catch <em>structural</em> bugs ("the button exists, has text 'Buy'"). They miss:</p>
 <ul>
 <li>CSS regressions — button is now invisible white-on-white</li>
@@ -488,7 +489,7 @@ a.active .search-snippet {
 </ul>
 <p>Visual regression takes a pixel snapshot and diffs it against an approved baseline. If they differ beyond a threshold, the test fails with a diff image showing exactly what changed.</p>
 
-<h3>13.2 The basics — toHaveScreenshot</h3>
+<h3>11.2 The basics — toHaveScreenshot</h3>
 <pre data-lang="ts">test('homepage looks right', async ({ page }) =&gt; {
   await page.goto('/');
   await expect(page).toHaveScreenshot('home.png');                       // full page
@@ -497,7 +498,7 @@ a.active .search-snippet {
 
 <p>First run creates the baseline in <code class="inline">__snapshots__/home.spec.ts/home.png</code>. Later runs compare against it. Diff stored next to the failure as <code class="inline">home-diff.png</code>.</p>
 
-<h3>13.3 Stabilising the page before snapshot</h3>
+<h3>11.3 Stabilising the page before snapshot</h3>
 <p>The single biggest source of flake. Common sources of pixel noise:</p>
 
 <table>
@@ -524,7 +525,7 @@ a.active .search-snippet {
   });
 });</pre>
 
-<h3>13.4 Masking dynamic regions</h3>
+<h3>11.4 Masking dynamic regions</h3>
 <p>Some elements legitimately change every run (dates, prices fetched live, user avatar). Mask them so the screenshot diff ignores those areas.</p>
 
 <pre data-lang="ts">await expect(page).toHaveScreenshot('orders.png', {
@@ -562,7 +563,7 @@ a.active .search-snippet {
 <div class="caption">Figure 11 — Masked regions are filled with a flat colour before diff; only un-masked areas need to match.</div>
 </div>
 
-<h3>13.5 Threshold tuning</h3>
+<h3>11.5 Threshold tuning</h3>
 <table>
 <tr><th>Option</th><th>What it does</th></tr>
 <tr><td><code class="inline">maxDiffPixels: 100</code></td><td>Allow up to 100 different pixels (absolute count)</td></tr>
@@ -572,7 +573,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>Start strict, loosen on noise</b>Begin with defaults (threshold 0.2). If you see repeated 1-pixel-different failures across OSes/fonts, raise <code class="inline">maxDiffPixelRatio</code> to 0.005 or 0.01 rather than disabling the test.</div>
 
-<h3>13.6 Per-project baselines</h3>
+<h3>11.6 Per-project baselines</h3>
 <p>Pixel rendering differs by browser engine, OS, and font availability. Don't share one baseline across all projects — Playwright already names baselines by project automatically.</p>
 
 <pre data-lang="ts">// playwright.config.ts
@@ -594,7 +595,7 @@ export default defineConfig({
 
 <div class="warn"><b>Critical for CI</b>Generate baselines on the same OS image as CI runs. macOS-generated baselines will fail on Linux CI due to font rendering. Use a Docker image (<code class="inline">mcr.microsoft.com/playwright</code>) locally to match.</div>
 
-<h3>13.7 Updating baselines</h3>
+<h3>11.7 Updating baselines</h3>
 <pre data-lang="bash"># After an intentional UI change, regenerate baselines locally
 npx playwright test --update-snapshots
 
@@ -604,7 +605,7 @@ npx playwright test tests/home.spec.ts --update-snapshots</pre>
 <h4>Reviewing baseline changes in PRs</h4>
 <p>Commit baseline files (PNGs) alongside the code change. PR reviewer must see the new baselines. Tooling tip: use a service like <em>Argos</em>, <em>Percy</em>, or a custom GitHub action that renders side-by-side baseline / actual / diff in PR comments.</p>
 
-<h3>13.8 CI artifact diffing</h3>
+<h3>11.8 CI artifact diffing</h3>
 <p>When a visual test fails on CI, Playwright drops three PNGs in the test-results folder:</p>
 <ul>
 <li><code class="inline">name-expected.png</code> — the baseline</li>
@@ -621,7 +622,7 @@ npx playwright test tests/home.spec.ts --update-snapshots</pre>
     name: visual-diffs
     path: test-results/**/*.png</pre>
 
-<h3>13.9 When NOT to use visual tests</h3>
+<h3>11.9 When NOT to use visual tests</h3>
 <ul>
 <li>Pages with heavy random/dynamic content (charts, dashboards) — masking gets unwieldy</li>
 <li>Frequently restyled prototypes — baselines become a chore</li>
@@ -629,7 +630,7 @@ npx playwright test tests/home.spec.ts --update-snapshots</pre>
 <li>Cross-OS pixel parity is mandatory but CI / dev OS differ — fix the env first</li>
 </ul>
 
-<h3>13.10 A typical visual suite layout</h3>
+<h3>11.10 A typical visual suite layout</h3>
 <pre data-lang="ts">// tests/visual/components.spec.ts
 import { test, expect } from '@playwright/test';
 

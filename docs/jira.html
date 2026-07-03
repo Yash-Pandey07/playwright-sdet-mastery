@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Jira for SDET | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Jira for SDET — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, jira, testing, automation, playwright jira for sdet">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>58.1 Hierarchy + issue types</h3>
+<h3>59.1 Hierarchy + issue types</h3>
 <table>
 <tr><th>Type</th><th>What</th></tr>
 <tr><td>Epic</td><td>Large body of work spanning multiple sprints</td></tr>
@@ -487,10 +488,10 @@ a.active .search-snippet {
 <tr><td>Subtask</td><td>Decomposition of a story/task</td></tr>
 </table>
 
-<h3>58.2 Common workflow states</h3>
+<h3>59.2 Common workflow states</h3>
 <p>Open → In Progress → In Review → Ready for QA → In QA → Done. Variations per team. Each transition can have rules (must have PR linked, must have AC met).</p>
 
-<h3>58.3 Writing a great bug report</h3>
+<h3>59.3 Writing a great bug report</h3>
 <pre data-lang="bash">Title:    [Checkout] Quantity stepper accepts negative values
 
 Environment: staging, Chrome 130, build a3f5b2
@@ -519,7 +520,7 @@ Related: epic ACME-1234, similar to ACME-5670 (closed wontfix)</pre>
 
 <div class="tip"><b>Three things that make a great bug report</b>(1) Reproducible steps a stranger can follow. (2) Concrete expected vs actual with numbers/values, not "doesn't work". (3) Attachments (screenshot, video, trace, logs).</div>
 
-<h3>58.4 Severity vs Priority (Jira fields)</h3>
+<h3>59.4 Severity vs Priority (Jira fields)</h3>
 <table>
 <tr><th></th><th>Severity</th><th>Priority</th></tr>
 <tr><td>Decided by</td><td>QA / engineering</td><td>PM / business</td></tr>
@@ -528,7 +529,7 @@ Related: epic ACME-1234, similar to ACME-5670 (closed wontfix)</pre>
 <tr><td>Example</td><td>Login crashes for all users = Critical</td><td>Typo on launch landing page = P0 even if Low severity</td></tr>
 </table>
 
-<h3>58.5 JQL — Jira Query Language</h3>
+<h3>59.5 JQL — Jira Query Language</h3>
 <pre data-lang="bash"># My open bugs
 assignee = currentUser() AND type = Bug AND status != Done
 
@@ -547,7 +548,7 @@ labels = quarantine AND status != Done
 # Released in 2026.06
 fixVersion = "2026.06"</pre>
 
-<h3>58.6 Sprints + boards</h3>
+<h3>59.6 Sprints + boards</h3>
 <ul>
 <li><strong>Scrum board</strong> — fixed sprint length (1-3 weeks); issues moved through columns; sprint goal + retrospective.</li>
 <li><strong>Kanban board</strong> — continuous flow; WIP limits per column; no sprints; cycle time matters.</li>
@@ -556,7 +557,7 @@ fixVersion = "2026.06"</pre>
 <li><strong>Cumulative Flow Diagram</strong> — work in each state over time; spots bottlenecks.</li>
 </ul>
 
-<h3>58.7 Test case management add-ons</h3>
+<h3>59.7 Test case management add-ons</h3>
 <table>
 <tr><th>Tool</th><th>Notes</th></tr>
 <tr><td>Zephyr (Squad/Scale)</td><td>Most common Jira-native test mgmt</td></tr>
@@ -567,7 +568,7 @@ fixVersion = "2026.06"</pre>
 
 <p>Test cases live in the add-on; results execute against a "test run" linked to a story or release. SDETs can push automated test results from CI via the add-on's REST API.</p>
 
-<h3>58.8 Automating Jira from CI</h3>
+<h3>59.8 Automating Jira from CI</h3>
 <pre data-lang="bash"># Comment on a Jira issue when a test fails
 curl -X POST -u $JIRA_USER:$JIRA_TOKEN \
   -H "Content-Type: application/json" \
@@ -580,7 +581,7 @@ curl -X POST -u $JIRA_USER:$JIRA_TOKEN \
   -d '{"fields":{"project":{"key":"ACME"},"summary":"Auto: '$TEST' failed","issuetype":{"name":"Bug"},"priority":{"name":"Medium"}}}' \
   "$JIRA_HOST/rest/api/3/issue"</pre>
 
-<h3>58.9 Linking strategy</h3>
+<h3>59.9 Linking strategy</h3>
 <ul>
 <li>Bug fix PR — link to the original bug</li>
 <li>Story — link to its epic; link to a test plan in Zephyr</li>

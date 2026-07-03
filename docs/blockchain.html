@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Blockchain & DLT | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Blockchain & DLT — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, blockchain, testing, automation, playwright blockchain dlt">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>36.1 Blockchain vs DLT</h3>
+<h3>60.1 Blockchain vs DLT</h3>
 <p><strong>Distributed Ledger Technology (DLT)</strong> = umbrella term: any database replicated across multiple nodes with no central authority. <strong>Blockchain</strong> = one specific type of DLT where transactions are grouped into <em>blocks</em>, each cryptographically linked to the previous via a hash — forming an immutable chain.</p>
 
 <p>All blockchains are DLTs. Not all DLTs are blockchains (e.g. Hashgraph uses a "DAG" structure instead of blocks).</p>
@@ -488,7 +489,7 @@ a.active .search-snippet {
 <tr><td>Examples</td><td>Bitcoin, Ethereum, Hyperledger Fabric</td><td>IOTA (Tangle), Hedera (Hashgraph)</td></tr>
 </table>
 
-<h3>36.2 Core security mechanisms</h3>
+<h3>60.2 Core security mechanisms</h3>
 <ul>
 <li><strong>Cryptographic hashing</strong> (SHA-256 in Bitcoin) — each block contains a hash of the previous. Change one transaction → its block hash changes → all subsequent hashes invalid.</li>
 <li><strong>Public-key cryptography</strong> — private key signs transactions; public key (derived) verifies. Possession of private key = ownership of funds.</li>
@@ -496,7 +497,7 @@ a.active .search-snippet {
 <li><strong>Decentralisation</strong> — no single point of failure / trust.</li>
 </ul>
 
-<h3>36.3 Bitcoin — the basics</h3>
+<h3>60.3 Bitcoin — the basics</h3>
 <ul>
 <li><strong>Created</strong> by pseudonymous Satoshi Nakamoto, 2009.</li>
 <li><strong>Wallets</strong> hold private keys (HD wallets derive many keys from one seed).</li>
@@ -507,7 +508,7 @@ a.active .search-snippet {
 <li><strong>Forensics</strong> — addresses are pseudonymous, not anonymous. Companies (Chainalysis) trace flows.</li>
 </ul>
 
-<h3>36.4 Ethereum &amp; the EVM</h3>
+<h3>60.4 Ethereum &amp; the EVM</h3>
 <ul>
 <li>Smart contract platform — programs run on every node.</li>
 <li><strong>EVM</strong> (Ethereum Virtual Machine) — sandboxed execution environment.</li>
@@ -534,7 +535,7 @@ contract SimpleStorage {
     }
 }</pre>
 
-<h3>36.5 Hyperledger Fabric — permissioned blockchain</h3>
+<h3>60.5 Hyperledger Fabric — permissioned blockchain</h3>
 <ul>
 <li>Open-source, Linux Foundation project</li>
 <li><strong>Permissioned</strong> — known participants, not anonymous</li>
@@ -544,7 +545,7 @@ contract SimpleStorage {
 <li>Use cases: supply chain, trade finance, healthcare records</li>
 </ul>
 
-<h3>36.6 Token standards</h3>
+<h3>60.6 Token standards</h3>
 <table>
 <tr><th>Standard</th><th>What</th><th>Examples</th></tr>
 <tr><td>ERC-20</td><td>Fungible tokens — interchangeable units</td><td>USDT, DAI, most stablecoins, governance tokens</td></tr>
@@ -554,13 +555,13 @@ contract SimpleStorage {
 <tr><td>ERC-4337</td><td>Account abstraction (smart wallets)</td><td>Modern wallet UX</td></tr>
 </table>
 
-<h3>36.7 Cryptocurrencies vs tokens</h3>
+<h3>60.7 Cryptocurrencies vs tokens</h3>
 <ul>
 <li><strong>Cryptocurrency</strong> = native asset of a blockchain (BTC on Bitcoin, ETH on Ethereum). Used to pay gas / transaction fees.</li>
 <li><strong>Token</strong> = asset issued by a smart contract on an existing blockchain (USDT on Ethereum). Doesn't have its own chain.</li>
 </ul>
 
-<h3>36.8 What SDETs actually test in blockchain apps</h3>
+<h3>60.8 What SDETs actually test in blockchain apps</h3>
 
 <h4>Layer 1: dApp UI (Playwright)</h4>
 <pre data-lang="ts">test('connect wallet flow', async ({ page, context }) =&gt; {
@@ -602,7 +603,7 @@ describe('SimpleStorage', () =&gt; {
 <h4>Layer 3: Indexer / API</h4>
 <p>Most dApps run a backend indexer (The Graph, custom) that reads blockchain events and serves a normal REST/GraphQL API. Test that like any API — schema, status codes, latency. Just need a known on-chain state to query against.</p>
 
-<h3>36.9 Special challenges</h3>
+<h3>60.9 Special challenges</h3>
 <ul>
 <li><strong>Non-deterministic timing</strong> — block confirmation takes seconds to minutes. Test on a local devnet (Hardhat / Anvil) where blocks are mined instantly.</li>
 <li><strong>Gas costs</strong> — assert gas usage per transaction stays within budget (regression detector).</li>

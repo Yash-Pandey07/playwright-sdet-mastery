@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>DSA Pro (complete) | Playwright SDET Mastery</title>
   <meta name="description" content="Learn DSA Pro (complete) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, dsa-pro, testing, automation, playwright dsa pro complete ">
@@ -485,7 +486,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>67.1 Complexity</h3>
+<h3>64.1 Complexity</h3>
 <h4>Big-O / Θ / Ω</h4>
 <table>
 <tr><th>Notation</th><th>Meaning</th></tr>
@@ -521,7 +522,7 @@ a.active .search-snippet {
 </ul>
 <p>Mergesort: a=2, b=2, f=n → log₂(2)=1 → Θ(n log n). Binary search: a=1, b=2, f=1 → Θ(log n).</p>
 
-<h3>67.2 Data structures — implementations</h3>
+<h3>64.2 Data structures — implementations</h3>
 
 <h4>Dynamic Array</h4>
 <pre data-lang="ts">class DynArray&lt;T&gt; {
@@ -805,7 +806,7 @@ class Trie {
   }
 }</pre>
 
-<h3>67.3 Sort algorithms (complete)</h3>
+<h3>64.3 Sort algorithms (complete)</h3>
 <pre data-lang="ts">// Quicksort (Lomuto partition)
 function quicksort(a: number[], lo = 0, hi = a.length - 1) {
   if (lo &lt; hi) {
@@ -872,7 +873,7 @@ function countingSort(a: number[], k: number): number[] {
 <tr><td>Timsort (JS, Python)</td><td>O(n log n)</td><td>O(n log n)</td><td>Yes</td><td>No</td></tr>
 </table>
 
-<h3>67.4 Binary search (variants)</h3>
+<h3>64.4 Binary search (variants)</h3>
 <pre data-lang="ts">// Classic
 function binSearch(a: number[], t: number): number {
   let lo = 0, hi = a.length - 1;
@@ -903,7 +904,7 @@ function searchOnAnswer(lo: number, hi: number, check: (k: number) =&gt; boolean
   return lo;
 }</pre>
 
-<h3>67.5 String algorithms</h3>
+<h3>64.5 String algorithms</h3>
 
 <h4>KMP (Knuth-Morris-Pratt) — O(n + m) substring</h4>
 <pre data-lang="ts">function buildLPS(p: string): number[] {
@@ -963,7 +964,7 @@ function kmp(t: string, p: string): number[] {
 }
 // Use for: pattern matching (concat pattern + sep + text, find z[i] = pattern length)</pre>
 
-<h3>67.6 Graph algorithms (complete code)</h3>
+<h3>64.6 Graph algorithms (complete code)</h3>
 
 <h4>BFS shortest path (unweighted)</h4>
 <pre data-lang="ts">function bfsShortest(adj: number[][], src: number): number[] {
@@ -1089,7 +1090,7 @@ function kmp(t: string, p: string): number[] {
   return sccs;
 }</pre>
 
-<h3>67.7 Dynamic Programming — complete catalogue with code</h3>
+<h3>64.7 Dynamic Programming — complete catalogue with code</h3>
 
 <h4>1D DP — climbing stairs / fib</h4>
 <pre data-lang="ts">function climb(n: number): number {
@@ -1207,7 +1208,7 @@ function kmp(t: string, p: string): number[] {
   return best;
 }</pre>
 
-<h3>67.8 Backtracking template + 8 problems</h3>
+<h3>64.8 Backtracking template + 8 problems</h3>
 <pre data-lang="ts">// Template
 function backtrack(state: any, choices: any[], result: any[]) {
   if (isSolution(state)) { result.push(cloneState(state)); return; }
@@ -1280,7 +1281,7 @@ function backtrack(state: any, choices: any[], result: any[]) {
   return false;
 }</pre>
 
-<h3>67.9 Greedy with correctness reasoning</h3>
+<h3>64.9 Greedy with correctness reasoning</h3>
 
 <h4>Interval scheduling (max non-overlapping)</h4>
 <pre data-lang="ts">function maxIntervals(intervals: [number, number][]): number {
@@ -1307,7 +1308,7 @@ function backtrack(state: any, choices: any[], result: any[]) {
   return true;
 }</pre>
 
-<h3>67.10 Bit manipulation catalogue</h3>
+<h3>64.10 Bit manipulation catalogue</h3>
 <pre data-lang="ts">// Power of 2 check
 const isPow2 = (x: number) =&gt; x &gt; 0 &amp;&amp; (x &amp; (x - 1)) === 0;
 
@@ -1346,7 +1347,7 @@ function singleNumber(nums: number[]): number {
   return nums.reduce((acc, x) =&gt; acc ^ x, 0);
 }</pre>
 
-<h3>67.11 Math algorithms</h3>
+<h3>64.11 Math algorithms</h3>
 
 <h4>GCD (Euclid)</h4>
 <pre data-lang="ts">function gcd(a: number, b: number): number { return b === 0 ? a : gcd(b, a % b); }
@@ -1391,7 +1392,7 @@ function extGcd(a: number, b: number): [number, number, number] {
   return C;
 }</pre>
 
-<h3>67.12 Geometry</h3>
+<h3>64.12 Geometry</h3>
 
 <h4>Line segment intersection (CCW test)</h4>
 <pre data-lang="ts">function ccw(a: [number,number], b: [number,number], c: [number,number]): number {
@@ -1420,7 +1421,7 @@ function segmentsIntersect(a: any, b: any, c: any, d: any): boolean {
   return lower.slice(0, -1).concat(upper.slice(0, -1));
 }</pre>
 
-<h3>67.13 50+ Problems by Pattern (quick reference)</h3>
+<h3>64.13 50+ Problems by Pattern (quick reference)</h3>
 
 <h4>Two pointers</h4>
 <ol>

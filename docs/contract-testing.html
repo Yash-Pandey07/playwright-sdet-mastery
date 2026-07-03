@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Contract Testing (Pact) | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Contract Testing (Pact) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, contract-testing, testing, automation, playwright contract testing pact ">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>49.1 The problem</h3>
+<h3>23.1 The problem</h3>
 <p>Microservice A calls Microservice B. Traditional ways to test the integration:</p>
 <ul>
 <li><strong>End-to-end tests</strong> — slow, flaky, expensive to maintain</li>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 </ul>
 <p>Contract testing: the consumer declares <em>"I send X, expect Y back"</em>; the producer verifies it can satisfy that contract. Producer changes that break the contract fail BEFORE deploy.</p>
 
-<h3>49.2 How Pact works</h3>
+<h3>23.2 How Pact works</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -514,7 +515,7 @@ a.active .search-snippet {
 <div class="caption">Figure — Consumer-Driven Contract flow.</div>
 </div>
 
-<h3>49.3 Consumer test (Node)</h3>
+<h3>23.3 Consumer test (Node)</h3>
 <pre data-lang="ts">// users-client.consumer.spec.ts
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 const { like, eachLike, integer, string } = MatchersV3;
@@ -546,14 +547,14 @@ test('GET /users/42', async () =&gt; {
 
 <p>Result: a JSON pact file in <code class="inline">pacts/web-users-api.json</code> describing the interaction.</p>
 
-<h3>49.4 Publishing to the broker</h3>
+<h3>23.4 Publishing to the broker</h3>
 <pre data-lang="bash">npm i -D @pact-foundation/pact-node
 pact-broker publish ./pacts \
   --consumer-app-version=$GIT_SHA \
   --branch=$GIT_BRANCH \
   --broker-base-url=https://pact-broker.acme.com</pre>
 
-<h3>49.5 Provider verification (Java)</h3>
+<h3>23.5 Provider verification (Java)</h3>
 <pre data-lang="java">@Provider("users-api")
 @PactBroker(url = "https://pact-broker.acme.com")
 public class UsersApiPactTest {
@@ -577,7 +578,7 @@ public class UsersApiPactTest {
   }
 }</pre>
 
-<h3>49.6 Pact Broker</h3>
+<h3>23.6 Pact Broker</h3>
 <p>Central service for pact storage and orchestration. Key features:</p>
 <ul>
 <li>Store every pact + version</li>
@@ -589,7 +590,7 @@ public class UsersApiPactTest {
 <pre data-lang="bash"># Gate deploy
 pact-broker can-i-deploy --pacticipant web --version $GIT_SHA --to-environment production</pre>
 
-<h3>49.7 Matchers (the magic)</h3>
+<h3>23.7 Matchers (the magic)</h3>
 <p>You don't pin exact values — you specify <strong>shapes</strong>. Producer can return different ACTUAL values; only the shape must match.</p>
 <table>
 <tr><th>Matcher</th><th>Means</th></tr>
@@ -601,7 +602,7 @@ pact-broker can-i-deploy --pacticipant web --version $GIT_SHA --to-environment p
 <tr><td><code class="inline">timestamp('yyyy-MM-dd', example)</code></td><td>Date format</td></tr>
 </table>
 
-<h3>49.8 Contract vs Schema vs E2E</h3>
+<h3>23.8 Contract vs Schema vs E2E</h3>
 <table>
 <tr><th>Approach</th><th>Catches</th><th>Misses</th></tr>
 <tr><td>OpenAPI schema check</td><td>Type/structure changes</td><td>Semantic mismatch (right shape, wrong meaning)</td></tr>

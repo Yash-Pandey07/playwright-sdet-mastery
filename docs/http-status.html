@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>HTTP Status Codes | Playwright SDET Mastery</title>
   <meta name="description" content="Learn HTTP Status Codes — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, http-status, testing, automation, playwright http status codes">
@@ -475,7 +476,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>25.1 1xx — Informational</h3>
+<h3>18.1 1xx — Informational</h3>
 <table>
 <tr><th>Code</th><th>Meaning</th><th>Notes</th></tr>
 <tr><td>100 Continue</td><td>Server received headers, send the body</td><td>Used with Expect: 100-continue for large uploads</td></tr>
@@ -483,7 +484,7 @@ a.active .search-snippet {
 <tr><td>103 Early Hints</td><td>Preload hints before final response</td><td>Modern perf optimization</td></tr>
 </table>
 
-<h3>25.2 2xx — Success</h3>
+<h3>18.2 2xx — Success</h3>
 <table>
 <tr><th>Code</th><th>Meaning</th><th>Common usage</th></tr>
 <tr><td>200 OK</td><td>Generic success</td><td>GET response with body, PUT/PATCH success</td></tr>
@@ -493,7 +494,7 @@ a.active .search-snippet {
 <tr><td>206 Partial Content</td><td>Range request fulfilled</td><td>Video streaming, resumable downloads</td></tr>
 </table>
 
-<h3>25.3 3xx — Redirection</h3>
+<h3>18.3 3xx — Redirection</h3>
 <table>
 <tr><th>Code</th><th>Meaning</th><th>SDET notes</th></tr>
 <tr><td>301 Moved Permanently</td><td>URL changed forever</td><td>SEO + browser caches the redirect</td></tr>
@@ -504,7 +505,7 @@ a.active .search-snippet {
 <tr><td>308 Permanent Redirect</td><td>Like 301 but preserves method</td><td>Newer, replaces 301 in REST APIs</td></tr>
 </table>
 
-<h3>25.4 4xx — Client error</h3>
+<h3>18.4 4xx — Client error</h3>
 <table>
 <tr><th>Code</th><th>Meaning</th><th>Test scenarios</th></tr>
 <tr><td>400 Bad Request</td><td>Malformed request</td><td>Bad JSON, missing required field</td></tr>
@@ -531,7 +532,7 @@ a.active .search-snippet {
 <tr><td>451 Unavailable For Legal Reasons</td><td>Censorship / DMCA</td><td>Geo / content block</td></tr>
 </table>
 
-<h3>25.5 5xx — Server error</h3>
+<h3>18.5 5xx — Server error</h3>
 <table>
 <tr><th>Code</th><th>Meaning</th><th>Common cause</th></tr>
 <tr><td>500 Internal Server Error</td><td>Unhandled exception</td><td>The bug you file. Server should not show stack to client.</td></tr>
@@ -545,7 +546,7 @@ a.active .search-snippet {
 <tr><td>511 Network Authentication Required</td><td>Captive portal</td><td>Wi-Fi needs sign-in</td></tr>
 </table>
 
-<h3>25.6 HTTP Methods + idempotency</h3>
+<h3>18.6 HTTP Methods + idempotency</h3>
 <table>
 <tr><th>Method</th><th>Purpose</th><th>Safe</th><th>Idempotent</th><th>Cacheable</th></tr>
 <tr><td>GET</td><td>Retrieve resource</td><td>✓</td><td>✓</td><td>✓</td></tr>
@@ -561,7 +562,7 @@ a.active .search-snippet {
 
 <p><strong>Safe</strong>: doesn't modify server state. <strong>Idempotent</strong>: calling N times has same effect as 1 time. Idempotent methods can be safely retried by clients on network errors — non-idempotent (POST) can't without an idempotency key.</p>
 
-<h3>25.7 Headers SDETs actually use</h3>
+<h3>18.7 Headers SDETs actually use</h3>
 
 <h4>Request headers</h4>
 <table>
@@ -601,7 +602,7 @@ a.active .search-snippet {
 <tr><td>Access-Control-Allow-Origin</td><td>CORS — who can access</td></tr>
 </table>
 
-<h3>25.8 Caching with ETag</h3>
+<h3>18.8 Caching with ETag</h3>
 <pre data-lang="bash"># First request
 GET /api/products/42
 &lt;-- 200 OK
@@ -615,7 +616,7 @@ GET /api/products/42
 &lt;-- 304 Not Modified
     (no body — client uses cached version)</pre>
 
-<h3>25.9 CORS preflight (OPTIONS)</h3>
+<h3>18.9 CORS preflight (OPTIONS)</h3>
 <p>Browsers send a preflight OPTIONS request before a "non-simple" cross-origin request (custom headers, non-GET/HEAD/POST, etc.). The server's response decides whether the actual request is allowed.</p>
 
 <pre data-lang="bash">OPTIONS /api/orders HTTP/1.1

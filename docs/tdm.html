@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Test Data Management | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Test Data Management — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, tdm, testing, automation, playwright test data management">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>31.1 Bad TDM looks like…</h3>
+<h3>38.1 Bad TDM looks like…</h3>
 <ul>
 <li>Tests fail Monday because "the QA data got refreshed over the weekend"</li>
 <li>Engineer A's test depends on User #42 that Engineer B deleted</li>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <li>Personal data of real customers ends up in the test environment</li>
 </ul>
 
-<h3>31.2 The four classical TDM strategies</h3>
+<h3>38.2 The four classical TDM strategies</h3>
 <table>
 <tr><th>Strategy</th><th>What it is</th><th>Pros</th><th>Cons</th></tr>
 <tr><td>Production clone</td><td>Copy of prod DB</td><td>Realistic data</td><td>PII exposure, expensive to refresh, hard to mutate</td></tr>
@@ -495,7 +496,7 @@ a.active .search-snippet {
 <tr><td>Hybrid</td><td>Synthetic for most, masked-prod for hard cases</td><td>Best of both</td><td>Most plumbing</td></tr>
 </table>
 
-<h3>31.3 Per-test factories (code-driven TDM)</h3>
+<h3>38.3 Per-test factories (code-driven TDM)</h3>
 <pre data-lang="ts">// src/factories/userFactory.ts
 import { faker } from '@faker-js/faker';
 import type { APIRequestContext } from '@playwright/test';
@@ -530,7 +531,7 @@ export async function deleteUser(api: APIRequestContext, id: string) {
   },
 });</pre>
 
-<h3>31.4 Builder pattern for complex objects</h3>
+<h3>38.4 Builder pattern for complex objects</h3>
 <pre data-lang="ts">class OrderBuilder {
   private order: Partial&lt;Order&gt; = { items: [], status: 'pending' };
   withUser(u: User)          { this.order.userId = u.id; return this; }
@@ -545,7 +546,7 @@ export async function deleteUser(api: APIRequestContext, id: string) {
 const order = await new OrderBuilder()
   .withUser(user).withItem('SHOE-42', 2).withCoupon('TEST50').build(request);</pre>
 
-<h3>31.5 Per-tenant isolation</h3>
+<h3>38.5 Per-tenant isolation</h3>
 <p>Each parallel test slot gets its own tenant (a top-level data namespace). Tests within a slot share the tenant safely; tests across slots can't collide.</p>
 <pre data-lang="ts">// fixtures.ts
 export const test = base.extend&lt;{}, { tenant: string }&gt;({
@@ -556,7 +557,7 @@ export const test = base.extend&lt;{}, { tenant: string }&gt;({
 });</pre>
 <p>The factory / API call includes <code class="inline">tenant</code> in headers; the backend scopes data accordingly.</p>
 
-<h3>31.6 PII masking — non-negotiable for prod-derived data</h3>
+<h3>38.6 PII masking — non-negotiable for prod-derived data</h3>
 <table>
 <tr><th>Field</th><th>Mask example</th></tr>
 <tr><td>Email</td><td><code class="inline">user-7a3f@masked.test</code></td></tr>
@@ -569,21 +570,21 @@ export const test = base.extend&lt;{}, { tenant: string }&gt;({
 </table>
 <p>Tools: Tonic.ai, Delphix, GDPR-mask, custom Python pipeline. Whatever you pick: keep the mapping <em>deterministic</em> within a refresh (the same prod email always maps to the same test email) — otherwise referential integrity breaks.</p>
 
-<h3>31.7 Cleanup &amp; leases</h3>
+<h3>38.7 Cleanup &amp; leases</h3>
 <ul>
 <li>Per-test factories should clean up via teardown (covered above).</li>
 <li>For long-lived seeds (one user per slot), use leases: "this slot owns user X for the next 1 hour". Expire on TTL so crashed runs don't lock data forever.</li>
 <li>Nightly job: delete all <code class="inline">qa-slot-*</code> records older than 7 days — catches leaks.</li>
 </ul>
 
-<h3>31.8 Time-sensitive data</h3>
+<h3>38.8 Time-sensitive data</h3>
 <ul>
 <li><strong>Frozen clocks</strong> — backend exposes a test-only endpoint to set "now". Tests asserting on relative times (e.g. "expires in 2 days") need this.</li>
 <li><strong>Schedule fast-forward</strong> — endpoint to advance time (cron triggers, expiry).</li>
 <li><strong>Playwright clock API</strong> — <code class="inline">page.clock.install()</code> + <code class="inline">page.clock.setSystemTime</code> freeze the browser clock for client-side date logic.</li>
 </ul>
 
-<h3>31.9 Common SDET TDM mistakes</h3>
+<h3>38.9 Common SDET TDM mistakes</h3>
 <ul>
 <li>Hardcoded ids that "always work" — until they don't (env reset, parallel run)</li>
 <li>Reusing the same email and getting 409 in parallel tests</li>

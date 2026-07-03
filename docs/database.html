@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Database Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Database Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, database, testing, automation, playwright database testing">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>7.1 Why DB testing exists</h3>
+<h3>21.1 Why DB testing exists</h3>
 <p>An API can return 200 OK while the underlying DB silently corrupts data. UI can show "Saved" while the row never landed. DB tests verify the <em>actual state of the world</em>, not what the surface layer claims.</p>
 
 <h4>What to validate</h4>
@@ -489,7 +490,7 @@ a.active .search-snippet {
 <li><strong>Calculated fields</strong> — totals match line items × prices</li>
 </ul>
 
-<h3>7.2 Where DB checks fit in an E2E flow</h3>
+<h3>21.2 Where DB checks fit in an E2E flow</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -519,7 +520,7 @@ a.active .search-snippet {
 <div class="caption">Figure 7 — DB assertions sit at the end of an E2E flow, verifying the ground truth.</div>
 </div>
 
-<h3>7.3 Connecting from a Node test (PostgreSQL example)</h3>
+<h3>21.3 Connecting from a Node test (PostgreSQL example)</h3>
 <pre data-lang="ts">// pg connection pool as a worker-scoped fixture
 import { test as base, expect } from '@playwright/test';
 import { Pool } from 'pg';
@@ -560,7 +561,7 @@ test('order persists with correct total', async ({ page, db, request }) =&gt; {
   expect(Number(rows[0].total)).toBe(99.00);
 });</pre>
 
-<h3>7.4 JDBC example (Java)</h3>
+<h3>21.4 JDBC example (Java)</h3>
 <pre data-lang="java">import java.sql.*;
 
 public class OrderDbCheck {
@@ -590,7 +591,7 @@ public class OrderDbCheck {
   assertEquals(o.total, new BigDecimal("99.00"));
 }</pre>
 
-<h3>7.5 SQL essentials for SDETs</h3>
+<h3>21.5 SQL essentials for SDETs</h3>
 
 <h4>SELECT with WHERE</h4>
 <pre data-lang="sql">SELECT id, email, created_at
@@ -639,7 +640,7 @@ FROM users
 WHERE email = 'qa@test.com';
 -- expected: deleted_at IS NOT NULL</pre>
 
-<h3>7.6 Typical SDET DB assertion patterns</h3>
+<h3>21.6 Typical SDET DB assertion patterns</h3>
 
 <h4>Pattern 1 — verify UI/API write</h4>
 <pre data-lang="ts">test('signup creates a user record', async ({ page, db }) =&gt; {
@@ -690,7 +691,7 @@ WHERE email = 'qa@test.com';
   expect(rows[0].n).toBe(1);   // idempotent
 });</pre>
 
-<h3>7.7 Pitfalls</h3>
+<h3>21.7 Pitfalls</h3>
 <ul>
 <li><strong>Test isolation</strong> — tests writing to shared tables collide. Solutions: a unique tenant per parallelIndex slot, per-test schema, or transactions you roll back.</li>
 <li><strong>Connection limits</strong> — DBs have max connections. Use a small pool per worker, share via worker-scoped fixture.</li>

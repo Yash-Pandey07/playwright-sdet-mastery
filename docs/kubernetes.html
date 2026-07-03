@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Kubernetes for Testers | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Kubernetes for Testers — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, kubernetes, testing, automation, playwright kubernetes for testers">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>52.1 Mental model</h3>
+<h3>28.1 Mental model</h3>
 <ul>
 <li><strong>Cluster</strong> = control plane + worker nodes</li>
 <li><strong>Node</strong> = VM/host running pods</li>
@@ -488,7 +489,7 @@ a.active .search-snippet {
 <li><strong>Namespace</strong> = logical partition for grouping/quota/access</li>
 </ul>
 
-<h3>52.2 kubectl essentials</h3>
+<h3>28.2 kubectl essentials</h3>
 <pre data-lang="bash">kubectl config use-context staging
 kubectl get nodes
 kubectl get pods -A                    # all namespaces
@@ -504,7 +505,7 @@ kubectl rollout restart deployment web
 kubectl rollout undo deployment web
 kubectl top pod                         # CPU/RAM</pre>
 
-<h3>52.3 A test Job</h3>
+<h3>28.3 A test Job</h3>
 <pre data-lang="yaml">apiVersion: batch/v1
 kind: Job
 metadata:
@@ -528,7 +529,7 @@ spec:
 kubectl logs -f job/e2e-tests-pr-123
 kubectl wait --for=condition=complete --timeout=600s job/e2e-tests-pr-123</pre>
 
-<h3>52.4 Deployment + Service + Ingress (mini stack)</h3>
+<h3>28.4 Deployment + Service + Ingress (mini stack)</h3>
 <pre data-lang="yaml">apiVersion: apps/v1
 kind: Deployment
 metadata: { name: web }
@@ -568,12 +569,12 @@ spec:
         backend:
           service: { name: web, port: { number: 80 } }</pre>
 
-<h3>52.5 ConfigMap &amp; Secret</h3>
+<h3>28.5 ConfigMap &amp; Secret</h3>
 <pre data-lang="bash">kubectl create configmap app-config --from-literal=db-url=postgres://...
 kubectl create secret generic e2e-secrets --from-literal=admin-pass=hunter2
 kubectl get secret e2e-secrets -o jsonpath='{.data.admin-pass}' | base64 -d</pre>
 
-<h3>52.6 Helm — package manager</h3>
+<h3>28.6 Helm — package manager</h3>
 <pre data-lang="bash">helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install pg bitnami/postgresql --namespace test --create-namespace
 helm upgrade --install web ./charts/web --values prod-values.yaml
@@ -582,7 +583,7 @@ helm template ./charts/web   # render YAML without applying</pre>
 
 <p>A Helm <em>chart</em> templatises YAML. <code class="inline">values.yaml</code> holds defaults; <code class="inline">values-prod.yaml</code> overrides for prod. Common for the SDET's test stack (DB + app + mocks).</p>
 
-<h3>52.7 Observability for tests</h3>
+<h3>28.7 Observability for tests</h3>
 <ul>
 <li><code class="inline">kubectl logs --tail=100 -f pod</code> — live logs</li>
 <li><code class="inline">kubectl get events --sort-by=.metadata.creationTimestamp</code> — recent cluster events</li>
@@ -590,7 +591,7 @@ helm template ./charts/web   # render YAML without applying</pre>
 <li>Lens / k9s — TUI alternatives to kubectl</li>
 </ul>
 
-<h3>52.8 Common SDET use cases</h3>
+<h3>28.8 Common SDET use cases</h3>
 <ul>
 <li><strong>Per-PR test environments</strong> — spin a namespace per PR, deploy app + dependencies, run E2E, destroy on close</li>
 <li><strong>CronJob nightly</strong> — schedule full regression at 2 AM</li>

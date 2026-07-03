@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>JMeter | Playwright SDET Mastery</title>
   <meta name="description" content="Learn JMeter — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, jmeter, testing, automation, playwright jmeter">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>54.1 Mental model</h3>
+<h3>53.1 Mental model</h3>
 <table>
 <tr><th>Element</th><th>What it is</th></tr>
 <tr><td>Test Plan</td><td>Top-level container; one .jmx file</td></tr>
@@ -491,11 +492,11 @@ a.active .search-snippet {
 <tr><td>Timer</td><td>Pause between requests</td></tr>
 </table>
 
-<h3>54.2 First test plan</h3>
+<h3>53.2 First test plan</h3>
 <pre data-lang="bash">jmeter      # GUI mode (only for editing, never for execution)
 jmeter -n -t plan.jmx -l results.jtl -e -o html-report   # CLI (use this for real runs)</pre>
 
-<h3>54.3 Load profile shapes</h3>
+<h3>53.3 Load profile shapes</h3>
 <table>
 <tr><th>Shape</th><th>Pattern</th><th>Use</th></tr>
 <tr><td>Ramp-up</td><td>0 → N users over T seconds</td><td>Find where it starts to break</td></tr>
@@ -505,7 +506,7 @@ jmeter -n -t plan.jmx -l results.jtl -e -o html-report   # CLI (use this for rea
 <tr><td>Stress</td><td>Ramp until break</td><td>Find absolute limit</td></tr>
 </table>
 
-<h3>54.4 Recording via JMeter Proxy</h3>
+<h3>53.4 Recording via JMeter Proxy</h3>
 <ol>
 <li>Add HTTP(S) Test Script Recorder.</li>
 <li>Configure browser to use JMeter as proxy (port 8888).</li>
@@ -513,7 +514,7 @@ jmeter -n -t plan.jmx -l results.jtl -e -o html-report   # CLI (use this for rea
 <li>Clean up: remove asset requests (images, analytics), add timers, parameterise inputs.</li>
 </ol>
 
-<h3>54.5 Data-driven via CSV</h3>
+<h3>53.5 Data-driven via CSV</h3>
 <pre data-lang="bash"># users.csv
 email,password
 alice@test.com,secret1
@@ -523,7 +524,7 @@ bob@test.com,secret2
 # In HTTP sampler: body = {"email": "${email}", "password": "${password}"}
 # Each iteration reads the next row.</pre>
 
-<h3>54.6 Correlations — extracting + reusing</h3>
+<h3>53.6 Correlations — extracting + reusing</h3>
 <p>The response of one request often contains a token/id the next request needs. Use a post-processor:</p>
 <ul>
 <li><strong>JSON Extractor</strong> — JSONPath into a variable</li>
@@ -534,7 +535,7 @@ bob@test.com,secret2
 <pre data-lang="bash"># JSON Extractor: $.access_token → token
 # Next sampler header: Authorization: Bearer ${token}</pre>
 
-<h3>54.7 Assertions</h3>
+<h3>53.7 Assertions</h3>
 <ul>
 <li>Response Assertion — status code, contains string, doesn't contain, regex</li>
 <li>JSON Assertion — validate JSONPath value</li>
@@ -542,7 +543,7 @@ bob@test.com,secret2
 <li>Size Assertion — response body within size range</li>
 </ul>
 
-<h3>54.8 Distributed run (master + slaves)</h3>
+<h3>53.8 Distributed run (master + slaves)</h3>
 <pre data-lang="bash"># On slave machines (default port 1099)
 jmeter-server
 
@@ -551,7 +552,7 @@ jmeter -n -t plan.jmx -R slave1,slave2,slave3 -l results.jtl
 
 # Or use Docker/k8s for ephemeral clusters</pre>
 
-<h3>54.9 Reading results</h3>
+<h3>53.9 Reading results</h3>
 <table>
 <tr><th>Metric</th><th>What it tells you</th></tr>
 <tr><td>Throughput (req/s)</td><td>Capacity</td></tr>
@@ -564,7 +565,7 @@ jmeter -n -t plan.jmx -R slave1,slave2,slave3 -l results.jtl
 
 <div class="warn"><b>Average lies</b>A handful of 30-second responses can hide behind a "200 ms average". Always quote p95/p99, not average.</div>
 
-<h3>54.10 JMeter vs k6 vs Gatling vs Locust</h3>
+<h3>53.10 JMeter vs k6 vs Gatling vs Locust</h3>
 <table>
 <tr><th>Tool</th><th>Lang</th><th>Style</th><th>Strengths</th></tr>
 <tr><td>JMeter</td><td>Java / XML</td><td>GUI-first, samplers</td><td>Mature, plugins for everything (JMS, JDBC, MQTT)</td></tr>

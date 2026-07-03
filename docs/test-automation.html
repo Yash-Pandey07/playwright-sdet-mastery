@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Test Automation Architecture | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Test Automation Architecture — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, test-automation, testing, automation, playwright test automation architecture">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>20.1 The two shapes of a healthy suite</h3>
+<h3>34.1 The two shapes of a healthy suite</h3>
 <div class="cmp">
 <div class="col">
 <h5>Pyramid (Mike Cohn)</h5>
@@ -503,7 +504,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>Practical SDET split</b>5–10% E2E (Playwright), 20–30% API/integration (Playwright request, REST Assured), 60–70% unit (the dev's responsibility). If the pyramid inverts and your team relies on hundreds of slow E2Es to find bugs, the suite is in trouble.</div>
 
-<h3>20.2 Layered framework architecture</h3>
+<h3>34.2 Layered framework architecture</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 280" xmlns="http://www.w3.org/2000/svg">
   <g font-size="12" fill="#e6edf3">
@@ -530,7 +531,7 @@ a.active .search-snippet {
 <div class="caption">Figure 13 — Layers depend downward only. Tests never know about Playwright directly; pages never construct browsers.</div>
 </div>
 
-<h3>20.3 Folder structure that scales</h3>
+<h3>34.3 Folder structure that scales</h3>
 <pre data-lang="bash">/tests
   /e2e             # full user journeys (Playwright)
   /api             # pure HTTP chains
@@ -552,7 +553,7 @@ a.active .search-snippet {
 /.env.example
 /README.md</pre>
 
-<h3>20.4 Patterns — which to use when</h3>
+<h3>34.4 Patterns — which to use when</h3>
 
 <h4>(a) Page Object Model (POM) — default</h4>
 <pre data-lang="ts">// pages/LoginPage.ts
@@ -575,7 +576,7 @@ export class LoginPage {
 <h4>(c) App Actions — bypass UI for setup</h4>
 <p>Instead of going through the UI to set up state ("click sign-up, fill, submit, verify email…"), expose a test-only API that creates state directly. Drastically faster. Used heavily in frontend frameworks; SDETs apply it via API setup + UI verify (covered in Module 5).</p>
 
-<h3>20.5 Service classes — keep test code thin</h3>
+<h3>34.5 Service classes — keep test code thin</h3>
 <pre data-lang="ts">// services/UserService.ts
 export class UserService {
   constructor(private api: APIRequestContext) {}
@@ -593,7 +594,7 @@ export class UserService {
 // In a test
 const user = await new UserService(request).create({ role: 'admin' });</pre>
 
-<h3>20.6 Test data strategy</h3>
+<h3>34.6 Test data strategy</h3>
 <table>
 <tr><th>Pattern</th><th>What it is</th><th>When to use</th></tr>
 <tr><td>Factory</td><td>Function that returns a default valid object, overridable</td><td>Most cases — flexible, readable</td></tr>
@@ -619,7 +620,7 @@ export function userFactory(over: Partial&lt;User&gt; = {}): User {
 const admin = userFactory({ role: 'admin' });
 const ten = Array.from({ length: 10 }, () =&gt; userFactory());</pre>
 
-<h3>20.7 Configuration across environments</h3>
+<h3>34.7 Configuration across environments</h3>
 <pre data-lang="ts">// config/env.ts
 import 'dotenv/config';
 import { z } from 'zod';
@@ -636,7 +637,7 @@ const Env = z.object({
 export const env = Env.parse(process.env);
 /* Fails loudly at startup if any var is missing or malformed. */</pre>
 
-<h3>20.8 Logging and observability</h3>
+<h3>34.8 Logging and observability</h3>
 <ul>
 <li><strong>Trace + screenshot + video</strong> on retry/failure — Playwright built-in</li>
 <li><strong>Structured logs</strong> from helpers — JSON lines so they're parseable by Datadog/Splunk</li>
@@ -645,7 +646,7 @@ export const env = Env.parse(process.env);
 <li><strong>Custom metrics</strong> — test runtime trend, retry rate per test, flakiness score in a time-series DB (Grafana)</li>
 </ul>
 
-<h3>20.9 Anti-patterns — what to avoid</h3>
+<h3>34.9 Anti-patterns — what to avoid</h3>
 <ul>
 <li><strong>God Page Object</strong> — one class with 200 methods. Split by component / feature.</li>
 <li><strong>Selectors in tests</strong> — never. Page objects own selectors.</li>
@@ -657,7 +658,7 @@ export const env = Env.parse(process.env);
 <li><strong>Catching errors silently</strong> — wraps masks bugs. Let them throw.</li>
 </ul>
 
-<h3>20.10 Maintenance plan (sustainable suite)</h3>
+<h3>34.10 Maintenance plan (sustainable suite)</h3>
 <ol>
 <li><strong>Weekly</strong> — review CI flake rate. Top 3 flakiest go to quarantine with a JIRA.</li>
 <li><strong>Sprintly</strong> — drop 1 quarantined test (fix or delete). Review test pyramid mix.</li>

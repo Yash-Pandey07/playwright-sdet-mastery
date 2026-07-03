@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>DSA Fundamentals | Playwright SDET Mastery</title>
   <meta name="description" content="Learn DSA Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, dsa, testing, automation, playwright dsa fundamentals">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>37.1 Complexity — the alphabet</h3>
+<h3>61.1 Complexity — the alphabet</h3>
 <table>
 <tr><th>Notation</th><th>Meaning</th></tr>
 <tr><td>Big-O — O(f)</td><td>Upper bound — "grows no faster than f"</td></tr>
@@ -498,7 +499,7 @@ a.active .search-snippet {
 <tr><td>O(n!)</td><td>All permutations</td><td>Brute force; need pruning</td></tr>
 </table>
 
-<h3>37.2 Arrays &amp; Strings</h3>
+<h3>61.2 Arrays &amp; Strings</h3>
 <ul>
 <li>Contiguous memory; O(1) index access; O(n) insert/delete in middle</li>
 <li>Dynamic arrays (JS Array, Python list) — amortised O(1) push, resize doubles capacity</li>
@@ -516,7 +517,7 @@ function prefix(nums: number[]): number[] {
 }
 // rangeSum(l, r) = p[r+1] - p[l]</pre>
 
-<h3>37.3 Hashmaps &amp; Sets</h3>
+<h3>61.3 Hashmaps &amp; Sets</h3>
 <ul>
 <li>Average O(1) insert/lookup; worst case O(n) with adversarial keys</li>
 <li>Use Set when you only need membership; Map when you need a value per key</li>
@@ -524,7 +525,7 @@ function prefix(nums: number[]): number[] {
 <li>Hash collisions in practice are extremely rare for non-adversarial workloads</li>
 </ul>
 
-<h3>37.4 Stacks &amp; Queues</h3>
+<h3>61.4 Stacks &amp; Queues</h3>
 <table>
 <tr><th>Structure</th><th>Order</th><th>Operations</th></tr>
 <tr><td>Stack</td><td>LIFO</td><td>push, pop, peek (top) — all O(1)</td></tr>
@@ -535,7 +536,7 @@ function prefix(nums: number[]): number[] {
 
 <p>JS arrays approximate all four — <code class="inline">push/pop</code> for stack, <code class="inline">push/shift</code> for queue (but <code class="inline">shift</code> is O(n)!). For real queue use a linked list or a JS class.</p>
 
-<h3>37.5 Linked Lists</h3>
+<h3>61.5 Linked Lists</h3>
 <pre data-lang="ts">class Node { val: number; next: Node | null = null; constructor(v: number) { this.val = v; } }
 
 // Insert at head — O(1)
@@ -552,7 +553,7 @@ function reverse(head: Node | null): Node | null {
 
 <p>When to use a linked list: O(1) insert/delete at known positions; no random access required. Most real code uses arrays — linked lists are interview territory.</p>
 
-<h3>37.6 Trees</h3>
+<h3>61.6 Trees</h3>
 <table>
 <tr><th>Tree type</th><th>Property</th><th>Used for</th></tr>
 <tr><td>Binary tree</td><td>Each node ≤ 2 children</td><td>Generic hierarchical data</td></tr>
@@ -592,7 +593,7 @@ function bfs(root: TreeNode | null): number[] {
   return out;
 }</pre>
 
-<h3>37.7 Graphs</h3>
+<h3>61.7 Graphs</h3>
 <p>A graph = nodes + edges. Directed or undirected, weighted or not, cyclic or acyclic.</p>
 
 <h4>Representations</h4>
@@ -613,7 +614,7 @@ function bfs(root: TreeNode | null): number[] {
 <tr><td>Union-Find</td><td>Connected components</td><td>Nearly O(1) per op</td></tr>
 </table>
 
-<h3>37.8 Sorting</h3>
+<h3>61.8 Sorting</h3>
 <table>
 <tr><th>Algorithm</th><th>Time avg</th><th>Time worst</th><th>Stable?</th></tr>
 <tr><td>Bubble / Insertion</td><td>O(n²)</td><td>O(n²)</td><td>Yes</td></tr>
@@ -624,7 +625,7 @@ function bfs(root: TreeNode | null): number[] {
 <tr><td>JS Array.sort (V8)</td><td>O(n log n)</td><td>O(n log n)</td><td>Yes (Timsort since 2019)</td></tr>
 </table>
 
-<h3>37.9 Recursion &amp; DP</h3>
+<h3>61.9 Recursion &amp; DP</h3>
 
 <h4>Recursion basics</h4>
 <ul>
@@ -655,7 +656,7 @@ function fib(n: number): number {
 }
 // O(n) time, O(1) space</pre>
 
-<h3>37.10 When to use which</h3>
+<h3>61.10 When to use which</h3>
 <table>
 <tr><th>Need</th><th>Pick</th></tr>
 <tr><td>Random access by index</td><td>Array</td></tr>
@@ -720,7 +721,7 @@ function fib(n: number): number {
 <div class="answer">When the natural definition is recursive — tree/graph traversal, divide-and-conquer (mergesort), backtracking (permutations). For linear iteration, plain loops are clearer and have no stack risk.</div></details>
 </div>
 
-<h3>37.11 Advanced data structures (dev-level)</h3>
+<h3>61.11 Advanced data structures (dev-level)</h3>
 
 <h4>Fenwick tree (Binary Indexed Tree)</h4>
 <p>O(log n) prefix sums with point updates. Compact array implementation.</p>
@@ -794,7 +795,7 @@ function fib(n: number): number {
 <h4>LRU cache (O(1) all ops)</h4>
 <p>Hashmap + doubly-linked list. Map keys → list nodes. Move to head on access; evict tail on overflow. (See dev ebook m41 for full implementation.)</p>
 
-<h3>37.12 Graph algorithms (advanced)</h3>
+<h3>61.12 Graph algorithms (advanced)</h3>
 <table>
 <tr><th>Algorithm</th><th>Purpose</th><th>Complexity</th></tr>
 <tr><td>Dijkstra</td><td>Single-source shortest path (non-negative weights)</td><td>O((V+E) log V) with heap</td></tr>
@@ -807,7 +808,7 @@ function fib(n: number): number {
 <tr><td>Max-flow (Dinic's)</td><td>Network capacity</td><td>O(V²·E)</td></tr>
 </table>
 
-<h3>37.13 Dynamic programming patterns (complete catalogue)</h3>
+<h3>61.13 Dynamic programming patterns (complete catalogue)</h3>
 <table>
 <tr><th>Pattern</th><th>Example problems</th></tr>
 <tr><td>1D state</td><td>Fibonacci, climb stairs, house robber, max subarray (Kadane)</td></tr>
@@ -822,7 +823,7 @@ function fib(n: number): number {
 <tr><td>DP on graphs</td><td>Longest path in DAG, count paths</td></tr>
 </table>
 
-<h3>37.14 Bit manipulation</h3>
+<h3>61.14 Bit manipulation</h3>
 <pre data-lang="ts">x &amp; (x - 1)        // clears lowest set bit (Brian Kernighan)
 x &amp; -x             // isolates lowest set bit
 x | (1 &lt;&lt; k)       // set bit k
@@ -841,7 +842,7 @@ function popcount(x: number): number {
 // Swap without temp
 a ^= b; b ^= a; a ^= b;</pre>
 
-<h3>37.15 Math you'll use</h3>
+<h3>61.15 Math you'll use</h3>
 <ul>
 <li><strong>Modular arithmetic</strong> — large number ops mod prime; (a + b) % m, (a * b) % m, Fermat's little theorem for inverse</li>
 <li><strong>GCD (Euclidean)</strong>: <code class="inline">gcd(a,b) = b == 0 ? a : gcd(b, a % b)</code></li>
@@ -851,7 +852,7 @@ a ^= b; b ^= a; a ^= b;</pre>
 <li><strong>Reservoir sampling</strong> — pick K from a stream of unknown length, uniform probability</li>
 </ul>
 
-<h3>37.16 SDET-flavoured DSA scenarios (interview-real)</h3>
+<h3>61.16 SDET-flavoured DSA scenarios (interview-real)</h3>
 <ol>
 <li><strong>Test selection algorithm</strong> — given a diff (set of changed files) + a coverage map (test → files covered), select minimum tests covering all changed files (set cover, greedy approximation)</li>
 <li><strong>Flake detection</strong> — given a stream of test results (pass/fail per run), detect tests with failure rate &gt; X% in sliding window of N (sliding window + counter)</li>

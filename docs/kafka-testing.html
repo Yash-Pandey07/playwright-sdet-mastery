@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Microservices & Kafka Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Microservices & Kafka Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, kafka-testing, testing, automation, playwright microservices kafka testing">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>56.1 Microservices testing pyramid</h3>
+<h3>51.1 Microservices testing pyramid</h3>
 <ol>
 <li><strong>Unit</strong> — within one service</li>
 <li><strong>Component</strong> — service in isolation with real DB, mocked deps</li>
@@ -487,7 +488,7 @@ a.active .search-snippet {
 <li><strong>Synthetic monitoring</strong> — prod heartbeat (Module 30)</li>
 </ol>
 
-<h3>56.2 Kafka in 5 minutes</h3>
+<h3>51.2 Kafka in 5 minutes</h3>
 <ul>
 <li><strong>Topic</strong> — named append-only log</li>
 <li><strong>Partition</strong> — topic split into ordered shards for parallelism</li>
@@ -498,7 +499,7 @@ a.active .search-snippet {
 <li><strong>Broker</strong> — Kafka server node; cluster = many brokers</li>
 </ul>
 
-<h3>56.3 Producing + consuming from tests (Node)</h3>
+<h3>51.3 Producing + consuming from tests (Node)</h3>
 <pre data-lang="ts">import { Kafka } from 'kafkajs';
 const kafka = new Kafka({ clientId: 'test', brokers: ['localhost:9092'] });
 
@@ -526,7 +527,7 @@ test('publishing an order triggers an email', async () =&gt; {
   await consumer.disconnect();
 });</pre>
 
-<h3>56.4 Schema registry + Avro/Protobuf</h3>
+<h3>51.4 Schema registry + Avro/Protobuf</h3>
 <p>Producers and consumers agree on a binary schema; the registry stores versions. Why it matters for tests:</p>
 <ul>
 <li>Backward/forward compatibility rules prevent breaking changes</li>
@@ -534,7 +535,7 @@ test('publishing an order triggers an email', async () =&gt; {
 <li>Consumers can be tested against old + new schema versions</li>
 </ul>
 
-<h3>56.5 Async assertion patterns</h3>
+<h3>51.5 Async assertion patterns</h3>
 <pre data-lang="ts">// expect.poll — retry an async check
 await expect.poll(async () =&gt; {
   const r = await db.query("SELECT status FROM orders WHERE id = $1", ['ord-1']);
@@ -557,7 +558,7 @@ async function awaitMessage(topic: string, match: (v: any) =&gt; boolean, timeou
   });
 }</pre>
 
-<h3>56.6 Idempotency &amp; retries</h3>
+<h3>51.6 Idempotency &amp; retries</h3>
 <ul>
 <li><strong>At-least-once delivery</strong> is the default — your consumer might process the same message twice. Always design idempotent handlers.</li>
 <li>Test it: send the same message twice with the same key, verify the side effect happens once.</li>
@@ -565,10 +566,10 @@ async function awaitMessage(topic: string, match: (v: any) =&gt; boolean, timeou
 <li>Test DLQ: produce a poison message, verify it lands in the DLQ after retry budget exhausts.</li>
 </ul>
 
-<h3>56.7 Eventual consistency</h3>
+<h3>51.7 Eventual consistency</h3>
 <p>In an event-driven system the DB write happens, then events propagate to downstream services and update their projections. Tests must wait for that propagation — never sleep for a fixed time; poll on the observable end state.</p>
 
-<h3>56.8 Tools</h3>
+<h3>51.8 Tools</h3>
 <table>
 <tr><th>Tool</th><th>Purpose</th></tr>
 <tr><td>Testcontainers Kafka</td><td>Spin a real Kafka per test suite</td></tr>
@@ -578,13 +579,13 @@ async function awaitMessage(topic: string, match: (v: any) =&gt; boolean, timeou
 <tr><td>Pact Message</td><td>Contract testing for event payloads</td></tr>
 </table>
 
-<h3>56.9 Service mesh / observability</h3>
+<h3>51.9 Service mesh / observability</h3>
 <ul>
 <li><strong>Distributed tracing</strong> (Jaeger, Datadog APM, OpenTelemetry) — correlates a request across services via a trace id. Tests can assert that a request produced the expected span graph.</li>
 <li><strong>Service mesh</strong> (Istio, Linkerd) — sidecar proxies handle retries, timeouts, mTLS. Tests verify policies (e.g. circuit breaker opens after N failures).</li>
 </ul>
 
-<h3>56.10 Chaos engineering for microservices</h3>
+<h3>51.10 Chaos engineering for microservices</h3>
 <ul>
 <li>Kill a pod (Chaos Mesh / Litmus) — verify retries handle it</li>
 <li>Inject latency to a downstream — verify timeouts + circuit breaker</li>

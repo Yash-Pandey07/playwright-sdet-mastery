@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Locator Playground | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Locator Playground — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, locator-playground, testing, automation, playwright locator playground">
@@ -473,7 +474,7 @@ a.active .search-snippet {
 <li>Right panel shows match count, accessible name, role, and the Playwright code line</li>
 <li>Try fail cases: too many matches (strict-mode violation), no matches, wrong role</li>
 </ul>
-<p style="margin-top:8px"><b>Offline limitation:</b> the playground works on HTML you paste, not on remote URLs (browser CORS rules block cross-origin DOM access from a file://). To target a live site, use <code class="inline">npx playwright codegen https://site.com</code> and copy locators from the recorder.</p>
+<p style="margin-top:8px"><b>Browser Sandbox Limitation:</b> the playground works on HTML you paste, not on remote URLs (browser CORS rules block cross-origin DOM access). To target a live site, use <code class="inline">npx playwright codegen https://site.com</code> and copy locators from the recorder.</p>
 </div>
 
 <style>
@@ -831,7 +832,7 @@ if (document.readyState === 'loading') {
 }
 </script>
 
-<h3>11.1 Live-site locator workflow</h3>
+<h3>9.1 Live-site locator workflow</h3>
 <ol>
 <li><strong>codegen</strong> — <code class="inline">npx playwright codegen https://your-site.com</code>. Browser opens; every click is converted to Playwright code with the recommended locator. Always clean up the output.</li>
 <li><strong>Inspector locator picker</strong> — during <code class="inline">--debug</code> or <code class="inline">--ui</code>, click the "Pick locator" icon and hover an element.</li>

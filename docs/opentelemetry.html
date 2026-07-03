@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>OpenTelemetry & Grafana | Playwright SDET Mastery</title>
   <meta name="description" content="Learn OpenTelemetry & Grafana — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, opentelemetry, testing, automation, playwright opentelemetry grafana">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>66.1 Three pillars of observability</h3>
+<h3>42.1 Three pillars of observability</h3>
 <table>
 <tr><th>Pillar</th><th>What</th><th>Tool stack</th></tr>
 <tr><td>Logs</td><td>Discrete events with context</td><td>Loki, Elasticsearch, CloudWatch Logs</td></tr>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <tr><td>Traces</td><td>Request flow across services as a tree of spans</td><td>Tempo, Jaeger, Datadog APM</td></tr>
 </table>
 
-<h3>66.2 OpenTelemetry</h3>
+<h3>42.2 OpenTelemetry</h3>
 <p>OTel is the open standard (CNCF) for generating telemetry. One SDK in your app emits traces+metrics+logs in OTLP format; you can swap backends without rewriting instrumentation.</p>
 
 <h4>Components</h4>
@@ -497,7 +498,7 @@ a.active .search-snippet {
 <li><strong>Exporters</strong> — backend-specific writers (OTLP, Prometheus, Jaeger, Datadog)</li>
 </ul>
 
-<h3>66.3 Spans and traces</h3>
+<h3>42.3 Spans and traces</h3>
 <pre data-lang="ts">// Node manual instrumentation
 import { trace } from '@opentelemetry/api';
 const tracer = trace.getTracer('orders-service');
@@ -520,7 +521,7 @@ async function placeOrder(input) {
 
 <p>A <strong>trace</strong> = a tree of spans sharing the same traceId. Propagation happens via the <code class="inline">traceparent</code> HTTP header (W3C Trace Context standard). Downstream services join the same trace.</p>
 
-<h3>66.4 Collector pipeline</h3>
+<h3>42.4 Collector pipeline</h3>
 <pre data-lang="yaml"># otel-collector.yaml
 receivers:
   otlp:
@@ -552,7 +553,7 @@ service:
     metrics: { receivers: [otlp], processors: [batch],            exporters: [prometheus]  }
     logs:    { receivers: [otlp], processors: [batch],            exporters: [loki]        }</pre>
 
-<h3>66.5 Grafana</h3>
+<h3>42.5 Grafana</h3>
 <p>Visualisation layer. Connects to Prometheus (metrics), Loki (logs), Tempo (traces), and others. Dashboards combine all three in one view.</p>
 
 <h4>PromQL essentials</h4>
@@ -562,7 +563,7 @@ histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[
 1 - (sum(rate(http_requests_total{status=~"5.."}[5m])) /
      sum(rate(http_requests_total[5m])))                     # availability</pre>
 
-<h3>66.6 SLI / SLO / error budget</h3>
+<h3>42.6 SLI / SLO / error budget</h3>
 <table>
 <tr><th>Term</th><th>Meaning</th></tr>
 <tr><td>SLI (Service Level Indicator)</td><td>A measurable signal (e.g. p95 latency, availability)</td></tr>
@@ -573,7 +574,7 @@ histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[
 
 <p>If error budget is spent for the month, new feature deploys halt — only reliability work continues until next window. Mechanism to balance velocity vs reliability.</p>
 
-<h3>66.7 SDET use cases for OTel</h3>
+<h3>42.7 SDET use cases for OTel</h3>
 <ul>
 <li>Assert that a test request produced a specific span graph (right services were called, in the right order, with expected attributes)</li>
 <li>Verify error spans on failure paths</li>
@@ -602,7 +603,7 @@ histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[
   expect(names).toContain('email-confirmation');
 });</pre>
 
-<h3>66.8 Logs vs metrics vs traces — when each?</h3>
+<h3>42.8 Logs vs metrics vs traces — when each?</h3>
 <table>
 <tr><th>Use</th><th>Pick</th></tr>
 <tr><td>"What happened at this exact moment for user X?"</td><td>Logs</td></tr>

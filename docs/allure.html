@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Allure Reports (deep) | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Allure Reports (deep) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, allure, testing, automation, playwright allure reports deep ">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>64.1 Why Allure</h3>
+<h3>41.1 Why Allure</h3>
 <ul>
 <li>Rich, stakeholder-friendly HTML report</li>
 <li>Feature/Story/Test hierarchy maps to BAU language</li>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <li>Step-level visibility — see exactly what failed inside a test</li>
 </ul>
 
-<h3>64.2 Setup — Playwright</h3>
+<h3>41.2 Setup — Playwright</h3>
 <pre data-lang="bash">npm i -D allure-playwright allure-commandline</pre>
 <pre data-lang="ts">// playwright.config.ts
 reporter: [
@@ -507,7 +508,7 @@ reporter: [
 npx allure generate ./allure-results -o ./allure-report --clean
 npx allure open ./allure-report</pre>
 
-<h3>64.3 Annotations (Playwright)</h3>
+<h3>41.3 Annotations (Playwright)</h3>
 <pre data-lang="ts">import { test } from '@playwright/test';
 import { allure } from 'allure-playwright';
 
@@ -533,7 +534,7 @@ test('login - happy path', async ({ page }) =&gt; {
   });
 });</pre>
 
-<h3>64.4 Java (TestNG) version</h3>
+<h3>41.4 Java (TestNG) version</h3>
 <pre data-lang="java">@Epic("Authentication")
 @Feature("Login")
 public class LoginTest {
@@ -549,7 +550,7 @@ public class LoginTest {
   }
 }</pre>
 
-<h3>64.5 Attachments</h3>
+<h3>41.5 Attachments</h3>
 <pre data-lang="ts">// Screenshot
 const buf = await page.screenshot();
 await allure.attach('failure-screenshot', buf, 'image/png');
@@ -560,7 +561,7 @@ await allure.attach('response', JSON.stringify(body, null, 2), 'application/json
 // Trace
 await allure.attach('trace.zip', fs.readFileSync('trace.zip'), 'application/zip');</pre>
 
-<h3>64.6 History &amp; trends</h3>
+<h3>41.6 History &amp; trends</h3>
 <p>Allure keeps a <code class="inline">history/</code> folder. To get trends across runs, copy the previous report's <code class="inline">history/</code> into the next run's <code class="inline">allure-results/</code> before generating.</p>
 
 <pre data-lang="bash"># In CI
@@ -573,7 +574,7 @@ await allure.attach('trace.zip', fs.readFileSync('trace.zip'), 'application/zip'
   uses: actions/upload-artifact@v4
   with: { name: allure-history, path: allure-report/history }</pre>
 
-<h3>64.7 Categories (defect classification)</h3>
+<h3>41.7 Categories (defect classification)</h3>
 <pre data-lang="json">// allure-results/categories.json
 [
   { "name": "Product defects", "matchedStatuses": ["failed"] },
@@ -583,7 +584,7 @@ await allure.attach('trace.zip', fs.readFileSync('trace.zip'), 'application/zip'
     "messageRegex": ".*ECONNREFUSED.*|.*ETIMEDOUT.*" }
 ]</pre>
 
-<h3>64.8 Hosting</h3>
+<h3>41.8 Hosting</h3>
 <ul>
 <li>Push the static <code class="inline">allure-report/</code> folder to GitHub Pages / S3 / nginx</li>
 <li>Allure TestOps — SaaS that ingests results from many runs, central dashboard</li>

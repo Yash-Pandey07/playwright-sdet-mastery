@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Performance Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Performance Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, performance, testing, automation, playwright performance testing">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>15.1 Core Web Vitals</h3>
+<h3>13.1 Core Web Vitals</h3>
 <table>
 <tr><th>Metric</th><th>Full name</th><th>Measures</th><th>Good</th><th>Poor</th></tr>
 <tr><td>LCP</td><td>Largest Contentful Paint</td><td>When the largest visible element finishes rendering</td><td>&lt; 2.5 s</td><td>&gt; 4 s</td></tr>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <tr><td>TTFB</td><td>Time To First Byte</td><td>Server response start</td><td>&lt; 800 ms</td><td>&gt; 1.8 s</td></tr>
 </table>
 
-<h3>15.2 Capturing Web Vitals in Playwright</h3>
+<h3>13.2 Capturing Web Vitals in Playwright</h3>
 <pre data-lang="bash">npm i -D web-vitals</pre>
 
 <pre data-lang="ts">test('home page meets web vitals', async ({ page }) =&gt; {
@@ -520,7 +521,7 @@ a.active .search-snippet {
   expect(vitals.FCP).toBeLessThan(1800);
 });</pre>
 
-<h3>15.3 Lighthouse via Playwright</h3>
+<h3>13.3 Lighthouse via Playwright</h3>
 <p>For a full Lighthouse audit (perf, a11y, SEO, best practices) use <code class="inline">playwright-lighthouse</code>:</p>
 <pre data-lang="bash">npm i -D playwright-lighthouse lighthouse</pre>
 
@@ -547,7 +548,7 @@ test('lighthouse perf budget', async () =&gt; {
   await browser.close();
 });</pre>
 
-<h3>15.4 Performance API — fine-grained timings</h3>
+<h3>13.4 Performance API — fine-grained timings</h3>
 <pre data-lang="ts">test('navigation timing budget', async ({ page }) =&gt; {
   await page.goto('/', { waitUntil: 'load' });
   const t = await page.evaluate(() =&gt; {
@@ -571,7 +572,7 @@ test('no resource over 1 MB', async ({ page }) =&gt; {
   expect(heavy, JSON.stringify(heavy, null, 2)).toEqual([]);
 });</pre>
 
-<h3>15.5 Network &amp; CPU throttling</h3>
+<h3>13.5 Network &amp; CPU throttling</h3>
 <p>Real users aren't on a gigabit fibre. Throttle to catch perf bugs that hide on a fast dev machine.</p>
 
 <pre data-lang="ts">// Via CDP session (Chromium)
@@ -592,7 +593,7 @@ test('home is usable on slow 3G', async ({ page, browserName }) =&gt; {
   expect(Date.now() - start).toBeLessThan(8000);
 });</pre>
 
-<h3>15.6 Perf budget — what to track in CI</h3>
+<h3>13.6 Perf budget — what to track in CI</h3>
 <ul>
 <li>LCP and CLS — Web Vitals on critical pages</li>
 <li>Total transfer size (JS + CSS + images) on first load</li>
@@ -601,7 +602,7 @@ test('home is usable on slow 3G', async ({ page, browserName }) =&gt; {
 <li>Bundle size deltas per PR (vs main) — fail if &gt; +5%</li>
 </ul>
 
-<h3>15.7 Where Playwright stops, k6 takes over</h3>
+<h3>13.7 Where Playwright stops, k6 takes over</h3>
 <p>Playwright tests a browser experience. For server-side load testing (5000 RPS, sustained load, ramp-up), use a tool built for it — <strong>k6</strong>, <strong>Gatling</strong>, <strong>Artillery</strong>. They generate concurrent HTTP traffic without paying the cost of a real browser.</p>
 
 <pre data-lang="javascript">// k6 — example smoke load
@@ -650,7 +651,7 @@ export default function () {
 <div class="answer">After navigation, read <code class="inline">performance.getEntriesByType('resource')</code>, filter to entries with <code class="inline">transferSize &gt; threshold</code>, assert the list is empty. A new 5 MB image will trip it instantly.</div></details>
 </div>
 
-<h3>15.8 RUM (Real User Monitoring)</h3>
+<h3>13.8 RUM (Real User Monitoring)</h3>
 <p>Synthetic tests use one machine in one location. RUM captures actual users' diverse devices + networks. The two together = full picture.</p>
 <pre data-lang="ts">// Client-side
 import { onLCP, onINP, onCLS, onFCP, onTTFB } from 'web-vitals';
@@ -668,7 +669,7 @@ function send(metric: any) {
 onLCP(send); onINP(send); onCLS(send); onFCP(send); onTTFB(send);</pre>
 <p>Aggregate server-side by route + device. Alert on p75 degradation.</p>
 
-<h3>15.9 Resource budget enforcement (full CI)</h3>
+<h3>13.9 Resource budget enforcement (full CI)</h3>
 <pre data-lang="ts">test('resource budget', async ({ page }) =&gt; {
   await page.goto('/');
   const res = await page.evaluate(() =&gt; performance.getEntriesByType('resource').map((r: any) =&gt; ({
@@ -682,7 +683,7 @@ onLCP(send); onINP(send); onCLS(send); onFCP(send); onTTFB(send);</pre>
   expect(img).toBeLessThan(500_000);  // 500 KB images on first load
 });</pre>
 
-<h3>15.10 LCP debugging recipe</h3>
+<h3>13.10 LCP debugging recipe</h3>
 <ol>
 <li>Identify the LCP element via DevTools Performance panel</li>
 <li>Check if it's blocked by JS/CSS (look at waterfall)</li>
@@ -694,7 +695,7 @@ onLCP(send); onINP(send); onCLS(send); onFCP(send); onTTFB(send);</pre>
 <li>HTTP/2 server push or 103 Early Hints</li>
 </ol>
 
-<h3>15.11 INP debugging recipe</h3>
+<h3>13.11 INP debugging recipe</h3>
 <ol>
 <li>Find long tasks: <code class="inline">PerformanceObserver({entryTypes:['longtask']})</code></li>
 <li>Break work into chunks: yield via <code class="inline">scheduler.yield()</code> or <code class="inline">setTimeout(0)</code></li>
@@ -704,7 +705,7 @@ onLCP(send); onINP(send); onCLS(send); onFCP(send); onTTFB(send);</pre>
 <li>Defer 3rd-party JS (lazy-load chat, analytics)</li>
 </ol>
 
-<h3>15.12 CLS fixes (concrete)</h3>
+<h3>13.12 CLS fixes (concrete)</h3>
 <ul>
 <li>All images: explicit width + height OR <code class="inline">aspect-ratio</code> CSS</li>
 <li>Fonts: <code class="inline">font-display: optional</code> + preload, or <code class="inline">size-adjust</code> for fallback</li>
@@ -713,7 +714,7 @@ onLCP(send); onINP(send); onCLS(send); onFCP(send); onTTFB(send);</pre>
 <li>Cookie banners: use modal overlay, not layout shift</li>
 </ul>
 
-<h3>15.13 Server-side perf budget</h3>
+<h3>13.13 Server-side perf budget</h3>
 <ul>
 <li>p95 server response &lt; 200 ms</li>
 <li>DB query p95 &lt; 50 ms</li>

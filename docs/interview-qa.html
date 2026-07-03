@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Interview Q&A by Experience | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Interview Q&A by Experience — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, interview-qa, testing, automation, playwright interview q a by experience">
@@ -474,7 +475,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>33.1 1–2 years SDET — Foundations</h3>
+<h3>69.1 1–2 years SDET — Foundations</h3>
 
 <details class="qa"><summary>What's the difference between functional and non-functional testing?</summary>
 <div class="answer">Functional: what the system does — login works, checkout creates an order. Non-functional: how it does it — performance, security, accessibility, usability, scalability.</div></details>
@@ -521,7 +522,7 @@ a.active .search-snippet {
 <details class="qa"><summary>Why use TypeScript over JavaScript for tests?</summary>
 <div class="answer">Compile-time type checking catches bugs before runtime, IDE auto-complete is richer, refactors are safer. Output is plain JS at runtime — no runtime cost.</div></details>
 
-<h3>33.2 3–5 years SDET — Framework &amp; Architecture</h3>
+<h3>69.2 3–5 years SDET — Framework &amp; Architecture</h3>
 
 <details class="qa"><summary>How do you structure a Playwright TS framework?</summary>
 <div class="answer">Layered: tests/ (intent), pages/ (POM), services/ (API clients), fixtures/ (setup), factories/ (data), utils/, config/, data/. Tests don't touch selectors or low-level browser APIs.</div></details>
@@ -562,7 +563,7 @@ a.active .search-snippet {
 <details class="qa"><summary>How do you measure test suite health?</summary>
 <div class="answer">Pass rate, retry rate (proxy for flakiness), runtime p95, top slowest tests, top flakiest tests, coverage trend, escaped-defect rate. Tracked over time as KPIs.</div></details>
 
-<h3>33.3 5–8 years SDET — System Design &amp; Leadership</h3>
+<h3>69.3 5–8 years SDET — System Design &amp; Leadership</h3>
 
 <details class="qa"><summary>Design a test execution platform for 10K tests with 10-min PR SLA.</summary>
 <div class="answer">Orchestrator API → smart test selector → queue → worker fleet (autoscaling on spot) → blob reports → merge → unified report. Capacity: ~700 tests/sec at peak = ~21k concurrent slots. Trace artifacts to S3, metadata to Postgres. See Module 26.</div></details>
@@ -600,7 +601,7 @@ a.active .search-snippet {
 <details class="qa"><summary>Walk me through your proudest SDET work.</summary>
 <div class="answer">STAR — Situation (large suite with 12% flake rate, blocking PRs); Task (improve PR feedback time and reliability); Action (introduced 4-shard sharding + storageState + replaced 47 waitForTimeout + introduced flake-detector pipeline); Result (flake rate to 1%, PR feedback 38m → 7m, dev satisfaction up 40%).</div></details>
 
-<h3 id="m33-5y">33.4 5-Years SDET Interview — Deep Q&amp;A (version-aware, Playwright 1.61)</h3>
+<h3 id="m33-5y">69.4 5-Years SDET Interview — Deep Q&amp;A (version-aware, Playwright 1.61)</h3>
 
 <div class="toc">
 <h4>Designed for the 5-year mark</h4>
@@ -612,7 +613,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h4>33.4.1 Version, environment &amp; setup</h4>
+<h4>69.4.1 Version, environment &amp; setup</h4>
 
 <details class="qa"><summary>Which Playwright version do you use and how do you decide when to upgrade?</summary>
 <div class="answer">We pin <code class="inline">@playwright/test</code> at <strong>1.61.0</strong> exactly (no caret) in <code class="inline">package.json</code>, matched against the Docker image <code class="inline">mcr.microsoft.com/playwright:v1.61.0-jammy</code>. Browser binaries are version-locked, so any drift between the library and the image causes "works locally, fails in CI" mismatches. Upgrade cadence: every 2-3 minors, after the .0 release has had a .1 patch (about two weeks). The upgrade is a single PR that bumps three places (package.json, Docker tag, install step) and re-baselines visual snapshots intentionally.</div></details>
@@ -626,7 +627,7 @@ a.active .search-snippet {
 <details class="qa"><summary>What does <code class="inline">npx playwright install</code> actually do?</summary>
 <div class="answer">Downloads the pinned Chromium/Firefox/WebKit revisions plus FFmpeg (for video). It does <em>not</em> install npm packages — that's <code class="inline">npm install</code>'s job. The <code class="inline">--with-deps</code> flag also <code class="inline">apt-get install</code>s OS libraries (libgbm, libnss3, etc.) that the browser binaries need on Linux. On macOS/Windows, --with-deps is a no-op.</div></details>
 
-<h4>33.4.2 Framework design &amp; architecture</h4>
+<h4>69.4.2 Framework design &amp; architecture</h4>
 
 <details class="qa"><summary>Walk me through your test framework structure.</summary>
 <div class="answer">Layered. <code class="inline">tests/</code> holds intent only — no selectors. <code class="inline">pages/</code> has Page Objects exposing user-level actions like <code class="inline">login(email, pw)</code>, never raw locators. <code class="inline">services/</code> wraps API calls using <code class="inline">APIRequestContext</code>. <code class="inline">fixtures/</code> defines custom test/worker fixtures via <code class="inline">test.extend</code>. <code class="inline">factories/</code> generates test data with Faker. <code class="inline">config/</code> holds <code class="inline">playwright.config.ts</code> with projects for chromium/firefox/webkit + setup project for storageState. <code class="inline">utils/</code> for pure helpers. Tests never import from <code class="inline">@playwright/test</code> directly — they import from <code class="inline">fixtures/index.ts</code> which re-exports an extended <code class="inline">test</code>.</div></details>
@@ -646,7 +647,7 @@ a.active .search-snippet {
 <details class="qa"><summary>What's your stance on POM vs Screenplay vs Functional helpers?</summary>
 <div class="answer">POM by default — fits 99% of teams and is what new joiners expect. Screenplay only when you have 1000+ tests, multiple actor types, and the actor/task model genuinely simplifies. Functional helpers (just exported functions) work for small projects but break down once shared state grows. The wrong choice is usually too-clever Screenplay on a 200-test suite — overhead with no payoff.</div></details>
 
-<h4>33.4.3 Locators &amp; assertions — deep mastery</h4>
+<h4>69.4.3 Locators &amp; assertions — deep mastery</h4>
 
 <details class="qa"><summary>Walk me through your locator priority and why.</summary>
 <div class="answer">In order: <code class="inline">getByRole</code> &gt; <code class="inline">getByLabel</code> &gt; <code class="inline">getByPlaceholder</code> &gt; <code class="inline">getByText</code> &gt; <code class="inline">getByTestId</code> &gt; CSS &gt; XPath. The reason is twofold: (1) the higher-priority locators are how a real user (or screen reader) identifies the element, so they double as accessibility checks; (2) they survive refactors — designers can change classes and DOM nesting and the test still works. CSS/XPath are escape hatches when nothing else is available, never the first choice.</div></details>
@@ -669,7 +670,7 @@ a.active .search-snippet {
 <details class="qa"><summary>How would you test a component that flashes a transient toast for 3 seconds?</summary>
 <div class="answer">Two assertions. (1) <code class="inline">await expect(toast).toBeVisible()</code> — confirms it appeared. (2) <code class="inline">await expect(toast).toBeHidden({ timeout: 5000 })</code> — confirms it auto-dismisses within the window. Don't <code class="inline">waitForTimeout(3000)</code>; use the assertion's built-in retry. If you also need to verify content, chain <code class="inline">toHaveText</code> between the two visibility checks.</div></details>
 
-<h4>33.4.4 Network, mocking &amp; API hybrid</h4>
+<h4>69.4.4 Network, mocking &amp; API hybrid</h4>
 
 <details class="qa"><summary>When do you mock a network response and when do you hit the real backend?</summary>
 <div class="answer">Mock when: (a) you're testing UI behaviour given a known backend response (loading, error, empty state), (b) the upstream is unstable or rate-limited, (c) you need to test edge cases the real backend can't produce (500 errors, slow responses). Hit real when: (a) you're validating the end-to-end contract, (b) the test is part of a smoke suite gating deployment, (c) the response shape changes frequently and a mock would drift. A mature suite uses both — most UI tests mock, a small "real backend" smoke runs against staging.</div></details>
@@ -700,7 +701,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>Hybrid test pattern — what does it look like?</summary>
 <div class="answer">Use API to set up state, UI to verify rendering. Example: create 50 orders via <code class="inline">request.post()</code>, then load the dashboard via <code class="inline">page.goto()</code> and assert the pagination shows "1 of 3 pages". Much faster than clicking through 50 order creations in the UI, and the API path is independently tested elsewhere. Cleanup via API too.</div></details>
 
-<h4>33.4.5 Flakiness — root-cause playbook</h4>
+<h4>69.4.5 Flakiness — root-cause playbook</h4>
 
 <details class="qa"><summary>A test passes locally but fails in CI. What's your debug sequence?</summary>
 <div class="answer">Six checks, in order. (1) Pull the trace artifact — open <code class="inline">trace.zip</code> in the trace viewer; the action and DOM state at the moment of failure usually tells the story. (2) Compare CPU/memory: CI runners are often slower; expand timeouts targeted to the slow assertion. (3) Compare viewport — local dev uses full screen, CI uses 1280x720; an off-viewport element won't <code class="inline">toBeVisible</code>. (4) Compare locale/timezone — CI is UTC by default; tests asserting on dates need explicit <code class="inline">TZ=America/New_York</code>. (5) Compare network — staging from CI may have stricter rate limits than your laptop. (6) Compare browser version — if CI uses Docker image v1.61.0-jammy and you're on v1.60 locally, behaviour differs. The trace solves 80% of cases on first read.</div></details>
@@ -717,7 +718,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>How do you handle animations and transitions?</summary>
 <div class="answer">Three tools. (1) <code class="inline">animations: 'disabled'</code> in <code class="inline">toHaveScreenshot</code> options — disables CSS animations during visual asserts. (2) <code class="inline">page.emulateMedia({ reducedMotion: 'reduce' })</code> at the project level — many apps respect this. (3) For unavoidable animations, assert on the post-animation state with a longer timeout. Never <code class="inline">waitForTimeout(500)</code> — it's fragile and slows the suite linearly with the number of tests.</div></details>
 
-<h4>33.4.6 Parallelism, sharding, and CI/CD</h4>
+<h4>69.4.6 Parallelism, sharding, and CI/CD</h4>
 
 <details class="qa"><summary>Explain workers vs sharding.</summary>
 <div class="answer"><strong>Workers</strong> are parallel processes <em>within one CI runner</em>. <code class="inline">workers: 4</code> means 4 browser instances on the same machine. <strong>Sharding</strong> splits tests <em>across multiple CI runners</em>. <code class="inline">--shard=1/4</code> runs the first 1/4 of tests on this runner; spawn 4 runners and they cover the whole suite in parallel. Total parallelism = shards × workers. A 1000-test suite at 4 shards × 4 workers = 16 concurrent tests, finishes in ~1/16 the time.</div></details>
@@ -753,7 +754,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>What's "fully parallel" mode and when do you turn it off?</summary>
 <div class="answer"><code class="inline">fullyParallel: true</code> means tests <em>within</em> a file also run in parallel across workers, not just across files. Default in modern configs. Turn it off (<code class="inline">test.describe.configure({ mode: 'serial' })</code>) only for tests that genuinely depend on order — e.g. a sequence creating a user, logging in, deleting. Even then, prefer rewriting as independent tests that each set up their own state.</div></details>
 
-<h4>33.4.7 Debugging mastery</h4>
+<h4>69.4.7 Debugging mastery</h4>
 
 <details class="qa"><summary>Walk me through using the Trace Viewer.</summary>
 <div class="answer">Trace captures every action, screenshot before/after, network calls, console logs, and source location. Enable with <code class="inline">trace: 'on-first-retry'</code> in config. After a failed run, open with <code class="inline">npx playwright show-trace trace.zip</code>. Three panels: timeline (every action), DOM snapshot (clickable, inspectable like Chrome DevTools at that moment), and network/console. The DOM snapshot is the killer feature — you can hover-inspect elements as they were at the failure, no reproduction needed.</div></details>
@@ -767,7 +768,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>How do you debug a "click is intercepted" error?</summary>
 <div class="answer">The error means another element is on top of the target. Three diagnostics. (1) Open the trace and inspect the DOM at the moment of failure — usually a modal, cookie banner, or floating chat icon. (2) Use <code class="inline">page.locator('xxx').click({ force: true })</code> as a temporary unblocker, but never as the fix. (3) Register a <code class="inline">page.addLocatorHandler()</code> (1.42+) for the interceptor — Playwright auto-dismisses it before retrying the click. Final fix is usually closing the dialog programmatically in beforeEach or via the handler.</div></details>
 
-<h4>33.4.8 Performance, visual, accessibility &amp; cross-browser</h4>
+<h4>69.4.8 Performance, visual, accessibility &amp; cross-browser</h4>
 
 <details class="qa"><summary>How do you do visual regression in Playwright?</summary>
 <div class="answer"><code class="inline">await expect(page).toHaveScreenshot('login.png', { maxDiffPixels: 100 })</code>. First run creates the baseline; subsequent runs compare. Tune <code class="inline">maxDiffPixels</code> or <code class="inline">maxDiffPixelRatio</code> to absorb anti-aliasing differences. <em>Critical</em>: snapshots are platform-specific (font rendering differs between Linux and macOS) — always generate baselines inside the Playwright Docker image to match CI. Mask volatile regions (timestamps, ads) with <code class="inline">mask: [locator]</code>.</div></details>
@@ -784,7 +785,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>How do you test on mobile?</summary>
 <div class="answer">Two paths. (1) Mobile emulation: <code class="inline">use: { ...devices['iPhone 15'] }</code> — viewport, user-agent, touch events, device pixel ratio. Catches 80% of responsive bugs without a real device. (2) Real device: Appium for native, or cloud farms (BrowserStack, Sauce Labs) for real mobile browsers via Playwright's remote endpoint. Emulation for PRs, real devices weekly. Don't conflate emulation with "tested on mobile" in a status report — be precise.</div></details>
 
-<h4>33.4.9 System design questions (5y SDET often gets a scaled-down version)</h4>
+<h4>69.4.9 System design questions (5y SDET often gets a scaled-down version)</h4>
 
 <details class="qa"><summary>Design a test platform that runs 5,000 tests in &lt; 10 minutes.</summary>
 <div class="answer">Components. (1) Orchestrator — REST API receives "run suite X on commit Y", emits jobs. (2) Test runner pool — Kubernetes pods, each running Playwright in Docker, autoscaled on a queue depth metric. (3) Test selector — given a code diff, computes affected tests via a dependency graph (or a tag heuristic) so PRs run a subset. (4) Result store — Postgres for metadata (run id, test id, status, duration), S3 for artifacts (traces, screenshots, videos). (5) Reporter — merges blob reports, publishes HTML, posts PR comment with summary. (6) Flake detector — separate pipeline reading the result store, computing per-test failure rate, auto-quarantining outliers. Capacity math: 5000 tests × avg 8s = 40,000 test-seconds. To finish in 600s, need 67 concurrent slots → 17 pods × 4 workers. Plus 30% headroom = 22 pods. Cost-wise, ~$0.50/PR on spot instances.</div></details>
@@ -798,7 +799,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>Design a self-healing locator system.</summary>
 <div class="answer">On every green run, snapshot for each locator: role, accessible name, text content, attributes, position relative to landmark elements. On a future failure, compute similarity between the failed locator's intent and current DOM candidates. If a single candidate exceeds 0.85 confidence, suggest it in the trace viewer — don't auto-apply. Auto-apply only with human approval via a PR-bot that opens a "self-healing suggestion" PR. Always keep humans in the loop — silent self-healing has a bad failure mode (false negatives that hide real bugs).</div></details>
 
-<h4>33.4.10 Scenario / "How would you test X" questions</h4>
+<h4>69.4.10 Scenario / "How would you test X" questions</h4>
 
 <details class="qa"><summary>How would you test a file upload feature?</summary>
 <div class="answer">Five tests. (1) Happy path: <code class="inline">setInputFiles('file.png')</code>, assert success message and that the file appears in the list. (2) File-too-large: synthetic 100MB file, assert error message. (3) Wrong type: <code class="inline">setInputFiles('malware.exe')</code>, assert rejection. (4) Drag-and-drop: <code class="inline">page.dispatchEvent('drop', {...})</code> with DataTransfer. (5) Backend: <code class="inline">request.post('/upload', { multipart: {...} })</code> independently asserts the API handles edge cases without the UI. For files that need to come from disk, store small fixtures in the repo; for large files, generate in beforeEach with <code class="inline">fs.writeFile</code>.</div></details>
@@ -818,7 +819,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>How would you test a complex date picker?</summary>
 <div class="answer">Five tests. (1) Default state — placeholder visible, no selection. (2) Open → select today → verify input shows today's date in the locale-correct format. (3) Open → navigate to next month → select a date — verify both display and the underlying value. (4) Disabled dates — assert past dates can't be selected. (5) Keyboard a11y — open with Enter, navigate with arrows, select with Enter, close with Esc. The aria snapshot (<code class="inline">toMatchAriaSnapshot</code>) is great for asserting the picker's structure without coupling to CSS.</div></details>
 
-<h4>33.4.11 Leadership &amp; cross-team collaboration (real at 5y)</h4>
+<h4>69.4.11 Leadership &amp; cross-team collaboration (real at 5y)</h4>
 
 <details class="qa"><summary>How do you partner with developers on test ownership?</summary>
 <div class="answer">Shared accountability. Devs write unit tests; SDETs own integration/E2E. Both pair on framework design. PR check: any new feature ships with at least one E2E happy-path test. The SDET reviews it; devs maintain it (it's code, like any code). The SDET role is to provide the rails (framework, fixtures, patterns), unblock devs, and own the integration test infrastructure — not to be a bottleneck writing every test.</div></details>
@@ -835,7 +836,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>How do you decide what NOT to test?</summary>
 <div class="answer">Cost vs payoff. Don't E2E-test pure UI styling — visual regression covers it cheaper. Don't write a UI test for a backend edge case — API test, same coverage, 10× faster. Don't test the framework or the browser itself. Don't duplicate coverage already in unit tests. The rule: every test must answer "what bug would this catch that nothing else does?" If the answer is none, delete the test.</div></details>
 
-<h4>33.4.12 STAR stories — five ready-to-deliver narratives</h4>
+<h4>69.4.12 STAR stories — five ready-to-deliver narratives</h4>
 
 <details class="qa"><summary>STAR: "Tell me about a time you reduced test flakiness."</summary>
 <div class="answer"><strong>Situation:</strong> Our 800-test Playwright suite had a 12% flake rate; PRs averaged 3 retries to merge. <strong>Task:</strong> Bring flake rate under 2% in one quarter. <strong>Action:</strong> Built a flake-detection pipeline (per-test failure rate over rolling 14d, dashboard, auto-quarantine). Audited top-20 worst offenders — found 70% used <code class="inline">waitForTimeout</code> or shared test data. Replaced <code class="inline">waitForTimeout</code> with web-first assertions; moved data setup into per-test fixtures with API cleanup; added <code class="inline">page.addLocatorHandler()</code> for a recurring cookie banner. Wrote a lint rule to ban <code class="inline">waitForTimeout</code> in new tests. <strong>Result:</strong> Flake rate to 0.8% in 11 weeks. PR median merge time 38m → 7m. Eliminated ~6 engineer-hours/day of "rerun the test" toil.</div></details>
@@ -852,7 +853,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>STAR: "Tell me about a framework or pattern you introduced."</summary>
 <div class="answer"><strong>Situation:</strong> Engineers were duplicating fixture setup across 20+ specs — each manually creating users, products, and auth state. <strong>Task:</strong> Make this composable and reusable. <strong>Action:</strong> Built a typed <code class="inline">test.extend</code>-based fixture library: <code class="inline">user</code>, <code class="inline">authenticatedUser</code>, <code class="inline">product</code>, <code class="inline">cart</code>, each with API-driven setup and afterEach cleanup. Documented the patterns and pair-migrated five teams over a month. <strong>Result:</strong> Average new-test PR size dropped from 80 lines to 25. Test data leakage between tests dropped to zero. New SDETs ramping in a week instead of a month.</div></details>
 
-<h4>33.4.13 Rapid-fire (expect these in screens)</h4>
+<h4>69.4.13 Rapid-fire (expect these in screens)</h4>
 
 <details class="qa"><summary>What's <code class="inline">test.use()</code>?</summary>
 <div class="answer">Per-describe or per-file fixture override. <code class="inline">test.use({ viewport: { width: 360, height: 800 } })</code> at the top of a file gives all tests in it a mobile viewport without touching the global config.</div></details>
@@ -884,7 +885,7 @@ expect(request.headers()['x-trace-id']).toBeDefined();</pre>The <code class="inl
 <details class="qa"><summary>What's your salary expectation?</summary>
 <div class="answer">Range based on market research for the role/level/location. Anchor with the upper bound you'd accept. Be ready to discuss flexibility on equity/cash mix.</div></details>
 
-<h3>33.5 Behavioral — STAR examples</h3>
+<h3>69.5 Behavioral — STAR examples</h3>
 
 <details class="qa"><summary>"Tell me about a time you disagreed with a colleague."</summary>
 <div class="answer">S: Dev wanted to ship a feature flag-off behind "we'll test in prod". T: Push back without escalating. A: Proposed a 1% canary with monitoring; demo'd the dashboard. R: Adopted; caught a 500-error regression that would have hit all users.</div></details>

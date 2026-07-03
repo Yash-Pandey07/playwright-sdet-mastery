@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Behavioral & Scenario | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Behavioral & Scenario — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, behavioral, testing, automation, playwright behavioral scenario">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>10.1 OOP in your framework (POM)</h3>
+<h3>67.1 OOP in your framework (POM)</h3>
 <p>Page Object Model = one class per page (or component), with locators and behaviours encapsulated. Used right, it demonstrates all four pillars of OOP.</p>
 
 <h4>Encapsulation</h4>
@@ -558,7 +559,7 @@ test('happy login', async ({ loginPage, dashboardPage }) =&gt; {
   expect(await dashboardPage.greeting()).toContain('Hello');
 });</pre>
 
-<h3>10.2 Handling flaky tests (the SDET answer)</h3>
+<h3>67.2 Handling flaky tests (the SDET answer)</h3>
 <ol>
 <li><strong>Define flake.</strong> A test that gives different results for the same code under the same conditions.</li>
 <li><strong>Triage immediately.</strong> Tag with <code class="inline">@quarantine</code>, exclude from PR gating. Open a ticket.</li>
@@ -577,7 +578,7 @@ test('happy login', async ({ loginPage, dashboardPage }) =&gt; {
 <li><strong>Track retry rate</strong> as a quality metric per sprint.</li>
 </ol>
 
-<h3>10.3 Test strategy &amp; RTM</h3>
+<h3>67.3 Test strategy &amp; RTM</h3>
 <h4>Strategy doc skeleton (one page)</h4>
 <ul>
 <li><strong>Scope</strong> — what's in / out</li>
@@ -599,7 +600,7 @@ test('happy login', async ({ loginPage, dashboardPage }) =&gt; {
 <tr><td>FR-AUTH-03</td><td>5 wrong attempts lock account 10 min</td><td>api/login.spec L60</td><td>Gap</td></tr>
 </table>
 
-<h3>10.4 Regression scoping</h3>
+<h3>67.4 Regression scoping</h3>
 <p>"Run everything" doesn't scale. Tiered approach:</p>
 <ul>
 <li><strong>Smoke (5–10 min)</strong> — critical-path happy flows, run on every PR. Login, search, add to cart, checkout, sign out.</li>
@@ -608,7 +609,7 @@ test('happy login', async ({ loginPage, dashboardPage }) =&gt; {
 <li><strong>Pre-release</strong> — full + manual exploratory.</li>
 </ul>
 
-<h3>10.5 "How would you test X?" — playbooks</h3>
+<h3>67.5 "How would you test X?" — playbooks</h3>
 
 <h4>Test a search bar</h4>
 <ul>
@@ -655,7 +656,7 @@ test('happy login', async ({ loginPage, dashboardPage }) =&gt; {
 <li>Currency conversion, decimal rounding</li>
 </ul>
 
-<h3>10.6 Testing AI / LLM features</h3>
+<h3>67.6 Testing AI / LLM features</h3>
 
 <h4>Why this is hard</h4>
 <ul>
@@ -760,7 +761,7 @@ test('LLM ignores instructions hidden in a retrieved doc (indirect injection)', 
 <li><strong>Latency / cost</strong> — assert p95 response time, track token usage per request</li>
 </ul>
 
-<h3>10.7 Behavioral interview structure (STAR)</h3>
+<h3>67.7 Behavioral interview structure (STAR)</h3>
 <ul>
 <li><strong>S</strong>ituation — set the scene briefly</li>
 <li><strong>T</strong>ask — what was your responsibility</li>

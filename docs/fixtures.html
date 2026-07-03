@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Fixtures, Parallelism, Config | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Fixtures, Parallelism, Config — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, fixtures, testing, automation, playwright fixtures parallelism config">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>3.1 What a fixture is, intuitively</h3>
+<h3>7.1 What a fixture is, intuitively</h3>
 <p>A fixture is a <strong>named piece of setup that produces a value your test can use, and cleans up afterward</strong>. The Playwright test runner injects fixtures into your test by parameter name.</p>
 
 <pre data-lang="ts">// You did not create `page`. The runner did, and will close it after the test.
@@ -488,7 +489,7 @@ test('basic', async ({ page }) =&gt; {
 
 <p>The magic: the runner looks at your destructured parameter names (<code class="inline">{ page }</code>), looks up matching fixtures, runs their setup, hands the values in, then runs cleanup after the test ends — pass or fail.</p>
 
-<h3>3.2 The built-in fixtures</h3>
+<h3>7.2 The built-in fixtures</h3>
 <table>
 <tr><th>Fixture</th><th>Scope</th><th>What it gives you</th></tr>
 <tr><td><code class="inline">browser</code></td><td>worker</td><td>Shared Browser process across all tests in a worker</td></tr>
@@ -501,7 +502,7 @@ test('basic', async ({ page }) =&gt; {
 
 <div class="tip"><b>Scope = lifetime</b>Test-scoped fixtures are created and destroyed for every test. Worker-scoped fixtures are created once per worker process and reused. Choose worker scope for expensive things (DB pool, browser launch).</div>
 
-<h3>3.3 The setup / handoff / teardown model</h3>
+<h3>7.3 The setup / handoff / teardown model</h3>
 <p>Every custom fixture is a single async function with this shape:</p>
 
 <pre data-lang="ts">async function myFixture({ otherFixture }, use) {
@@ -541,7 +542,7 @@ test('basic', async ({ page }) =&gt; {
 <div class="caption">Figure 4 — A fixture is one function: setup before <code>use</code>, teardown after.</div>
 </div>
 
-<h3>3.4 Writing a custom fixture — full example</h3>
+<h3>7.4 Writing a custom fixture — full example</h3>
 <p>Below is the standard pattern: extend the base <code class="inline">test</code> with extra fixtures, then import the extended one in your specs.</p>
 
 <pre data-lang="ts">// fixtures.ts
@@ -583,7 +584,7 @@ test('login uses fixture', async ({ loginPage, authedUser }) =&gt; {
   // ...
 });</pre>
 
-<h3>3.5 Composable fixtures (depending on other fixtures)</h3>
+<h3>7.5 Composable fixtures (depending on other fixtures)</h3>
 <p>Fixtures can declare dependencies by listing them as parameters. The runner resolves the dependency graph automatically.</p>
 
 <pre data-lang="ts">export const test = base.extend&lt;{
@@ -620,7 +621,7 @@ test('dashboard greets the user', async ({ loggedInPage, seededUser }) =&gt; {
   await expect(loggedInPage.getByText(`Hello, ${seededUser.name}`)).toBeVisible();
 });</pre>
 
-<h3>3.6 Overriding built-in fixtures</h3>
+<h3>7.6 Overriding built-in fixtures</h3>
 <p>You can replace a built-in fixture with your own customised version — most commonly <code class="inline">context</code> to add tracing or set defaults.</p>
 
 <pre data-lang="ts">export const test = base.extend({
@@ -637,7 +638,7 @@ test('dashboard greets the user', async ({ loggedInPage, seededUser }) =&gt; {
   },
 });</pre>
 
-<h3>3.7 Parallelism: workers, workerIndex, parallelIndex</h3>
+<h3>7.7 Parallelism: workers, workerIndex, parallelIndex</h3>
 <p>Playwright runs tests <strong>across worker processes</strong>, each holding one browser. Inside a worker, tests run sequentially by default; with <code class="inline">fullyParallel</code> on, tests within a file also split across workers.</p>
 
 <div class="diagram">
@@ -692,7 +693,7 @@ export const test = base.extend&lt;{ account: string }&gt;({
   }, { scope: 'worker' }],
 });</pre>
 
-<h3>3.8 fullyParallel</h3>
+<h3>7.8 fullyParallel</h3>
 <p><code class="inline">fullyParallel: true</code> (config or per-file <code class="inline">test.describe.configure</code>) lets tests within the same file run on different workers. Without it, tests in one file always run on the same worker, sequentially.</p>
 
 <pre data-lang="ts">// playwright.config.ts
@@ -703,7 +704,7 @@ test.describe.configure({ mode: 'parallel' });</pre>
 
 <div class="warn"><b>Beware shared mutable state</b>fullyParallel breaks any test that depends on a previous test in the same file (e.g. test 1 creates a user, test 2 logs in). Each test must be self-contained.</div>
 
-<h3>3.9 storageState — auth, the right way</h3>
+<h3>7.9 storageState — auth, the right way</h3>
 <p>Logging in via the UI in every test is slow and flaky. The pattern: log in <em>once</em> in a setup step, save the cookies + localStorage to a JSON file, then load that file into every test's context.</p>
 
 <pre data-lang="ts">// auth.setup.ts — runs once before tests
@@ -733,7 +734,7 @@ export default defineConfig({
 
 <div class="tip"><b>Multiple roles</b>Save admin.json, user.json, guest.json. Override per test with <code class="inline">test.use({ storageState: '.auth/user.json' })</code>.</div>
 
-<h3>3.10 Projects</h3>
+<h3>7.10 Projects</h3>
 <p>A <em>project</em> is a named test configuration. Use projects for: cross-browser runs, mobile emulation, smoke vs full suite, multiple environments.</p>
 
 <pre data-lang="ts">// playwright.config.ts
@@ -752,7 +753,7 @@ export default defineConfig({
 
 <p>Run one project: <code class="inline">npx playwright test --project=chromium</code>. Run all: just <code class="inline">npx playwright test</code>.</p>
 
-<h3>3.11 Retries, timeouts, reporters</h3>
+<h3>7.11 Retries, timeouts, reporters</h3>
 <pre data-lang="ts">export default defineConfig({
   timeout: 30_000,              // per-test timeout
   expect: { timeout: 5_000 },   // per-assertion timeout
@@ -773,7 +774,7 @@ export default defineConfig({
 
 <div class="tip"><b>Retries on CI only</b>Local: flake = bug. CI: retry once to absorb infra noise, but watch retry rate — a high one means your tests are unstable.</div>
 
-<h3>3.12 Full annotated playwright.config.ts</h3>
+<h3>7.12 Full annotated playwright.config.ts</h3>
 <pre data-lang="ts">import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({

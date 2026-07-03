@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Left-Shift & Right-Shift | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Left-Shift & Right-Shift — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, shift-testing, testing, automation, playwright left shift right shift">
@@ -474,7 +475,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>30.1 The two halves</h3>
+<h3>37.1 The two halves</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
   <g font-size="11" fill="#e6edf3">
@@ -497,7 +498,7 @@ a.active .search-snippet {
 <div class="caption">Figure 16 — Shift-left finds bugs earlier; shift-right catches what slips through.</div>
 </div>
 
-<h3>30.2 Shift-left practices</h3>
+<h3>37.2 Shift-left practices</h3>
 <table>
 <tr><th>Practice</th><th>What it is</th><th>SDET role</th></tr>
 <tr><td>3 amigos</td><td>PM, dev, tester refine each story together before code</td><td>Surface edge cases, define test data needs</td></tr>
@@ -510,7 +511,7 @@ a.active .search-snippet {
 <tr><td>PR-level tests</td><td>Smoke + targeted regression on every PR</td><td>Build the pipeline</td></tr>
 </table>
 
-<h3>30.3 Shift-right practices</h3>
+<h3>37.3 Shift-right practices</h3>
 <table>
 <tr><th>Practice</th><th>What it is</th><th>SDET role</th></tr>
 <tr><td>Synthetic monitoring</td><td>Scheduled Playwright/REST checks against prod</td><td>Author and own these "always-on" tests</td></tr>
@@ -522,7 +523,7 @@ a.active .search-snippet {
 <tr><td>User feedback loops</td><td>In-app feedback, support ticket aggregation</td><td>Convert recurring issues into tests</td></tr>
 </table>
 
-<h3>30.4 Synthetic monitoring with Playwright</h3>
+<h3>37.4 Synthetic monitoring with Playwright</h3>
 <pre data-lang="ts">// tests/prod-smoke.spec.ts — runs every 5 minutes in production
 test('prod login still works', async ({ page }) =&gt; {
   await page.goto('https://app.acme.com/login');
@@ -539,7 +540,7 @@ test('prod checkout API is up', async ({ request }) =&gt; {
 
 <p>Schedule via GitHub Actions cron, Datadog Synthetics, or Checkly. Page the on-call if a check fails twice in a row.</p>
 
-<h3>30.5 Contract testing with Pact (1-min mental model)</h3>
+<h3>37.5 Contract testing with Pact (1-min mental model)</h3>
 <ol>
 <li>Consumer (frontend) defines what it expects from the API.</li>
 <li>Consumer's tests use a mock that records the expectation as a "Pact" file.</li>
@@ -549,7 +550,7 @@ test('prod checkout API is up', async ({ request }) =&gt; {
 </ol>
 <p>Result: frontend and backend evolve independently without integration surprises. Common in microservice orgs.</p>
 
-<h3>30.6 Feature flags + canaries</h3>
+<h3>37.6 Feature flags + canaries</h3>
 <pre data-lang="ts">// Flag in code
 if (await featureFlags.isEnabled('new-checkout')) {
   return &lt;NewCheckout /&gt;;
@@ -567,7 +568,7 @@ test('new checkout', async ({ page }) =&gt; {
   /* ...assert new flow... */
 });</pre>
 
-<h3>30.7 What "right-shift" looks like in practice</h3>
+<h3>37.7 What "right-shift" looks like in practice</h3>
 <ul>
 <li>You ship a feature behind a flag, off for everyone.</li>
 <li>Enable it for 1% of users.</li>

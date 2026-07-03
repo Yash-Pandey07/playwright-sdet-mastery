@@ -471,6 +471,7 @@ function generatePage(moduleContent, module, css, js) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>${pageTitle}</title>
   <meta name="description" content="${meta.description}">
   <meta name="keywords" content="${meta.keywords}">
@@ -587,6 +588,7 @@ function generateIndexPage(moduleContent, css, js) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Yash Pandey">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Playwright SDET Mastery — Open Source Ebook</title>
   <meta name="description" content="Free, open-source Playwright SDET ebook covering 72+ modules: architecture, locators, API testing, CI/CD, system design, and interview prep for QA engineers.">
   <meta name="keywords" content="playwright, sdet, ebook, testing, automation, open source, api testing, ci-cd, system design">
@@ -707,6 +709,31 @@ function stripHtml(htmlStr) {
     .trim();
 }
 
+function cleanForOnline(innerContent) {
+  let content = innerContent;
+  content = content.replace(
+    /This is a single, offline, self-contained reference/g, 
+    "This is a comprehensive reference"
+  );
+  content = content.replace(
+    /Code blocks are syntax-highlighted offline; copy-paste freely\./g,
+    "Code blocks are syntax-highlighted; copy-paste freely."
+  );
+  content = content.replace(
+    /Bookmark the page in your browser \(Cmd\/Ctrl\+D\)\. It works without internet\./g,
+    "Bookmark the page in your browser (Cmd/Ctrl+D) for easy access."
+  );
+  content = content.replace(
+    /Offline limitation:/g,
+    "Browser Sandbox Limitation:"
+  );
+  content = content.replace(
+    /\(browser CORS rules block cross-origin DOM access from a file:\/\/\)/g,
+    "(browser CORS rules block cross-origin DOM access)"
+  );
+  return content;
+}
+
 function build() {
   console.log('📖 Playwright SDET Mastery — Site Builder');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -731,7 +758,18 @@ function build() {
     const raw = extracted[mod.id];
     if (raw) {
       const innerMatch = raw.match(/<section\s+class="module"\s+id="m\d+"[^>]*>([\s\S]*?)<\/section>/);
-      const innerContent = innerMatch ? innerMatch[1].trim() : raw;
+      let innerContent = innerMatch ? innerMatch[1].trim() : raw;
+      innerContent = cleanForOnline(innerContent);
+      
+      const oldNumMatch = mod.id.match(/^m(\d+)$/);
+      if (oldNumMatch) {
+        const oldNum = oldNumMatch[1];
+        if (oldNum !== mod.num) {
+          const regex = new RegExp(`(<h[34][^>]*>)\\s*${oldNum}\\.`, 'g');
+          innerContent = innerContent.replace(regex, `$1${mod.num}.`);
+        }
+      }
+
       searchIndex[mod.id] = stripHtml(innerContent);
     }
   });
@@ -754,8 +792,21 @@ function build() {
     const innerMatch = raw.match(/<section\s+class="module"\s+id="m\d+"[^>]*>([\s\S]*?)<\/section>/);
     let innerContent = innerMatch ? innerMatch[1].trim() : raw;
 
+    // --- APPLY ONLINE/MULTI-PAGE REPLACEMENTS ---
+    innerContent = cleanForOnline(innerContent);
+
     // Update the header badge number to match mod.num
     innerContent = innerContent.replace(/<span class="badge">[^]*?<\/span>/, `<span class="badge">${mod.num}</span>`);
+
+    // Update the sub-header numbers (e.g. <h3>60.1 -> <h3>1.1) to match mod.num
+    const oldNumMatch = mod.id.match(/^m(\d+)$/);
+    if (oldNumMatch) {
+      const oldNum = oldNumMatch[1];
+      if (oldNum !== mod.num) {
+        const regex = new RegExp(`(<h[34][^>]*>)\\s*${oldNum}\\.`, 'g');
+        innerContent = innerContent.replace(regex, `$1${mod.num}.`);
+      }
+    }
 
     // Generate page
     const fileName = mod.slug === 'index' ? 'index.html' : `${mod.slug}.html`;

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>AI in Testing · MCP · Agents | Playwright SDET Mastery</title>
   <meta name="description" content="Learn AI in Testing · MCP · Agents — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, ai-testing, testing, automation, playwright ai in testing mcp agents">
@@ -479,7 +480,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>28.1 Where AI helps in SDET work (honestly)</h3>
+<h3>43.1 Where AI helps in SDET work (honestly)</h3>
 <table>
 <tr><th>Use case</th><th>AI value</th><th>Honest caveat</th></tr>
 <tr><td>Boilerplate / first draft</td><td>High — saves hours/week</td><td>Always review</td></tr>
@@ -491,7 +492,7 @@ a.active .search-snippet {
 <tr><td>Generating tests from requirements</td><td>Low-medium today</td><td>Often shallow; needs heavy human edit</td></tr>
 </table>
 
-<h3>28.2 AI-assisted test authoring</h3>
+<h3>43.2 AI-assisted test authoring</h3>
 
 <h4>The workflow</h4>
 <ol>
@@ -511,16 +512,16 @@ test('user updates email and sees confirmation', async ({ page, request }) =&gt;
 
 <div class="warn"><b>Hallucinated selectors</b>LLMs invent locators that match patterns they've seen, not the page you're testing. Always run the test, watch the trace, then commit. Treat AI like a fast junior — fast, sometimes wrong, needs review.</div>
 
-<h3>28.3 AI-assisted debugging</h3>
+<h3>43.3 AI-assisted debugging</h3>
 <p>Workflow: a test fails on CI, you download the trace, paste a summary into your AI assistant. "This test fails on CI but passes locally. Trace shows action <code class="inline">.click()</code> on <code class="inline">getByRole('button', { name: 'Submit' })</code> times out. Network shows POST /submit returns 502. What are common causes?" The AI returns a checklist (CORS, timing, env diff, upstream flakiness).</p>
 
-<h3>28.4 Self-healing locators</h3>
+<h3>43.4 Self-healing locators</h3>
 <p>See Module 26 §26.6 for the architecture. In practice today this is offered by tools like <em>Healenium</em>, <em>Functionize</em>, <em>Mabl</em>. Playwright doesn't ship one out of the box, but you can build one over the captured Locator + DOM snapshot from the trace.</p>
 
-<h3>28.5 LLM-as-judge</h3>
+<h3>43.5 LLM-as-judge</h3>
 <p>For features whose output isn't deterministic (chat, summarisation, search), build a "judge" model that scores the output. See Module 10 §10.6.</p>
 
-<h3>28.6 Model Context Protocol (MCP)</h3>
+<h3>43.6 Model Context Protocol (MCP)</h3>
 <p>MCP is an open protocol (introduced by Anthropic in late 2024) for connecting LLMs to <em>tools</em> and <em>context sources</em> in a standard way. Think of it as USB-C for AI: instead of every app inventing its own way to expose tools (Slack, GitHub, your DB), a tool exposes itself as an MCP server, and any MCP-compatible client (Claude Desktop, Cursor, custom agents) can use it.</p>
 
 <h4>The three roles</h4>
@@ -538,7 +539,7 @@ test('user updates email and sees confirmation', async ({ page, request }) =&gt;
 <li><strong>Prompts</strong> — reusable prompt templates the user can trigger</li>
 </ul>
 
-<h3>28.7 Playwright MCP server</h3>
+<h3>43.7 Playwright MCP server</h3>
 <p>Microsoft ships <code class="inline">@playwright/mcp</code> — an MCP server that exposes Playwright operations (open URL, click, screenshot, get accessibility tree) as tools. An LLM with this connection can "drive a browser":</p>
 
 <pre data-lang="bash">npx @playwright/mcp@latest
@@ -559,7 +560,7 @@ test('user updates email and sees confirmation', async ({ page, request }) =&gt;
 <li><strong>Visual review</strong> — Claude grabs screenshots across pages for design review</li>
 </ul>
 
-<h3>28.8 Playwright "Agents" (Test-AI workflows)</h3>
+<h3>43.8 Playwright "Agents" (Test-AI workflows)</h3>
 <p>The phrase "Playwright Agent" is used in two ways:</p>
 <ol>
 <li><strong>An LLM connected to the Playwright MCP server</strong>, performing browser tasks autonomously. Discussed above.</li>
@@ -580,7 +581,7 @@ test('semantic-driven test', async ({ page }) =&gt; {
 
 <div class="warn"><b>Reality check</b>"Vibe-coded" tests via LLM are fragile and expensive (every run hits the model). Treat them as a productivity aid for exploration / proof-of-concept, not as your daily-driver regression suite. Convert good runs to deterministic Playwright code.</div>
 
-<h3>28.9 Testing AI features in YOUR product</h3>
+<h3>43.9 Testing AI features in YOUR product</h3>
 <p>Covered in Module 10 §10.6. Quick recap:</p>
 <ol>
 <li>Mock the model endpoint in CI for deterministic UI tests.</li>
@@ -590,7 +591,7 @@ test('semantic-driven test', async ({ page }) =&gt; {
 <li>Refusal tests, bias tests, drift detection on schedule.</li>
 </ol>
 
-<h3>28.10 What does the future of SDET look like?</h3>
+<h3>43.10 What does the future of SDET look like?</h3>
 <ul>
 <li>Test maintenance becomes LLM-assisted — "broken locator? AI suggests fix, you click approve"</li>
 <li>Exploratory testing partially automated — "agent, find UI bugs in this build" returns a triaged list</li>

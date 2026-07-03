@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Locators & UI Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Locators & UI Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, locators, testing, automation, playwright locators ui testing">
@@ -476,11 +477,11 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>2.1 What a Locator actually is</h3>
+<h3>6.1 What a Locator actually is</h3>
 <p>A <strong>Locator</strong> is <em>not</em> a reference to a DOM node — it is a <em>description</em> of how to find one. When you call <code class="inline">page.locator('#submit')</code>, no DOM lookup happens yet. Playwright stores the recipe ("find an element with id <code class="inline">submit</code>"). The lookup happens fresh every time you act on it, which is why locators never go stale.</p>
 <p>Compare this with Selenium's <code class="inline">WebElement</code>, which is a handle to a found element. If the DOM re-renders, the handle becomes stale and you get <code class="inline">StaleElementReferenceException</code>. Playwright's design sidesteps that entire class of bug.</p>
 
-<h3>2.2 The locator priority order (memorize this)</h3>
+<h3>6.2 The locator priority order (memorize this)</h3>
 <p>Playwright's team strongly recommends choosing locators in this order:</p>
 <table>
 <tr><th>#</th><th>Locator</th><th>What it targets</th><th>Why it's good</th></tr>
@@ -496,7 +497,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>Rule of thumb</b>Ask "how would a user describe this element?" — if they would say "the Submit button", use <code class="inline">getByRole('button', { name: 'Submit' })</code>. If they would say "the third row of the table", combine getByRole + nth.</div>
 
-<h3>2.3 getByRole — the most important one</h3>
+<h3>6.3 getByRole — the most important one</h3>
 <p>HTML elements have an implicit ARIA role: a <code class="inline">&lt;button&gt;</code> has role <em>button</em>, a <code class="inline">&lt;a href&gt;</code> has role <em>link</em>, <code class="inline">&lt;h1&gt;</code> has role <em>heading</em>, etc. The <em>accessible name</em> is what a screen reader would read out — usually the visible text, or the value of <code class="inline">aria-label</code> / <code class="inline">aria-labelledby</code> / <code class="inline">title</code>.</p>
 
 <pre data-lang="ts">// HTML: &lt;button&gt;Sign in&lt;/button&gt;
@@ -532,7 +533,7 @@ await page.getByRole('button', { name: /^delete/i }).click();</pre>
 <tr><td>img</td><td>&lt;img alt&gt; (no alt = role="presentation")</td></tr>
 </table>
 
-<h3>2.4 getByLabel, getByPlaceholder, getByText, getByTestId</h3>
+<h3>6.4 getByLabel, getByPlaceholder, getByText, getByTestId</h3>
 <pre data-lang="ts">// &lt;label&gt;Email&lt;/label&gt;&lt;input type="email"&gt;
 await page.getByLabel('Email').fill('user@test.com');
 
@@ -556,7 +557,7 @@ await expect(page.getByTestId('cart-count')).toHaveText('3');</pre>
 
 <div class="note"><b>Custom test-id attribute</b>Configure once in <code class="inline">playwright.config.ts</code>: <code class="inline">use: { testIdAttribute: 'data-qa' }</code> and your team can use <code class="inline">data-qa</code> instead.</div>
 
-<h3>2.5 CSS and XPath — the escape hatches</h3>
+<h3>6.5 CSS and XPath — the escape hatches</h3>
 <pre data-lang="ts">// CSS
 page.locator('button.primary');
 page.locator('div.card &gt; h3');
@@ -576,7 +577,7 @@ page.locator(':nth-match(button, 2)');          // 2nd match</pre>
 
 <div class="warn"><b>Why XPath is fragile</b>XPath usually encodes the document structure (e.g. <code class="inline">div[2]/span[3]</code>). Any DOM refactor breaks it. Prefer role/label locators that follow <em>semantics</em>, not <em>structure</em>.</div>
 
-<h3>2.6 Strict mode and narrowing</h3>
+<h3>6.6 Strict mode and narrowing</h3>
 <p>Every action method (click, fill, etc.) in Playwright requires the locator to resolve to <strong>exactly one</strong> element. If it matches multiple, you get a clear error. This is <em>strict mode</em> and it is on by default.</p>
 
 <pre data-lang="ts">// FAILS with strict mode if multiple buttons named "Edit" exist
@@ -621,7 +622,7 @@ await page
 
 <div class="tip"><b>Why narrowing beats indexing</b>nth(3) breaks the moment someone inserts a row. Filtering by content stays correct.</div>
 
-<h3>2.6.5 Parent / Sibling / Child relationships</h3>
+<h3>6.6.5 Parent / Sibling / Child relationships</h3>
 <p>Unlike Selenium, Playwright has no <code class="inline">.parent()</code> method. You express tree relationships through <strong>chaining</strong>, <strong>filter+has</strong>, or fall back to CSS / XPath when needed.</p>
 
 <h4>Child — chain or CSS</h4>
@@ -675,7 +676,7 @@ const row2 = cell.locator('xpath=ancestor::tr[1]');</pre>
 
 <div class="tip"><b>Rule of thumb</b>If both options exist, prefer chaining + filter over CSS/XPath axes. The chain locator stays readable and Playwright re-resolves each segment independently — more robust to mid-page changes.</div>
 
-<h3>2.7 Stability ranking — when to use what</h3>
+<h3>6.7 Stability ranking — when to use what</h3>
 <table>
 <tr><th>Stability</th><th>Approach</th><th>Notes</th></tr>
 <tr><td>★★★★★</td><td>role + accessible name</td><td>Survives styling, restructuring, language changes if i18n keys are stable</td></tr>
@@ -686,7 +687,7 @@ const row2 = cell.locator('xpath=ancestor::tr[1]');</pre>
 <tr><td>★☆☆☆☆</td><td>XPath with positions</td><td>Breaks on any DOM change</td></tr>
 </table>
 
-<h3>2.8 The full UI interaction toolkit</h3>
+<h3>6.8 The full UI interaction toolkit</h3>
 
 <h4>Click family</h4>
 <pre data-lang="ts">await page.getByRole('button', { name: 'Buy' }).click();
@@ -774,7 +775,7 @@ await expect(page).toHaveScreenshot('home.png');                    // full page
 await expect(page.locator('.invoice')).toHaveScreenshot('inv.png'); // element
 // First run creates baseline. Later runs diff vs baseline.</pre>
 
-<h3>2.9 Multiple tabs and windows (promise-first pattern)</h3>
+<h3>6.9 Multiple tabs and windows (promise-first pattern)</h3>
 <p>When a click opens a new tab, Playwright emits a <code class="inline">page</code> event on the context. Two important rules:</p>
 <ol>
 <li><strong>Subscribe to the event <em>before</em> you trigger it</strong> — otherwise you miss it.</li>
@@ -797,7 +798,7 @@ await expect(page.locator('.invoice')).toHaveScreenshot('inv.png'); // element
 
 <div class="warn"><b>Bug magnet</b>Don't do <code class="inline">await page.click('a')</code> first and <em>then</em> <code class="inline">await context.waitForEvent('page')</code>. The new page may have already opened and the event has fired. Always Promise.all the two together.</div>
 
-<h3>2.10 iframes</h3>
+<h3>6.10 iframes</h3>
 <pre data-lang="ts">// Scope locators to inside an iframe
 const stripe = page.frameLocator('iframe[name="card-frame"]');
 await stripe.getByPlaceholder('Card number').fill('4242 4242 4242 4242');
@@ -811,7 +812,7 @@ await inner.getByRole('button', { name: 'Pay' }).click();
 // All frames on the page
 for (const frame of page.frames()) console.log(frame.url());</pre>
 
-<h3>2.11 Dialogs (alert / confirm / prompt)</h3>
+<h3>6.11 Dialogs (alert / confirm / prompt)</h3>
 <pre data-lang="ts">// Subscribe BEFORE the action that triggers the dialog.
 page.on('dialog', async dialog =&gt; {
   console.log(dialog.type(), dialog.message());
@@ -828,7 +829,7 @@ await page.getByRole('button', { name: 'Delete account' }).click();</pre>
 
 <div class="tip"><b>One-time handler</b>If a dialog only fires once: <code class="inline">page.once('dialog', d =&gt; d.accept())</code>.</div>
 
-<h3>2.12 File upload</h3>
+<h3>6.12 File upload</h3>
 <pre data-lang="ts">// Standard &lt;input type="file"&gt; — fastest path
 await page.getByLabel('Upload CV').setInputFiles('fixtures/cv.pdf');
 
@@ -852,7 +853,7 @@ const [chooser] = await Promise.all([
 ]);
 await chooser.setFiles('fixtures/cv.pdf');</pre>
 
-<h3>2.13 File download</h3>
+<h3>6.13 File download</h3>
 <pre data-lang="ts">const [download] = await Promise.all([
   page.waitForEvent('download'),
   page.getByRole('button', { name: 'Export CSV' }).click(),
@@ -862,7 +863,7 @@ await download.saveAs('./downloads/export.csv');
 // or read the content stream directly:
 const stream = await download.createReadStream();</pre>
 
-<h3>2.14 Web-first assertions and the golden rule</h3>
+<h3>6.14 Web-first assertions and the golden rule</h3>
 <p>Playwright's <code class="inline">expect</code> works on a <strong>locator</strong>, and it <strong>auto-retries</strong> the assertion until it passes or the timeout expires. This is what makes flaky tests rare.</p>
 
 <h5>The golden rule</h5>
@@ -916,7 +917,7 @@ await expect.soft(locator).toHaveText('A');
 await expect.soft(locator2).toBeVisible();
 // Test fails at the end if any soft assertion failed.</pre>
 
-<h3>2.15 Actionability deep-dive</h3>
+<h3>6.15 Actionability deep-dive</h3>
 <p>Before every action, Playwright checks the conditions in the table. You don't write these — they're automatic. But knowing them helps you debug "Why is my click failing?"</p>
 <table>
 <tr><th>Action</th><th>Attached</th><th>Visible</th><th>Stable</th><th>Receives events</th><th>Enabled</th><th>Editable</th></tr>

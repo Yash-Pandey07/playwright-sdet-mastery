@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Popups, Alerts, Windows | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Popups, Alerts, Windows — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, popups, testing, automation, playwright popups alerts windows">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>22.1 Every event you can listen to</h3>
+<h3>10.1 Every event you can listen to</h3>
 
 <h4>On <code class="inline">page</code></h4>
 <table>
@@ -508,7 +509,7 @@ a.active .search-snippet {
 <li><code class="inline">disconnected</code></li>
 </ul>
 
-<h3>22.2 JS dialogs — alert / confirm / prompt</h3>
+<h3>10.2 JS dialogs — alert / confirm / prompt</h3>
 <p>These BLOCK the page until handled. Playwright auto-dismisses them by default (so tests don't hang) <em>unless</em> you attach a <code class="inline">page.on('dialog', ...)</code> listener.</p>
 
 <pre data-lang="ts">// Accept any confirm/alert
@@ -533,7 +534,7 @@ await page.getByRole('button', { name: 'Delete account' }).click();
 
 <div class="warn"><b>One-time vs persistent</b><code class="inline">page.on(...)</code> handles all dialogs forever. <code class="inline">page.once(...)</code> handles only the next one. Use once when you want to handle one prompt then assert the next is unhandled.</div>
 
-<h3>22.3 Popups and new tabs</h3>
+<h3>10.3 Popups and new tabs</h3>
 <p>Three things can open a "new page":</p>
 <ol>
 <li><code class="inline">window.open(url)</code> — JS-initiated</li>
@@ -558,7 +559,7 @@ const [popup] = await Promise.all([
 await newPage.waitForLoadState();
 await expect(newPage).toHaveURL(/\/terms/);</pre>
 
-<h3>22.4 Switching between multiple pages</h3>
+<h3>10.4 Switching between multiple pages</h3>
 <p>Pages list is on the context. You can switch by index, URL, or title.</p>
 
 <pre data-lang="ts">// All pages in a context
@@ -577,7 +578,7 @@ await checkout.bringToFront();
 // Close one
 await pages[1].close();</pre>
 
-<h3>22.5 The tricky case — new tab opens with a dialog already pending</h3>
+<h3>10.5 The tricky case — new tab opens with a dialog already pending</h3>
 
 <p>Scenario: clicking a link opens a new tab. Inside that new tab's page load, JS fires <code class="inline">alert('Welcome!')</code> immediately. By the time you get the Page reference and try to attach a dialog listener, the alert has already fired (or is about to). How do you handle it cleanly?</p>
 
@@ -618,7 +619,7 @@ await pages[1].close();</pre>
 
     expect(popup.get_by_role("heading")).to_have_text("Welcome")</pre>
 
-<h3>22.6 Worse case — TWO popups stacked</h3>
+<h3>10.6 Worse case — TWO popups stacked</h3>
 <p>What if you trigger a button that opens both a popup and a dialog at the same time, but the dialog is on the <em>original</em> page (not the popup)?</p>
 
 <pre data-lang="ts">test('original page shows confirm, popup opens', async ({ context, page }) =&gt; {
@@ -634,7 +635,7 @@ await pages[1].close();</pre>
   await expect(popup).toHaveURL(/\/destination/);
 });</pre>
 
-<h3>22.7 OAuth / payment popup flow</h3>
+<h3>10.7 OAuth / payment popup flow</h3>
 <p>OAuth login or 3DS payment commonly: click "Sign in with Google" → popup opens → user authenticates → popup closes itself → original page navigates. Test this as:</p>
 
 <pre data-lang="ts">test('sign in via Google popup', async ({ context, page }) =&gt; {
@@ -658,7 +659,7 @@ await pages[1].close();</pre>
 
 <div class="warn"><b>Real OAuth gotcha</b>Google detects automation and may block. For tests, prefer: (1) Google's test-mode service accounts, (2) intercept the OAuth callback and inject a test token via <code class="inline">page.route</code>, (3) bypass via storageState seeded once.</div>
 
-<h3>22.8 beforeunload — "are you sure you want to leave?"</h3>
+<h3>10.8 beforeunload — "are you sure you want to leave?"</h3>
 <pre data-lang="ts">test('unsaved-changes prompt blocks leave', async ({ page }) =&gt; {
   await page.goto('/form');
   await page.getByLabel('Description').fill('important draft');
@@ -670,7 +671,7 @@ await pages[1].close();</pre>
   await expect(page.getByLabel('Description')).toHaveValue('important draft');
 });</pre>
 
-<h3>22.9 window.opener and window.opener.postMessage</h3>
+<h3>10.9 window.opener and window.opener.postMessage</h3>
 <p>A popup can communicate back to its opener via <code class="inline">window.opener.postMessage(...)</code>. To test it, listen on the original page:</p>
 
 <pre data-lang="ts">// Eavesdrop on postMessage from the popup
@@ -687,7 +688,7 @@ await popup.evaluate(() =&gt; (window.opener as any).postMessage({ type: 'auth-d
 await expect.poll(() =&gt; messages.length).toBeGreaterThan(0);
 expect(messages[0]).toMatchObject({ type: 'auth-done' });</pre>
 
-<h3>22.10 Common pitfalls</h3>
+<h3>10.10 Common pitfalls</h3>
 <ul>
 <li><strong>Forgetting promise-first</strong> — the event fires before your listener is registered.</li>
 <li><strong>Awaiting the popup load before attaching dialog handler</strong> — alert fires during load, handler missed.</li>

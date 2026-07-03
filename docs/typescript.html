@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>TypeScript Crash Course | Playwright SDET Mastery</title>
   <meta name="description" content="Learn TypeScript Crash Course — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, typescript, testing, automation, playwright typescript crash course">
@@ -478,10 +479,10 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>19.1 Why TypeScript</h3>
+<h3>3.1 Why TypeScript</h3>
 <p>JS at runtime is untyped — bugs surface only when the bad code runs. TS adds <em>compile-time</em> type checking. Same JS output, with safety + IDE auto-complete + safer refactors. SDET-relevant payoff: fewer "is undefined" failures in test code, easier to evolve a Page Object Model.</p>
 
-<h3>19.2 Basic types</h3>
+<h3>3.2 Basic types</h3>
 <pre data-lang="ts">// Primitives
 const name: string = 'Alice';
 const age: number = 30;
@@ -505,7 +506,7 @@ const pair: [string, number] = ['Alice', 30];   // fixed length + types
 // Object
 const user: { name: string; age?: number } = { name: 'A' };  // age optional</pre>
 
-<h3>19.3 type vs interface</h3>
+<h3>3.3 type vs interface</h3>
 <div class="cmp">
 <div class="col">
 <h5>interface</h5>
@@ -529,7 +530,7 @@ type Coord = { x: number } &amp; { y: number };  // intersection</pre>
 
 <div class="tip"><b>Pragmatic rule</b>Use interface for object shapes your team extends. Use type for unions, intersections, and computed types. Either works for the rest.</div>
 
-<h3>19.4 Union and intersection</h3>
+<h3>3.4 Union and intersection</h3>
 <pre data-lang="ts">// Union — A or B
 type Result = { ok: true; value: string } | { ok: false; error: string };
 
@@ -543,7 +544,7 @@ type WithTimestamp = { createdAt: Date };
 type UserWithTs = User &amp; WithTimestamp;
 // must have name, age, createdAt</pre>
 
-<h3>19.5 Literal types</h3>
+<h3>3.5 Literal types</h3>
 <pre data-lang="ts">type Role = 'admin' | 'user' | 'guest';     // string literal union
 type Dir  = 'N' | 'S' | 'E' | 'W';
 type Bit  = 0 | 1;
@@ -552,7 +553,7 @@ function setRole(r: Role) { /* ... */ }
 setRole('admin');        // OK
 setRole('superuser');    // type error</pre>
 
-<h3>19.6 Generics</h3>
+<h3>3.6 Generics</h3>
 <p>Type parameters let a function/class work over many concrete types while preserving information.</p>
 
 <pre data-lang="ts">function first&lt;T&gt;(arr: T[]): T | undefined { return arr[0]; }
@@ -578,7 +579,7 @@ class Stack&lt;T&gt; {
   pop(): T | undefined { return this.items.pop(); }
 }</pre>
 
-<h3>19.7 Narrowing</h3>
+<h3>3.7 Narrowing</h3>
 <pre data-lang="ts">function fmt(x: string | number) {
   if (typeof x === 'string') return x.toUpperCase();    // narrowed: string
   return x.toFixed(2);                                  // narrowed: number
@@ -607,7 +608,7 @@ function up(v: unknown) {
   if (isString(v)) return v.toUpperCase();
 }</pre>
 
-<h3>19.8 Utility types — the ones you'll use</h3>
+<h3>3.8 Utility types — the ones you'll use</h3>
 <pre data-lang="ts">interface User { id: string; name: string; age: number }
 
 type Partial1   = Partial&lt;User&gt;;    // all fields optional
@@ -624,7 +625,7 @@ type Params     = Parameters&lt;typeof fn&gt;;         // tuple of fn's params
 function fn(a: number, b: string): boolean { return true; }
 // RT = boolean, Params = [number, string]</pre>
 
-<h3>19.9 Enums (and why <code class="inline">as const</code> often beats them)</h3>
+<h3>3.9 Enums (and why <code class="inline">as const</code> often beats them)</h3>
 <pre data-lang="ts">// Classic enum
 enum Status { Pending = 'pending', Paid = 'paid', Failed = 'failed' }
 const s: Status = Status.Pending;
@@ -635,7 +636,7 @@ type Status2 = typeof STATUS[keyof typeof STATUS];   // 'pending' | 'paid' | 'fa
 
 <div class="tip"><b>Tip</b>Modern TS code often skips enums in favour of <code class="inline">as const</code> objects. Smaller runtime, easier to refactor, same type safety.</div>
 
-<h3>19.10 Mapped &amp; conditional types</h3>
+<h3>3.10 Mapped &amp; conditional types</h3>
 <pre data-lang="ts">// Mapped — transform each property
 type Stringify&lt;T&gt; = { [K in keyof T]: string };
 type S = Stringify&lt;User&gt;;   // { id: string; name: string; age: string }
@@ -650,7 +651,7 @@ type Pets = 'cat' | 'dog' | 'fish';
 type Furry = Extract&lt;Pets, 'cat' | 'dog'&gt;;     // 'cat' | 'dog'
 type NotFish = Exclude&lt;Pets, 'fish'&gt;;          // 'cat' | 'dog'</pre>
 
-<h3>19.11 Classes — TS additions</h3>
+<h3>3.11 Classes — TS additions</h3>
 <pre data-lang="ts">class Account {
   // Access modifiers
   public  id: string;
@@ -677,7 +678,7 @@ abstract class Shape {
   abstract area(): number;     // subclasses must implement
 }</pre>
 
-<h3>19.12 tsconfig.json — what matters</h3>
+<h3>3.12 tsconfig.json — what matters</h3>
 <pre data-lang="json">{
   "compilerOptions": {
     "target": "ES2022",
@@ -701,7 +702,7 @@ abstract class Shape {
 
 <div class="tip"><b>Always strict</b>Turn on <code class="inline">strict: true</code> from day one. Retrofitting later is painful. Add <code class="inline">noUncheckedIndexedAccess</code> if you can — catches a lot of "undefined" bugs in test fixtures.</div>
 
-<h3>19.13 Common TS patterns in test code</h3>
+<h3>3.13 Common TS patterns in test code</h3>
 <pre data-lang="ts">// Discriminated union for response handling
 type ApiResult&lt;T&gt; =
   | { ok: true;  data: T }
@@ -786,7 +787,7 @@ const test = base.extend&lt;Fixtures&gt;({ /* ... */ });</pre>
 <details class="qa"><summary>What's the difference between satisfies and as?</summary>
 <div class="answer"><code class="inline">as T</code> is a type assertion — trust me, treat this as T (no check). <code class="inline">satisfies T</code> (TS 4.9+) checks that the value matches T but keeps the inferred narrower type. Prefer satisfies when you can.</div></details>
 
-<h3>19.14 More TS interview Q&amp;A</h3>
+<h3>3.14 More TS interview Q&amp;A</h3>
 
 <details class="qa"><summary>What's a conditional type?</summary>
 <div class="answer">Ternary at type level: <code class="inline">T extends U ? X : Y</code>. Powers utility types like ReturnType, Awaited. Distributive over unions: <code class="inline">T extends any ? T[] : never</code> applies branch to each member.</div></details>

@@ -69,7 +69,6 @@ The curriculum is structured into 12 curated sections (plus a bonus module), gui
 
 ## ✨ Premium UX Features
 
-* **Offline-Ready:** The master copy is a single self-contained HTML file that runs anywhere without internet.
 * **Live Search with Snippets:** Fast, client-side keyword filtering with content preview snippets in the navigation sidebar.
 * **Collapsible Sidebar Nav:** Toggle sidebar on/off — adapts seamlessly across mobile, tablet, and desktop viewports.
 * **Smart Sidebar Scrolling:** Restores scroll position and auto-centers the active module link in the viewport.

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>SDET System Design | Playwright SDET Mastery</title>
   <meta name="description" content="Learn SDET System Design — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, sdet-system-design, testing, automation, playwright sdet system design">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>26.1 How interviewers grade this round</h3>
+<h3>36.1 How interviewers grade this round</h3>
 <p>SDET system design at 5+ years experience asks: <em>"Design a Y at scale for an org with N tests / N devs / N envs."</em> They look for:</p>
 <ul>
 <li>You ask clarifying questions before drawing — scale, constraints, who uses it</li>
@@ -488,7 +489,7 @@ a.active .search-snippet {
 <li>You spot bottlenecks and propose mitigations</li>
 </ul>
 
-<h3>26.2 Common SDET system-design prompts</h3>
+<h3>36.2 Common SDET system-design prompts</h3>
 <ol>
 <li>"Design a test execution platform for 10K tests across 50 microservices, running on every PR within 10 minutes."</li>
 <li>"Design a test data management service that gives each test isolated, realistic data on demand."</li>
@@ -497,7 +498,7 @@ a.active .search-snippet {
 <li>"Design a unified test results dashboard across teams."</li>
 </ol>
 
-<h3>26.3 Worked example — distributed test execution platform</h3>
+<h3>36.3 Worked example — distributed test execution platform</h3>
 
 <h4>(1) Clarify</h4>
 <ul>
@@ -628,7 +629,7 @@ a.active .search-snippet {
 <li><strong>Synchronous result vs polling</strong> — GitHub status check polls; webhooks on result table can push updates.</li>
 </ul>
 
-<h3>26.4 Smart test selection</h3>
+<h3>36.4 Smart test selection</h3>
 <p>Run only tests likely affected by the diff. Several approaches:</p>
 <ul>
 <li><strong>Path-based</strong> — file change in <code class="inline">/checkout/</code> triggers tests tagged <code class="inline">@checkout</code>. Static mapping, simple, brittle.</li>
@@ -637,7 +638,7 @@ a.active .search-snippet {
 <li><strong>Test impact analysis (TIA)</strong> — combination above + safety net of full regression nightly.</li>
 </ul>
 
-<h3>26.5 Test Data Service</h3>
+<h3>36.5 Test Data Service</h3>
 <p>Goal: every test gets isolated, realistic data, in milliseconds. Options:</p>
 <table>
 <tr><th>Pattern</th><th>Pros</th><th>Cons</th></tr>
@@ -647,7 +648,7 @@ a.active .search-snippet {
 <tr><td>Synthetic data on the fly</td><td>Flexible</td><td>Hard to ensure realism</td></tr>
 </table>
 
-<h3>26.6 Self-healing locators (AI-assisted)</h3>
+<h3>36.6 Self-healing locators (AI-assisted)</h3>
 <p>When a locator breaks because the DOM changed, the system tries to find the best alternative automatically. Approach:</p>
 <ol>
 <li>Capture a rich snapshot per locator on green runs (role, name, neighbours, text, position, attributes).</li>
@@ -656,7 +657,7 @@ a.active .search-snippet {
 <li>Surface healed locators in PR for human review — never silently change tests.</li>
 </ol>
 
-<h3>26.7 Reporting analytics</h3>
+<h3>36.7 Reporting analytics</h3>
 <ul>
 <li>Time-series of pass rate, retry rate, mean run time per test</li>
 <li>Top flaky tests this week</li>
@@ -666,7 +667,7 @@ a.active .search-snippet {
 <li>Cost per PR</li>
 </ul>
 
-<h3>26.8 Common follow-up questions</h3>
+<h3>36.8 Common follow-up questions</h3>
 <ul>
 <li>"What if a worker crashes mid-test?" — retry on a different worker, mark the original as failed/retried.</li>
 <li>"How do you handle test data tied to a specific tenant?" — tenant pool with leases; expire stale leases.</li>
@@ -733,7 +734,7 @@ a.active .search-snippet {
 <div class="answer">Per-PR: synthetic Lighthouse on critical routes; compare against main baseline; fail if regression &gt; threshold (e.g. LCP +200 ms). Nightly: full k6 load test with budgets. Production: RUM with web-vitals → alerts on p95 degradation.</div></details>
 </div>
 
-<h3>26.4 Implementation Patterns</h3>
+<h3>36.4 Implementation Patterns</h3>
 
 <h4>Test Execution Queue — Python + Redis</h4>
 <pre data-lang="python">

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Jenkins | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Jenkins — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, jenkins, testing, automation, playwright jenkins">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>62.1 Architecture</h3>
+<h3>30.1 Architecture</h3>
 <ul>
 <li><strong>Controller</strong> — orchestrator; stores config, schedules jobs, serves UI</li>
 <li><strong>Agent</strong> — worker (formerly "slave") that runs builds</li>
@@ -487,7 +488,7 @@ a.active .search-snippet {
 <li><strong>Build</strong> — one execution of a job</li>
 </ul>
 
-<h3>62.2 Declarative Pipeline (modern default)</h3>
+<h3>30.2 Declarative Pipeline (modern default)</h3>
 <pre data-lang="bash">// Jenkinsfile
 pipeline {
   agent any
@@ -543,7 +544,7 @@ pipeline {
   }
 }</pre>
 
-<h3>62.3 Scripted Pipeline (older Groovy DSL)</h3>
+<h3>30.3 Scripted Pipeline (older Groovy DSL)</h3>
 <pre data-lang="bash">node('linux') {
   stage('checkout') { checkout scm }
   stage('install')  { sh 'npm ci' }
@@ -556,7 +557,7 @@ pipeline {
   }
 }</pre>
 
-<h3>62.4 Credentials &amp; secrets</h3>
+<h3>30.4 Credentials &amp; secrets</h3>
 <pre data-lang="bash">// Use a credential id stored in Jenkins
 withCredentials([
   string(credentialsId: 'JIRA_TOKEN', variable: 'JIRA_TOKEN'),
@@ -565,7 +566,7 @@ withCredentials([
   sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
 }</pre>
 
-<h3>62.5 Parallel + matrix</h3>
+<h3>30.5 Parallel + matrix</h3>
 <pre data-lang="bash">// Static parallel
 stage('Test') {
   parallel {
@@ -589,7 +590,7 @@ matrix {
   }
 }</pre>
 
-<h3>62.6 Shared libraries</h3>
+<h3>30.6 Shared libraries</h3>
 <pre data-lang="bash">// vars/runPlaywright.groovy
 def call(Map config = [:]) {
   sh "npx playwright test --shard=${config.shard ?: '1/1'}"
@@ -607,7 +608,7 @@ pipeline {
   }
 }</pre>
 
-<h3>62.7 Common plugins for SDETs</h3>
+<h3>30.7 Common plugins for SDETs</h3>
 <table>
 <tr><th>Plugin</th><th>Purpose</th></tr>
 <tr><td>JUnit</td><td>Test result parsing + trend</td></tr>
@@ -620,7 +621,7 @@ pipeline {
 <tr><td>Configuration as Code (JCasC)</td><td>Jenkins config from YAML</td></tr>
 </table>
 
-<h3>62.8 Jenkins vs GitHub Actions vs GitLab CI</h3>
+<h3>30.8 Jenkins vs GitHub Actions vs GitLab CI</h3>
 <table>
 <tr><th>Aspect</th><th>Jenkins</th><th>GitHub Actions</th><th>GitLab CI</th></tr>
 <tr><td>Hosting</td><td>Self-host (usually)</td><td>SaaS / self-hosted runners</td><td>SaaS / self-hosted runners</td></tr>

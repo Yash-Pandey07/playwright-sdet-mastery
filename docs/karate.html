@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Karate Framework | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Karate Framework — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, karate, testing, automation, playwright karate framework">
@@ -477,10 +478,10 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>47.1 What Karate is</h3>
+<h3>49.1 What Karate is</h3>
 <p>Karate is a JVM-based, BDD-style API testing tool from Intuit. It removes Java boilerplate — tests are written in a Gherkin-derived DSL inside <code class="inline">.feature</code> files. No step-definition code; built-in matchers, JSON traversal, schema validation, JS expressions.</p>
 
-<h3>47.2 First test</h3>
+<h3>49.2 First test</h3>
 <pre data-lang="gherkin">Feature: users API
 
 Background:
@@ -502,7 +503,7 @@ Scenario: get the user just created
   Then status 200
   And match response.email == 'alice@test.com'</pre>
 
-<h3>47.3 The match operator (Karate's killer feature)</h3>
+<h3>49.3 The match operator (Karate's killer feature)</h3>
 <pre data-lang="gherkin">* def actual = { foo: 'bar', baz: 42 }
 
 * match actual == { foo: 'bar', baz: 42 }              # full equality
@@ -518,7 +519,7 @@ Scenario: get the user just created
 * match each list == { id: '#number' }                 # every element
 * match list[?(@.id == 2)] != []                       # JSONPath filter</pre>
 
-<h3>47.4 Data-driven via Examples</h3>
+<h3>49.4 Data-driven via Examples</h3>
 <pre data-lang="gherkin">Scenario Outline: status code &lt;code&gt; for &lt;path&gt;
   Given path '&lt;path&gt;'
   When method get
@@ -530,7 +531,7 @@ Scenario: get the user just created
     | /users/9999 | 404  |
     | /admin      | 403  |</pre>
 
-<h3>47.5 Chained scenarios — calling features from features</h3>
+<h3>49.5 Chained scenarios — calling features from features</h3>
 <pre data-lang="gherkin">* def created = call read('create-user.feature') { email: 'qa@test.com' }
 * def userId = created.userId
 
@@ -538,7 +539,7 @@ Given path '/users', userId
 When method get
 Then status 200</pre>
 
-<h3>47.6 Parallel runner</h3>
+<h3>49.6 Parallel runner</h3>
 <pre data-lang="java">// JUnit 5 wrapper
 public class AllTests {
   @Test
@@ -550,14 +551,14 @@ public class AllTests {
   }
 }</pre>
 
-<h3>47.7 Karate UI + Mock</h3>
+<h3>49.7 Karate UI + Mock</h3>
 <ul>
 <li><strong>Karate UI</strong> — Same DSL extended for browser automation (driver=chrome|firefox|playwright). Lower-level than Playwright but unifies API+UI in one feature file.</li>
 <li><strong>Karate Mock</strong> — Standalone HTTP mock server defined in a feature file. Useful for service virtualisation in CI.</li>
 <li><strong>Karate Gatling</strong> — Use the same feature files for load testing via Gatling.</li>
 </ul>
 
-<h3>47.8 When to pick Karate</h3>
+<h3>49.8 When to pick Karate</h3>
 <table>
 <tr><th>Pick Karate when</th><th>Pick alternative when</th></tr>
 <tr><td>Team mixes engineers + non-engineers writing tests</td><td>Everyone is a developer (REST Assured or Playwright fits better)</td></tr>

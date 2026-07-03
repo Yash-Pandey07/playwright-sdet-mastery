@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>React for SDET | Playwright SDET Mastery</title>
   <meta name="description" content="Learn React for SDET — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, react, testing, automation, playwright react for sdet">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>59.1 Mental model</h3>
+<h3>56.1 Mental model</h3>
 <p>A React app is a tree of <strong>components</strong>. Each component is a function that returns JSX (HTML-like markup). State changes trigger re-renders; React diffs the new tree against the previous one and updates only the changed DOM nodes (reconciliation).</p>
 
 <pre data-lang="ts">// Functional component
@@ -495,7 +496,7 @@ function Counter() {
   );
 }</pre>
 
-<h3>59.2 Hooks reference</h3>
+<h3>56.2 Hooks reference</h3>
 <table>
 <tr><th>Hook</th><th>Purpose</th></tr>
 <tr><td>useState</td><td>Local state</td></tr>
@@ -508,7 +509,7 @@ function Counter() {
 <tr><td>useLayoutEffect</td><td>Synchronous effect (before paint)</td></tr>
 </table>
 
-<h3>59.3 Reconciliation + keys</h3>
+<h3>56.3 Reconciliation + keys</h3>
 <pre data-lang="ts">// BAD — without keys, React can't tell which item is which
 {items.map((item, i) =&gt; &lt;Row data={item} /&gt;)}
 
@@ -517,7 +518,7 @@ function Counter() {
 
 <p>Missing keys cause subtle bugs: input state attaches to the wrong row after reordering. SDETs catch these in drag-and-drop / sortable lists.</p>
 
-<h3>59.4 Testing with React Testing Library</h3>
+<h3>56.4 Testing with React Testing Library</h3>
 <pre data-lang="ts">import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LoginForm } from './LoginForm';
@@ -538,7 +539,7 @@ it('submits credentials', async () =&gt; {
 
 <div class="tip"><b>Same locator philosophy as Playwright</b>RTL pushes getByRole / getByLabel — same accessible-name approach. Skills transfer between unit and E2E.</div>
 
-<h3>59.5 Mocking API calls with MSW</h3>
+<h3>56.5 Mocking API calls with MSW</h3>
 <pre data-lang="ts">// src/mocks/handlers.ts
 import { http, HttpResponse } from 'msw';
 export const handlers = [
@@ -557,7 +558,7 @@ it('shows user name from API', async () =&gt; {
   expect(await screen.findByText('Alice')).toBeInTheDocument();
 });</pre>
 
-<h3>59.6 Playwright Component Testing</h3>
+<h3>56.6 Playwright Component Testing</h3>
 <pre data-lang="bash">npm init playwright@latest -- --ct
 # pick framework: React</pre>
 
@@ -574,7 +575,7 @@ test('renders + click', async ({ mount }) =&gt; {
 
 <p>Component tests render in a real browser via Playwright but mount just the component (no app shell). Faster than full E2E, more realistic than jsdom.</p>
 
-<h3>59.7 Common React bugs SDETs catch</h3>
+<h3>56.7 Common React bugs SDETs catch</h3>
 <ul>
 <li><strong>Stale closures</strong> — onClick captures old state from render. Symptom: counter increments by 1 even after 3 clicks. Fix: functional updater <code class="inline">setCount(c =&gt; c+1)</code>.</li>
 <li><strong>Missing keys</strong> — list reorder bug; old input state appears on wrong row.</li>
@@ -585,7 +586,7 @@ test('renders + click', async ({ mount }) =&gt; {
 <li><strong>Accessibility bugs</strong> — div onClick (no role/keyboard), missing labels.</li>
 </ul>
 
-<h3>59.8 React 18 / 19 highlights</h3>
+<h3>56.8 React 18 / 19 highlights</h3>
 <ul>
 <li><strong>Concurrent rendering</strong> — React can pause/resume work; users see smoother UX</li>
 <li><strong>useTransition</strong> — marks updates as non-urgent</li>

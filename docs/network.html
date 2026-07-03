@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Network & Advanced | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Network & Advanced — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, network, testing, automation, playwright network advanced">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>4.1 Intercepting network — page.route</h3>
+<h3>8.1 Intercepting network — page.route</h3>
 <p>Every network request a Page (or the whole BrowserContext) makes can be intercepted. You can let it through, modify it, or fake the response entirely.</p>
 
 <pre data-lang="ts">// Intercept all requests to /api/users — fulfill with a fake JSON
@@ -537,7 +538,7 @@ await expect(page.getByText('Alice')).toBeVisible();</pre>
 
 <div class="tip"><b>Pattern matching</b>Route patterns use glob (<code class="inline">**/api/**</code>), regex (<code class="inline">page.route(/\/api\/users/, …)</code>), or a predicate function.</div>
 
-<h3>4.2 Simulating errors and slow networks</h3>
+<h3>8.2 Simulating errors and slow networks</h3>
 <pre data-lang="ts">// 500 server error
 await page.route('**/api/checkout', route =&gt; route.fulfill({
   status: 500,
@@ -555,7 +556,7 @@ await page.route('**/api/products', async route =&gt; {
 
 // Test should still pass — UI must show loading spinner</pre>
 
-<h3>4.3 Waiting for requests/responses (promise-first)</h3>
+<h3>8.3 Waiting for requests/responses (promise-first)</h3>
 <p>Use <code class="inline">waitForResponse</code> when you need to assert <em>against</em> a network call (e.g. "the POST went through and returned 201"). Always use the Promise.all pattern so you start listening before the action triggers the call.</p>
 
 <pre data-lang="ts">const [response] = await Promise.all([
@@ -575,7 +576,7 @@ expect(body.orderId).toMatch(/ORD-/);</pre>
 ]);
 expect(request.postDataJSON()).toMatchObject({ event: 'cta_click' });</pre>
 
-<h3>4.4 The promise-first pattern, deeply explained</h3>
+<h3>8.4 The promise-first pattern, deeply explained</h3>
 <p>Browser events (popups, downloads, requests, responses) can fire <em>synchronously</em> with the action that triggers them. If you act first and then await the event, the event may have already fired and your listener missed it.</p>
 
 <div class="cmp">
@@ -597,7 +598,7 @@ const [popup] = await Promise.all([
 
 <p><code class="inline">Promise.all</code> kicks off all promises in the array <em>before</em> awaiting any of them. The waitForEvent listener is registered first, then the click runs — event firing is guaranteed to be observed.</p>
 
-<h3>4.5 HAR — record and replay real traffic</h3>
+<h3>8.5 HAR — record and replay real traffic</h3>
 <p>A HAR file is a JSON capture of every HTTP request/response on a page. Playwright can record one, and later replay tests against it (zero real network).</p>
 
 <pre data-lang="ts">// Record
@@ -613,7 +614,7 @@ await page.goto('/checkout');
 
 <div class="tip"><b>When HAR shines</b>Snapshot a complex API conversation once, then run tests against the snapshot offline. Eliminates "the staging API is down" failures.</div>
 
-<h3>4.6 The Trace Viewer — time-travel debugging</h3>
+<h3>8.6 The Trace Viewer — time-travel debugging</h3>
 <p>When a test fails, Playwright can save a <em>trace</em> — a zip with: DOM snapshots before/after every action, screenshots, network log, console log, source mapping. You open it in the Trace Viewer and "scrub" through your test.</p>
 
 <pre data-lang="ts">// In playwright.config.ts
@@ -666,7 +667,7 @@ use: {
 <div class="caption">Figure 6 — Trace Viewer: scrub the timeline, see DOM before/after each action, network beside it.</div>
 </div>
 
-<h3>4.7 Debugging tools</h3>
+<h3>8.7 Debugging tools</h3>
 
 <h4>Headed mode</h4>
 <pre data-lang="bash">npx playwright test --headed     # show the browser</pre>
@@ -695,7 +696,7 @@ npx playwright show-report</pre>
 npx playwright test --project=firefox
 npx playwright test --workers=1 --headed</pre>
 
-<h3>4.8 Putting it together — mocked API test</h3>
+<h3>8.8 Putting it together — mocked API test</h3>
 <pre data-lang="ts">test('checkout shows server error gracefully', async ({ page }) =&gt; {
   await page.route('**/api/checkout', route =&gt; route.fulfill({
     status: 500,

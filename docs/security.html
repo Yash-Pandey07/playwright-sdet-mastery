@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Security Testing (OWASP) | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Security Testing (OWASP) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, security, testing, automation, playwright security testing owasp ">
@@ -476,7 +477,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>53.1 OWASP Top 10 (2021)</h3>
+<h3>52.1 OWASP Top 10 (2021)</h3>
 <table>
 <tr><th>#</th><th>Category</th><th>What it is</th><th>Test idea</th></tr>
 <tr><td>A01</td><td>Broken Access Control</td><td>Users do things they shouldn't</td><td>Hit admin endpoints as a regular user — expect 403</td></tr>
@@ -491,7 +492,7 @@ a.active .search-snippet {
 <tr><td>A10</td><td>SSRF</td><td>Server fetches attacker-controlled URLs</td><td>Send URLs pointing at metadata services / localhost</td></tr>
 </table>
 
-<h3>53.2 Common attack vectors — test recipes</h3>
+<h3>52.2 Common attack vectors — test recipes</h3>
 
 <h4>XSS (Cross-Site Scripting)</h4>
 <pre data-lang="ts">// Try storing malicious payload, then reading
@@ -530,7 +531,7 @@ POST /api/fetch {"url": "http://localhost:6379/"}
 <pre data-lang="bash">GET /redirect?to=https://evil.com
 # expected: rejected or warning, not silent redirect</pre>
 
-<h3>53.3 ZAP (OWASP Zed Attack Proxy)</h3>
+<h3>52.3 ZAP (OWASP Zed Attack Proxy)</h3>
 <p>Open-source security scanner. Acts as a proxy: spider the app, then run active scans (auth bypass, XSS, SQLi).</p>
 <pre data-lang="bash"># Baseline scan — passive only (safe to run in CI)
 docker run -t owasp/zap2docker-stable zap-baseline.py -t https://staging.acme.com
@@ -540,11 +541,11 @@ docker run -t owasp/zap2docker-stable zap-full-scan.py -t https://staging.acme.c
 
 <p>Integrate into CI: baseline scan on every PR; full scan nightly. Fail build on high-severity findings.</p>
 
-<h3>53.4 Burp Suite</h3>
+<h3>52.4 Burp Suite</h3>
 <p>Commercial (free Community edition) intercepting proxy. Used heavily by pentesters. Features: HTTP history, Repeater (resend modified requests), Intruder (fuzz parameters), Decoder, Sequencer (test session tokens for randomness).</p>
 <p>Workflow: configure browser to use Burp as proxy, click around the app, watch traffic. Send interesting requests to Repeater to mutate and replay.</p>
 
-<h3>53.5 Other tools</h3>
+<h3>52.5 Other tools</h3>
 <table>
 <tr><th>Tool</th><th>Purpose</th></tr>
 <tr><td>sqlmap</td><td>Automated SQL injection — given a URL/parameter, tries many payloads</td></tr>
@@ -555,7 +556,7 @@ docker run -t owasp/zap2docker-stable zap-full-scan.py -t https://staging.acme.c
 <tr><td>Semgrep / Bandit / ESLint security plugins</td><td>SAST — static code analysis</td></tr>
 </table>
 
-<h3>53.6 Authentication tests</h3>
+<h3>52.6 Authentication tests</h3>
 <ul>
 <li>Brute force: hit /login with 100 wrong passwords — expect 429 after N</li>
 <li>Weak password accepted: try "password" — expect rejection</li>
@@ -564,7 +565,7 @@ docker run -t owasp/zap2docker-stable zap-full-scan.py -t https://staging.acme.c
 <li>Insecure direct password storage: register, dump DB, ensure password is hashed (bcrypt/argon2), not plain or MD5</li>
 </ul>
 
-<h3>53.7 Security headers (cheap wins)</h3>
+<h3>52.7 Security headers (cheap wins)</h3>
 <table>
 <tr><th>Header</th><th>Purpose</th></tr>
 <tr><td>Content-Security-Policy</td><td>Restricts which sources scripts/styles can load from</td></tr>
@@ -583,7 +584,7 @@ docker run -t owasp/zap2docker-stable zap-full-scan.py -t https://staging.acme.c
   expect(h['x-content-type-options']).toBe('nosniff');
 });</pre>
 
-<h3>53.8 SDET role in security</h3>
+<h3>52.8 SDET role in security</h3>
 <ul>
 <li>Own the cheap, automatable checks: headers, auth flows, basic injection fuzzing, dependency scans in CI.</li>
 <li>Partner with dedicated AppSec / pentest teams for deep audits, threat modelling.</li>

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Playwright Cheat Sheet | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Playwright Cheat Sheet — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, cheat-sheet, testing, automation, playwright playwright cheat sheet">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>34.1 CLI</h3>
+<h3>16.1 CLI</h3>
 <pre data-lang="bash">npm init playwright@latest                      # scaffold project
 npx playwright install --with-deps              # download browsers + OS libs
 npx playwright test                             # run all tests
@@ -493,7 +494,7 @@ npx playwright codegen https://site.com         # record actions
 npx playwright show-report                      # open last HTML report
 npx playwright show-trace trace.zip             # open a specific trace</pre>
 
-<h3>34.2 Locators</h3>
+<h3>16.2 Locators</h3>
 <pre data-lang="ts">page.getByRole('button', { name: 'Buy', exact: true });
 page.getByLabel('Email');
 page.getByPlaceholder('Search');
@@ -514,7 +515,7 @@ page.locator('div:has(span.badge)');
 // Chaining
 page.getByRole('row', { name: /alice/i }).getByRole('button', { name: 'Delete' });</pre>
 
-<h3>34.3 Actions</h3>
+<h3>16.3 Actions</h3>
 <pre data-lang="ts">await locator.click({ button: 'right', clickCount: 2, modifiers: ['Shift'] });
 await locator.dblclick();
 await locator.fill('text');
@@ -538,7 +539,7 @@ await page.evaluate(() =&gt; window.scrollTo(0, 0));
 await page.exposeFunction('name', fn);
 await page.addInitScript(() =&gt; { /* ... */ });</pre>
 
-<h3>34.4 Web-first assertions</h3>
+<h3>16.4 Web-first assertions</h3>
 <pre data-lang="ts">await expect(loc).toBeVisible(); toBeHidden(); toBeAttached(); toBeFocused();
 await expect(loc).toHaveText('x'); toContainText('e'); toHaveText([...]);
 await expect(loc).toHaveValue('x'); toHaveAttribute('href', '/x');
@@ -555,7 +556,7 @@ await expect.poll(async () =&gt; (await api.getStatus()).value).toBe('ready');
 // Negation
 await expect(loc).not.toBeVisible();</pre>
 
-<h3>34.5 Network</h3>
+<h3>16.5 Network</h3>
 <pre data-lang="ts">// Mock
 await page.route('**/api/x', route =&gt; route.fulfill({ status: 200, body: '[]' }));
 // Modify request
@@ -581,7 +582,7 @@ const [res] = await Promise.all([
 // HAR
 await context.routeFromHAR('flow.har', { update: true });</pre>
 
-<h3>34.6 Fixtures &amp; config</h3>
+<h3>16.6 Fixtures &amp; config</h3>
 <pre data-lang="ts">// Custom fixture
 export const test = base.extend&lt;{ loginPage: LoginPage }&gt;({
   loginPage: async ({ page }, use) =&gt; { await use(new LoginPage(page)); },
@@ -600,7 +601,7 @@ use: { baseURL: 'https://app', viewport: { width: 1440, height: 900 },
 projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] }, dependencies: ['setup'] }],
 webServer: { command: 'npm start', url: 'http://localhost:3000', reuseExistingServer: !process.env.CI }</pre>
 
-<h3>34.7 Events</h3>
+<h3>16.7 Events</h3>
 <pre data-lang="ts">// Dialog
 page.on('dialog', d =&gt; d.accept('value'));
 // Popup / new tab
@@ -615,13 +616,13 @@ await fc.setFiles('file.pdf');
 page.on('console', m =&gt; console.log(m.type(), m.text()));
 page.on('pageerror', e =&gt; console.error(e.message));</pre>
 
-<h3>34.8 iframes</h3>
+<h3>16.8 iframes</h3>
 <pre data-lang="ts">const f = page.frameLocator('iframe[name="card"]');
 await f.getByPlaceholder('CVC').fill('123');
 // Nested
 const inner = page.frameLocator('#outer').frameLocator('#inner');</pre>
 
-<h3>34.9 Visual</h3>
+<h3>16.9 Visual</h3>
 <pre data-lang="ts">await expect(page).toHaveScreenshot('home.png', {
   fullPage: true,
   animations: 'disabled',
@@ -630,7 +631,7 @@ const inner = page.frameLocator('#outer').frameLocator('#inner');</pre>
   maxDiffPixelRatio: 0.01,
 });</pre>
 
-<h3>34.10 API</h3>
+<h3>16.10 API</h3>
 <pre data-lang="ts">// In test
 test('api', async ({ request }) =&gt; {
   const r = await request.post('/api/x', { data: { a: 1 }, headers: { Authorization: 'Bearer t' } });
@@ -641,7 +642,7 @@ test('api', async ({ request }) =&gt; {
 const api = await playwright.request.newContext({ baseURL: 'https://api', extraHTTPHeaders: { Authorization: 't' } });
 await api.dispose();</pre>
 
-<h3>34.11 Debug</h3>
+<h3>16.11 Debug</h3>
 <pre data-lang="ts">await page.pause();                // breakpoint — opens inspector
 await page.screenshot({ path: 'd.png' });
 await context.tracing.start({ screenshots: true, snapshots: true });
@@ -649,7 +650,7 @@ await context.tracing.stop({ path: 't.zip' });
 // View later
 // npx playwright show-trace t.zip</pre>
 
-<h3>34.12 Common one-liners</h3>
+<h3>16.12 Common one-liners</h3>
 <pre data-lang="ts">// Block third-party
 await context.route('**/*', r =&gt; /analytics|hotjar/.test(r.request().url()) ? r.abort() : r.continue());
 // Add cookie
@@ -661,7 +662,7 @@ const ctx = await chromium.launchPersistentContext('./userdir', { headless: fals
 // Connect to remote browser
 const browser = await chromium.connect({ wsEndpoint: 'wss://...' });</pre>
 
-<h3>34.13 Most-used Q's in interviews — 30-sec answers</h3>
+<h3>16.13 Most-used Q's in interviews — 30-sec answers</h3>
 <table>
 <tr><th>Q</th><th>A in 1 sentence</th></tr>
 <tr><td>Locator vs ElementHandle?</td><td>Locator is a re-resolved description; ElementHandle is a stale handle.</td></tr>

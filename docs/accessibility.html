@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Accessibility Testing | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Accessibility Testing — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, accessibility, testing, automation, playwright accessibility testing">
@@ -475,10 +476,10 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>14.1 Why a11y testing</h3>
+<h3>12.1 Why a11y testing</h3>
 <p>15% of users have a disability of some kind. Beyond ethics, accessibility is increasingly a legal requirement (EU Accessibility Act 2025, ADA in US, Section 508). And — usefully for SDETs — accessible markup is also the markup Playwright's role-based locators rely on. Improving a11y improves test stability for free.</p>
 
-<h3>14.2 WCAG levels</h3>
+<h3>12.2 WCAG levels</h3>
 <table>
 <tr><th>Level</th><th>What it covers</th><th>Realistic target</th></tr>
 <tr><td>A</td><td>Most basic — alt text, keyboard, no flashing</td><td>Bare minimum, always</td></tr>
@@ -486,7 +487,7 @@ a.active .search-snippet {
 <tr><td>AAA</td><td>Highest — sign language, contrast 7:1, extended text</td><td>Hard to fully meet; pick where it counts</td></tr>
 </table>
 
-<h3>14.3 axe-core + Playwright</h3>
+<h3>12.3 axe-core + Playwright</h3>
 <p>axe-core is the industry-standard a11y engine (used by Lighthouse and many tools). Install the Playwright wrapper:</p>
 <pre data-lang="bash">npm i -D @axe-core/playwright</pre>
 
@@ -504,7 +505,7 @@ test('home page has no detectable a11y violations', async ({ page }) =&gt; {
 
 <p>If there are violations, the message lists each rule (e.g. <em>color-contrast</em>, <em>label</em>) with the failing nodes and a help URL — actionable, not noise.</p>
 
-<h3>14.4 Common rules to gate on</h3>
+<h3>12.4 Common rules to gate on</h3>
 <table>
 <tr><th>Rule</th><th>What it catches</th></tr>
 <tr><td>color-contrast</td><td>Text-to-background contrast below WCAG threshold</td></tr>
@@ -518,7 +519,7 @@ test('home page has no detectable a11y violations', async ({ page }) =&gt; {
 <tr><td>heading-order</td><td>h1→h2→h3 logical order (no skipping)</td></tr>
 </table>
 
-<h3>14.5 Scoping the scan</h3>
+<h3>12.5 Scoping the scan</h3>
 <pre data-lang="ts">// Only scan a specific component
 const results = await new AxeBuilder({ page })
   .include('.product-card')
@@ -527,7 +528,7 @@ const results = await new AxeBuilder({ page })
   .disableRules(['color-contrast'])  // temporary while a contrast fix is in progress
   .analyze();</pre>
 
-<h3>14.6 Manual checks the automation can't do</h3>
+<h3>12.6 Manual checks the automation can't do</h3>
 <ul>
 <li><strong>Keyboard navigation</strong> — can a user reach every interactive element with Tab? Order makes sense?</li>
 <li><strong>Focus visibility</strong> — does the focus ring show on every focusable element?</li>
@@ -536,7 +537,7 @@ const results = await new AxeBuilder({ page })
 <li><strong>Real users</strong> — best signal; partner with disability orgs for periodic audits</li>
 </ul>
 
-<h3>14.7 Keyboard + focus tests (DIY without axe)</h3>
+<h3>12.7 Keyboard + focus tests (DIY without axe)</h3>
 <pre data-lang="ts">test('tab order goes through every form field', async ({ page }) =&gt; {
   await page.goto('/signup');
   await page.keyboard.press('Tab');
@@ -557,7 +558,7 @@ test('error message is announced to screen readers', async ({ page }) =&gt; {
   await expect(err).toHaveText(/email is required/i);
 });</pre>
 
-<h3>14.8 CI gating</h3>
+<h3>12.8 CI gating</h3>
 <pre data-lang="ts">// tests/a11y.spec.ts — run as part of regular suite
 import AxeBuilder from '@axe-core/playwright';
 
@@ -606,7 +607,7 @@ for (const path of PAGES) {
 <div class="answer">Role-based locators (<code class="inline">getByRole</code>) work because the markup is semantic. Improving a11y (correct roles, labels, headings) makes your tests less brittle. Bad markup hurts both users and SDETs.</div></details>
 </div>
 
-<h3>14.9 WCAG 2.2 (new since 2.1)</h3>
+<h3>12.9 WCAG 2.2 (new since 2.1)</h3>
 <ul>
 <li><strong>Focus Not Obscured</strong> — sticky headers/footers can hide focused element on scroll</li>
 <li><strong>Focus Appearance</strong> — focus indicator must meet contrast + thickness</li>
@@ -616,7 +617,7 @@ for (const path of PAGES) {
 <li><strong>Accessible Authentication</strong> — no cognitive tests required (CAPTCHA exceptions)</li>
 </ul>
 
-<h3>14.10 Screen reader basics (NVDA / VoiceOver / JAWS)</h3>
+<h3>12.10 Screen reader basics (NVDA / VoiceOver / JAWS)</h3>
 <ul>
 <li><strong>NVDA</strong> — free Windows; default Insert key. Test on Firefox/Chrome.</li>
 <li><strong>VoiceOver</strong> — built into macOS/iOS. Cmd+F5. Use on Safari for parity with iPhone users.</li>
@@ -633,7 +634,7 @@ for (const path of PAGES) {
 <li>Arrow keys — read line by line</li>
 </ul>
 
-<h3>14.11 ARIA — only when HTML doesn't suffice</h3>
+<h3>12.11 ARIA — only when HTML doesn't suffice</h3>
 <table>
 <tr><th>Need</th><th>HTML first</th><th>ARIA fallback</th></tr>
 <tr><td>Clickable</td><td><code class="inline">&lt;button&gt;</code></td><td><code class="inline">role="button" tabindex="0"</code> + keyDown handler</td></tr>
@@ -646,7 +647,7 @@ for (const path of PAGES) {
 
 <div class="warn"><b>First rule of ARIA</b>Don't use it. Native HTML is always better — built-in behaviour + keyboard + screen reader support. Only reach for ARIA when no HTML element fits.</div>
 
-<h3>14.12 Common WCAG failures &amp; how to test</h3>
+<h3>12.12 Common WCAG failures &amp; how to test</h3>
 <table>
 <tr><th>Issue</th><th>How to spot</th></tr>
 <tr><td>Missing form label</td><td>axe + manual screen-reader pass</td></tr>
@@ -659,7 +660,7 @@ for (const path of PAGES) {
 <tr><td>Auto-playing media</td><td>Page load — does anything start?</td></tr>
 </table>
 
-<h3>14.13 Programmatic a11y in CI (full pipeline)</h3>
+<h3>12.13 Programmatic a11y in CI (full pipeline)</h3>
 <pre data-lang="ts">// Page object with built-in scan
 import AxeBuilder from '@axe-core/playwright';
 
@@ -685,7 +686,7 @@ test('no new a11y violations', async ({ page }) =&gt; {
   expect(newViolations, JSON.stringify(newViolations, null, 2)).toEqual([]);
 });</pre>
 
-<h3>14.14 Beyond axe — manual checks</h3>
+<h3>12.14 Beyond axe — manual checks</h3>
 <ul>
 <li><strong>Keyboard-only</strong> walkthrough — unplug mouse for 5 min</li>
 <li><strong>Screen reader</strong> pass on critical flows quarterly</li>

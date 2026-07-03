@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Next.js for SDET | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Next.js for SDET — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, nextjs, testing, automation, playwright next js for sdet">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>61.1 App Router vs Pages Router</h3>
+<h3>57.1 App Router vs Pages Router</h3>
 <table>
 <tr><th>App Router (default since 13)</th><th>Pages Router (legacy)</th></tr>
 <tr><td>File-based: app/users/[id]/page.tsx</td><td>File-based: pages/users/[id].tsx</td></tr>
@@ -487,7 +488,7 @@ a.active .search-snippet {
 <tr><td>Server Actions</td><td>—</td></tr>
 </table>
 
-<h3>61.2 Server vs Client Components</h3>
+<h3>57.2 Server vs Client Components</h3>
 <pre data-lang="ts">// app/page.tsx — Server Component by default
 async function Home() {
   const users = await fetch('https://api/users').then(r =&gt; r.json());
@@ -504,7 +505,7 @@ export function Cart() {
 
 <p>Server Components never ship JS to the browser. They reduce bundle size dramatically. They can't use useState, useEffect, browser-only APIs.</p>
 
-<h3>61.3 Data fetching modes</h3>
+<h3>57.3 Data fetching modes</h3>
 <table>
 <tr><th>Mode</th><th>When</th><th>How</th></tr>
 <tr><td>Static (SSG)</td><td>Build-time HTML, fastest</td><td>Default if no dynamic data</td></tr>
@@ -513,7 +514,7 @@ export function Cart() {
 <tr><td>Client</td><td>Fetch in useEffect / SWR / TanStack Query</td><td>useEffect / useSWR</td></tr>
 </table>
 
-<h3>61.4 Route handlers</h3>
+<h3>57.4 Route handlers</h3>
 <pre data-lang="ts">// app/api/users/route.ts
 export async function GET() {
   const users = await db.user.findMany();
@@ -525,7 +526,7 @@ export async function POST(req: Request) {
   return Response.json(u, { status: 201 });
 }</pre>
 
-<h3>61.5 Server Actions</h3>
+<h3>57.5 Server Actions</h3>
 <pre data-lang="ts">// app/actions.ts
 'use server';
 export async function createOrder(formData: FormData) {
@@ -547,7 +548,7 @@ export default function CartForm() {
 
 <p>Server Actions are RPC-like functions you can call from client components or use as form actions. No need to write a route + client fetch.</p>
 
-<h3>61.6 Middleware</h3>
+<h3>57.6 Middleware</h3>
 <pre data-lang="ts">// middleware.ts
 import { NextResponse } from 'next/server';
 
@@ -558,7 +559,7 @@ export function middleware(req) {
 }
 export const config = { matcher: ['/dashboard/:path*'] };</pre>
 
-<h3>61.7 Testing Next.js apps</h3>
+<h3>57.7 Testing Next.js apps</h3>
 <table>
 <tr><th>Layer</th><th>Tool</th></tr>
 <tr><td>Pure logic (utils, hooks)</td><td>Vitest</td></tr>
@@ -576,7 +577,7 @@ webServer: {
   timeout: 120_000,
 },</pre>
 
-<h3>61.8 SDET gotchas</h3>
+<h3>57.8 SDET gotchas</h3>
 <ul>
 <li><strong>Hydration mismatch</strong> — server HTML differs from first client render. Common cause: <code class="inline">new Date()</code>, locale-dependent formatting, <code class="inline">window</code> access during render.</li>
 <li><strong>Cache surprises</strong> — fetch is cached by default in Server Components. Forgetting <code class="inline">cache: 'no-store'</code> serves stale data.</li>

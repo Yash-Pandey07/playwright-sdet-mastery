@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>System Design Fundamentals | Playwright SDET Mastery</title>
   <meta name="description" content="Learn System Design Fundamentals — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, system-design, testing, automation, playwright system design fundamentals">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>38.1 The interview structure</h3>
+<h3>65.1 The interview structure</h3>
 <ol>
 <li><strong>Clarify</strong> — users, scale, features. "Are we designing read-heavy or write-heavy? Global or single-region?"</li>
 <li><strong>Estimate</strong> — back-of-envelope. "1M DAU, 10 reads each = 10M reads/day = ~120 read QPS average, 1200 peak."</li>
@@ -490,7 +491,7 @@ a.active .search-snippet {
 <li><strong>Failures &amp; scale</strong> — how does it handle 10× growth? A region outage?</li>
 </ol>
 
-<h3>38.2 Scaling fundamentals</h3>
+<h3>65.2 Scaling fundamentals</h3>
 
 <h4>Vertical vs horizontal</h4>
 <ul>
@@ -516,7 +517,7 @@ a.active .search-snippet {
 <li><strong>Leaderless</strong> (Cassandra, Dynamo) — quorum reads/writes; tunable consistency.</li>
 </ul>
 
-<h3>38.3 Caching</h3>
+<h3>65.3 Caching</h3>
 <table>
 <tr><th>Cache layer</th><th>What it caches</th><th>Tool</th></tr>
 <tr><td>Browser</td><td>Static assets, images</td><td>Cache-Control headers</td></tr>
@@ -536,7 +537,7 @@ a.active .search-snippet {
 
 <div class="warn"><b>Cache invalidation — one of the two hard problems</b>"There are only two hard things in CS: cache invalidation and naming things." Stale cache returns wrong data. Strategies: short TTL, event-driven invalidation on writes, cache versioning (key includes a version).</div>
 
-<h3>38.4 SQL vs NoSQL</h3>
+<h3>65.4 SQL vs NoSQL</h3>
 <table>
 <tr><th>Property</th><th>SQL (relational)</th><th>NoSQL</th></tr>
 <tr><td>Schema</td><td>Fixed</td><td>Flexible / schemaless</td></tr>
@@ -547,7 +548,7 @@ a.active .search-snippet {
 <tr><td>Best for</td><td>Structured data, complex queries, transactions</td><td>High write throughput, flexible schema, simple access patterns</td></tr>
 </table>
 
-<h3>38.5 Async patterns</h3>
+<h3>65.5 Async patterns</h3>
 
 <h4>Message queue (SQS, RabbitMQ)</h4>
 <p>Producer publishes message to a queue. Consumer pulls and processes. Decouples producer from consumer; smooths bursts; survives consumer crashes.</p>
@@ -561,7 +562,7 @@ a.active .search-snippet {
 <h4>CQRS</h4>
 <p>Command Query Responsibility Segregation — different models for writes and reads. Writes go to a normalized DB; reads from a denormalized projection optimised for queries.</p>
 
-<h3>38.6 CAP theorem</h3>
+<h3>65.6 CAP theorem</h3>
 <p>In a distributed system, you can have at most two of:</p>
 <ul>
 <li><strong>C</strong> — Consistency (all nodes see the same data)</li>
@@ -570,7 +571,7 @@ a.active .search-snippet {
 </ul>
 <p>Since network partitions happen in real systems, you really choose CP or AP. SQL DBs default CP (refuse writes during partition); Dynamo / Cassandra default AP (accept writes, reconcile later).</p>
 
-<h3>38.7 Consistency models</h3>
+<h3>65.7 Consistency models</h3>
 <ul>
 <li><strong>Strong</strong> — every read sees the latest write. Synchronous replication. Most expensive.</li>
 <li><strong>Eventual</strong> — given enough time without writes, all replicas converge. Cheapest, common in NoSQL.</li>
@@ -579,7 +580,7 @@ a.active .search-snippet {
 <li><strong>Causal</strong> — causally related events are ordered consistently.</li>
 </ul>
 
-<h3>38.8 Failure handling</h3>
+<h3>65.8 Failure handling</h3>
 <ul>
 <li><strong>Timeouts</strong> — every external call has one. Choose carefully — too short = unnecessary failures, too long = cascade.</li>
 <li><strong>Retries</strong> — with exponential backoff + jitter. Idempotency required for non-GET calls.</li>
@@ -589,7 +590,7 @@ a.active .search-snippet {
 <li><strong>Dead letter queue</strong> — messages that can't be processed go to a DLQ for human review.</li>
 </ul>
 
-<h3>38.9 Quick walkthroughs</h3>
+<h3>65.9 Quick walkthroughs</h3>
 
 <h4>Design a URL shortener</h4>
 <ul>
@@ -669,7 +670,7 @@ a.active .search-snippet {
 <div class="answer">"Clarify requirements + scale → estimate numbers → data model → API → high-level diagram → deep-dive one piece → discuss trade-offs and failure modes."</div></details>
 </div>
 
-<h3>38.10 Capacity estimation cheat sheet (memorise)</h3>
+<h3>65.10 Capacity estimation cheat sheet (memorise)</h3>
 <table>
 <tr><th>Item</th><th>Order of magnitude</th></tr>
 <tr><td>L1 cache</td><td>1 ns</td></tr>
@@ -687,7 +688,7 @@ a.active .search-snippet {
 <tr><td>Daily users → peak QPS</td><td>peak ≈ avg × 5-10; avg ≈ DAU × calls/user/day / 86400</td></tr>
 </table>
 
-<h3>38.11 Sharding strategies (deep)</h3>
+<h3>65.11 Sharding strategies (deep)</h3>
 <table>
 <tr><th>Strategy</th><th>Pros</th><th>Cons</th></tr>
 <tr><td>Hash sharding (hash(key) mod N)</td><td>Even distribution</td><td>Rebalancing on N change moves nearly all keys</td></tr>
@@ -697,7 +698,7 @@ a.active .search-snippet {
 <tr><td>Geographic / tenant-based</td><td>Locality, regulatory compliance</td><td>Cross-shard queries expensive</td></tr>
 </table>
 
-<h3>38.12 Replication patterns (deep)</h3>
+<h3>65.12 Replication patterns (deep)</h3>
 <ul>
 <li><strong>Leader-follower (primary-replica)</strong> — writes go to leader, async replication to followers. Read scaling. Async = eventual consistency on followers.</li>
 <li><strong>Synchronous replication</strong> — leader waits for N followers before ack. Strong consistency, slower writes.</li>
@@ -705,7 +706,7 @@ a.active .search-snippet {
 <li><strong>Leaderless (Dynamo, Cassandra)</strong> — N replicas; tunable quorum (W + R &gt; N for read-your-writes).</li>
 </ul>
 
-<h3>38.13 Consistency models (deep)</h3>
+<h3>65.13 Consistency models (deep)</h3>
 <table>
 <tr><th>Model</th><th>Guarantee</th><th>Cost</th></tr>
 <tr><td>Linearizable</td><td>As if single copy; reads return latest committed write</td><td>Slowest; requires coordination</td></tr>
@@ -716,7 +717,7 @@ a.active .search-snippet {
 <tr><td>Eventual</td><td>Replicas converge given no writes</td><td>Cheapest; always available</td></tr>
 </table>
 
-<h3>38.14 CAP + PACELC</h3>
+<h3>65.14 CAP + PACELC</h3>
 <ul>
 <li><strong>CAP</strong>: in a partition, choose Consistency or Availability (C or A; P is unavoidable). Most systems are CP or AP under partition.</li>
 <li><strong>PACELC</strong>: extends CAP. When Partition: choose A or C. Else (no partition): choose Latency or Consistency. Better captures real trade-offs.</li>
@@ -724,7 +725,7 @@ a.active .search-snippet {
 <li>Cassandra = PA/EL (when partitioned: availability; else: latency)</li>
 </ul>
 
-<h3>38.15 Distributed system pitfalls</h3>
+<h3>65.15 Distributed system pitfalls</h3>
 <ul>
 <li><strong>Network is unreliable</strong> — every call can fail or hang</li>
 <li><strong>Latency is non-zero</strong> — round trips add up</li>
@@ -737,7 +738,7 @@ a.active .search-snippet {
 </ul>
 <p>(These are the "Fallacies of Distributed Computing".)</p>
 
-<h3>38.16 Common system-design walkthroughs (interview)</h3>
+<h3>65.16 Common system-design walkthroughs (interview)</h3>
 
 <h4>Rate limiter</h4>
 <ul>
@@ -817,7 +818,7 @@ a.active .search-snippet {
 <li>Provider failures: fallback channel</li>
 </ul>
 
-<h3>38.17 Architectural styles</h3>
+<h3>65.17 Architectural styles</h3>
 <table>
 <tr><th>Style</th><th>When fits</th></tr>
 <tr><td>Monolith</td><td>Small team, fast iteration, simple ops</td></tr>
@@ -829,7 +830,7 @@ a.active .search-snippet {
 <tr><td>CQRS + Event Sourcing</td><td>Audit trail required, complex projections, replay needed</td></tr>
 </table>
 
-<h3>38.18 Failure handling toolkit</h3>
+<h3>65.18 Failure handling toolkit</h3>
 <ul>
 <li><strong>Timeout</strong> on every external call</li>
 <li><strong>Retry</strong> with exponential backoff + jitter; only for idempotent ops</li>
@@ -906,7 +907,7 @@ a.active .search-snippet {
 <div class="answer">Redis SET per region with TTL (30s). Client heartbeats every 15s. To check presence: query all regions in parallel OR replicate to a global SET. Trade-off: cost vs freshness. For exact "online count", use HyperLogLog for approximate cardinality.</div></details>
 </div>
 
-<h3>38.X Code Patterns</h3>
+<h3>65.X Code Patterns</h3>
 
 <h4>Cache-Aside Pattern — Python + Redis</h4>
 <pre data-lang="python">

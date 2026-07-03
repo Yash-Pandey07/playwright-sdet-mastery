@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>API Chaining | Playwright SDET Mastery</title>
   <meta name="description" content="Learn API Chaining — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, api-chaining, testing, automation, playwright api chaining">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>12.1 What is API chaining?</h3>
+<h3>19.1 What is API chaining?</h3>
 <p>Most real backend flows are a <strong>sequence of dependent calls</strong>: create a resource, take its id, use it in the next call. Each step depends on data produced by an earlier step. An "API chain test" is a single test that exercises that sequence end-to-end at the API layer (no UI).</p>
 
 <p>Example chain:</p>
@@ -489,7 +490,7 @@ a.active .search-snippet {
 <li>GET /orders/{orderId} → final assertion: status is paid, total correct</li>
 </ol>
 
-<h3>12.2 Sequential (linear) chain</h3>
+<h3>19.2 Sequential (linear) chain</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 120" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -559,7 +560,7 @@ a.active .search-snippet {
   expect(final.total).toBe(99.00);
 });</pre>
 
-<h3>12.3 DAG / tree chain — one parent, many children</h3>
+<h3>19.3 DAG / tree chain — one parent, many children</h3>
 <p>Sometimes the chain isn't linear. A single creation step produces an id that's used by several independent follow-ups. Run them in parallel for speed.</p>
 
 <div class="diagram">
@@ -621,7 +622,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>Why parallelise children</b>If three calls each take 200 ms, serial takes 600 ms; parallel takes 200 ms. For a suite of 50 tests that's a ~20-second win per run.</div>
 
-<h3>12.4 Holding state across the chain</h3>
+<h3>19.4 Holding state across the chain</h3>
 
 <h4>(a) In-test variables — simplest</h4>
 <p>Already shown above. Good for a single-test chain. Variables (<code class="inline">user</code>, <code class="inline">cart</code>, <code class="inline">order</code>) flow top to bottom.</p>
@@ -676,7 +677,7 @@ test('long checkout chain', async ({ request }) =&gt; {
   expect(ctx.orderId).toBeTruthy();
 });</pre>
 
-<h3>12.5 Cleanup ordering — LIFO</h3>
+<h3>19.5 Cleanup ordering — LIFO</h3>
 <p>Created in order A → B → C → D. Delete in order D → C → B → A. Foreign keys often require it; ignoring causes 409 Conflict.</p>
 
 <pre data-lang="ts">test('chain with proper teardown', async ({ request }) =&gt; {
@@ -701,7 +702,7 @@ async function postAndTrack(request: APIRequestContext, url: string, data: any, 
   return body;
 }</pre>
 
-<h3>12.6 Negative chains — fail fast on intermediate failure</h3>
+<h3>19.6 Negative chains — fail fast on intermediate failure</h3>
 <p>If step 2 fails, step 3 has nothing to act on. Assertions on each step make the test stop at the right place with a clear message — instead of confusing cascading failures three steps later.</p>
 
 <pre data-lang="ts">test('failure surfaces at the right step', async ({ request }) =&gt; {
@@ -715,7 +716,7 @@ async function postAndTrack(request: APIRequestContext, url: string, data: any, 
 
 <div class="tip"><b>Custom message in expect</b><code class="inline">expect(value, 'message').toBe(x)</code> attaches a label to the assertion. Saves debug time on long chains.</div>
 
-<h3>12.7 Idempotency keys — chain safety</h3>
+<h3>19.7 Idempotency keys — chain safety</h3>
 <p>If the chain retries on a transient error and you POST twice, you don't want two orders. Send an <code class="inline">Idempotency-Key</code> header; the server returns the same response for retries with the same key.</p>
 
 <pre data-lang="ts">const key = crypto.randomUUID();
@@ -724,7 +725,7 @@ const second = await request.post('/api/orders', { data, headers: { 'Idempotency
 expect(second.status()).toBe(first.status());
 expect((await second.json()).id).toBe((await first.json()).id);   // same order, not duplicate</pre>
 
-<h3>12.8 Common pitfalls</h3>
+<h3>19.8 Common pitfalls</h3>
 <ul>
 <li><strong>Forgetting to await</strong> — POST returns a Response promise; you must await it AND its <code class="inline">.json()</code>.</li>
 <li><strong>Reusing data across tests</strong> — chain A leaves a half-built record; chain B sees it and behaves differently. Always create fresh, clean up.</li>
@@ -733,7 +734,7 @@ expect((await second.json()).id).toBe((await first.json()).id);   // same order,
 <li><strong>Missing intermediate assertions</strong> — if every step succeeds quietly and only the last assertion runs, a failure in step 3 leaves you bisecting. Assert each step's success.</li>
 </ul>
 
-<h3>12.9 Chain vs single test — what to pick</h3>
+<h3>19.9 Chain vs single test — what to pick</h3>
 <table>
 <tr><th>Concern</th><th>Single test with chain</th><th>Many small tests + fixtures</th></tr>
 <tr><td>Speed</td><td>One test, one setup</td><td>Fixture builds once per worker, shared</td></tr>

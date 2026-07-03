@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Playwright with Python | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Playwright with Python — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, python, testing, automation, playwright playwright with python">
@@ -477,12 +478,12 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>21.1 Install</h3>
+<h3>15.1 Install</h3>
 <pre data-lang="bash">pip install pytest-playwright pytest
 playwright install --with-deps      # download Chromium / Firefox / WebKit
 pytest --browser chromium</pre>
 
-<h3>21.2 Sync vs async API</h3>
+<h3>15.2 Sync vs async API</h3>
 <div class="cmp">
 <div class="col">
 <h5>Sync (default with pytest)</h5>
@@ -514,7 +515,7 @@ asyncio.run(main())</pre>
 </div>
 </div>
 
-<h3>21.3 First pytest test</h3>
+<h3>15.3 First pytest test</h3>
 <pre data-lang="python"># test_login.py
 from playwright.sync_api import Page, expect
 
@@ -527,7 +528,7 @@ def test_login_happy(page: Page):
 
 <p>Run: <code class="inline">pytest -v</code>. Add <code class="inline">--headed</code> to see the browser, <code class="inline">--browser firefox</code> to switch, <code class="inline">--slowmo 500</code> to slow actions.</p>
 
-<h3>21.4 Built-in pytest fixtures</h3>
+<h3>15.4 Built-in pytest fixtures</h3>
 <table>
 <tr><th>Fixture</th><th>Scope</th><th>What it gives you</th></tr>
 <tr><td><code class="inline">page</code></td><td>function</td><td>Fresh Page per test</td></tr>
@@ -538,7 +539,7 @@ def test_login_happy(page: Page):
 <tr><td><code class="inline">browser_type_launch_args</code></td><td>session</td><td>Dict passed to launch()</td></tr>
 </table>
 
-<h3>21.5 Custom fixtures (conftest.py)</h3>
+<h3>15.5 Custom fixtures (conftest.py)</h3>
 <pre data-lang="python"># conftest.py
 import pytest
 from playwright.sync_api import Page
@@ -568,7 +569,7 @@ def browser_context_args(browser_context_args):
             "locale": "en-IN",
             "ignore_https_errors": True}</pre>
 
-<h3>21.6 Locators &amp; assertions — same as TS</h3>
+<h3>15.6 Locators &amp; assertions — same as TS</h3>
 <p>Same priority order (role &gt; label &gt; placeholder &gt; text), strict mode, narrowing, web-first assertions. Snake_case method names.</p>
 
 <pre data-lang="python">page.get_by_role("button", name="Buy")
@@ -589,7 +590,7 @@ expect(page.locator(".error")).to_have_text("Wrong password")
 expect(page.get_by_role("button")).to_be_enabled()
 expect(page.locator(".row")).to_have_count(3)</pre>
 
-<h3>21.7 Network mocking</h3>
+<h3>15.7 Network mocking</h3>
 <pre data-lang="python">def test_empty_orders(page: Page):
     page.route("**/api/orders", lambda route: route.fulfill(
         status=200, content_type="application/json", body="[]"
@@ -597,7 +598,7 @@ expect(page.locator(".row")).to_have_count(3)</pre>
     page.goto("/orders")
     expect(page.get_by_text("No orders yet")).to_be_visible()</pre>
 
-<h3>21.8 API testing in Python</h3>
+<h3>15.8 API testing in Python</h3>
 <pre data-lang="python">from playwright.sync_api import Playwright
 
 def test_create_user(playwright: Playwright):
@@ -608,7 +609,7 @@ def test_create_user(playwright: Playwright):
     assert body["email"] == "a@b.com"
     request.dispose()</pre>
 
-<h3>21.9 Multiple tabs / popups</h3>
+<h3>15.9 Multiple tabs / popups</h3>
 <pre data-lang="python">def test_opens_in_new_tab(context, page):
     with context.expect_page() as new_page_info:
         page.get_by_role("link", name="Terms").click()
@@ -618,14 +619,14 @@ def test_create_user(playwright: Playwright):
 
 <p>Python's equivalent of TS Promise.all is the <code class="inline">with</code> context manager — registers the listener, runs the action, captures the event.</p>
 
-<h3>21.10 Parallel execution</h3>
+<h3>15.10 Parallel execution</h3>
 <pre data-lang="bash">pip install pytest-xdist
 pytest -n auto             # parallel across all CPU cores
 pytest -n 4                # 4 workers</pre>
 
 <p>Each worker gets its own Browser; tests within a worker share it; each test gets its own Context.</p>
 
-<h3>21.11 Side-by-side — TS vs Python</h3>
+<h3>15.11 Side-by-side — TS vs Python</h3>
 <div class="cmp">
 <div class="col">
 <h5>TypeScript</h5>
@@ -646,7 +647,7 @@ pytest -n 4                # 4 workers</pre>
 </div>
 </div>
 
-<h3>21.12 When to pick Python over TS</h3>
+<h3>15.12 When to pick Python over TS</h3>
 <table>
 <tr><th>Pick Python when…</th><th>Pick TS when…</th></tr>
 <tr><td>Your data/backend team writes in Python and shares libraries</td><td>Your frontend is in TS and tests can share types/models</td></tr>

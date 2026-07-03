@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Manual Testing Foundations | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Manual Testing Foundations — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, manual-testing, testing, automation, playwright manual testing foundations">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>24.1 SDLC vs STLC</h3>
+<h3>33.1 SDLC vs STLC</h3>
 <div class="cmp">
 <div class="col">
 <h5>SDLC (Software Development Life Cycle)</h5>
@@ -505,7 +506,7 @@ a.active .search-snippet {
 </div>
 </div>
 
-<h3>24.2 Verification vs Validation</h3>
+<h3>33.2 Verification vs Validation</h3>
 <table>
 <tr><th>Verification</th><th>Validation</th></tr>
 <tr><td>"Are we building the product right?"</td><td>"Are we building the right product?"</td></tr>
@@ -514,7 +515,7 @@ a.active .search-snippet {
 <tr><td>Reviews, walkthroughs, inspections</td><td>Functional, UAT, system testing</td></tr>
 </table>
 
-<h3>24.3 Test levels</h3>
+<h3>33.3 Test levels</h3>
 <table>
 <tr><th>Level</th><th>Who writes it</th><th>What it covers</th></tr>
 <tr><td>Unit</td><td>Developer</td><td>One function/class in isolation</td></tr>
@@ -523,7 +524,7 @@ a.active .search-snippet {
 <tr><td>Acceptance (UAT)</td><td>Business / end users</td><td>Validates business needs</td></tr>
 </table>
 
-<h3>24.4 Functional vs non-functional</h3>
+<h3>33.4 Functional vs non-functional</h3>
 <div class="cmp">
 <div class="col">
 <h5>Functional types</h5>
@@ -549,7 +550,7 @@ a.active .search-snippet {
 </div>
 </div>
 
-<h3>24.5 Test design techniques (interviewers ask these)</h3>
+<h3>33.5 Test design techniques (interviewers ask these)</h3>
 
 <h4>Boundary Value Analysis (BVA)</h4>
 <p>Bugs cluster at boundaries. For an input that accepts 1–100, test 0, 1, 2, 99, 100, 101.</p>
@@ -569,7 +570,7 @@ a.active .search-snippet {
 <h4>Error guessing</h4>
 <p>Experienced testers guess where bugs hide — empty fields, max lengths, special characters, race conditions. Not systematic, but high signal.</p>
 
-<h3>24.6 Defect lifecycle</h3>
+<h3>33.6 Defect lifecycle</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -607,7 +608,7 @@ a.active .search-snippet {
 <div class="caption">Figure 14 — A bug travels through these states. SDET often owns "Verified/Closed" and "Reopened".</div>
 </div>
 
-<h3>24.7 Severity vs Priority — the must-know distinction</h3>
+<h3>33.7 Severity vs Priority — the must-know distinction</h3>
 <table>
 <tr><th>Severity</th><th>Priority</th></tr>
 <tr><td>Impact of the bug on the system</td><td>Order in which it should be fixed</td></tr>
@@ -617,7 +618,7 @@ a.active .search-snippet {
 <tr><td>App crash on rare path = High severity</td><td>Same crash affects 3 users / month = Low priority</td></tr>
 </table>
 
-<h3>24.8 Smoke / Sanity / Regression / Retesting</h3>
+<h3>33.8 Smoke / Sanity / Regression / Retesting</h3>
 <table>
 <tr><th>Type</th><th>What it is</th><th>When</th></tr>
 <tr><td>Smoke</td><td>Build-acceptance: app boots, critical paths work</td><td>Every new build</td></tr>
@@ -626,7 +627,7 @@ a.active .search-snippet {
 <tr><td>Retesting</td><td>Re-run the test that found a bug, after the fix, to confirm it's gone</td><td>After every bug fix</td></tr>
 </table>
 
-<h3>24.9 Test artefacts</h3>
+<h3>33.9 Test artefacts</h3>
 <ul>
 <li><strong>Test plan</strong> — scope, schedule, resources, risk</li>
 <li><strong>Test strategy</strong> — high-level approach across projects</li>
@@ -636,7 +637,7 @@ a.active .search-snippet {
 <li><strong>Test summary report</strong> — pass/fail counts, defects, recommendation</li>
 </ul>
 
-<h3>24.10 Agile testing</h3>
+<h3>33.10 Agile testing</h3>
 <ul>
 <li>Testing happens <strong>every sprint</strong>, not at the end</li>
 <li>SDET pairs with developers during story implementation (3 amigos: PM + dev + tester)</li>
@@ -697,7 +698,7 @@ a.active .search-snippet {
 <div class="answer">Entry: conditions that must be true before testing can start (build deployed, env ready, test data seeded). Exit: conditions for stopping (all critical tests pass, no high/critical bugs open, coverage threshold met).</div></details>
 </div>
 
-<h3>24.11 Test case template (concrete)</h3>
+<h3>33.11 Test case template (concrete)</h3>
 <pre data-lang="bash">ID:         TC-LOGIN-001
 Title:      Successful login with valid credentials
 Module:     Authentication
@@ -732,7 +733,7 @@ Date:         2026-06-19
 Build:        v3.2.1-rc4
 Defect IDs:   [linked if failed]</pre>
 
-<h3>24.12 Bug report template (gold standard)</h3>
+<h3>33.12 Bug report template (gold standard)</h3>
 <pre data-lang="bash">Title:      [Module] Concise description of the problem
 
 Environment:
@@ -782,7 +783,7 @@ Related:
 Root cause hypothesis (optional, mark as such):
   - Likely race between order creation and email service publish</pre>
 
-<h3>24.13 Test Plan template (one-page)</h3>
+<h3>33.13 Test Plan template (one-page)</h3>
 <pre data-lang="bash">Project:        Acme Checkout v3.2
 Test Lead:      Yash
 Start / End:    2026-06-19 → 2026-07-03
@@ -841,7 +842,7 @@ Tools:
   - JMeter (load smoke)
   - Jira / Zephyr</pre>
 
-<h3>24.14 RTM (Requirements Traceability Matrix) example</h3>
+<h3>33.14 RTM (Requirements Traceability Matrix) example</h3>
 <table>
 <tr><th>Req ID</th><th>Acceptance criterion</th><th>Test cases</th><th>Status</th></tr>
 <tr><td>FR-CHK-01</td><td>User can place order with valid card</td><td>TC-CHK-001, TC-CHK-002, api/checkout.spec L20</td><td>Pass</td></tr>
@@ -851,17 +852,17 @@ Tools:
 <tr><td>NFR-CHK-02</td><td>WCAG 2.2 AA</td><td>a11y/checkout.spec</td><td>Fail (3 contrast issues)</td></tr>
 </table>
 
-<h3>24.15 Exploratory testing — session-based</h3>
+<h3>33.15 Exploratory testing — session-based</h3>
 <p>Time-boxed (60-90 min) sessions with a charter ("explore checkout under network failures"). Take notes; file bugs as you find them. Less script, more curiosity. Catches what scripted misses.</p>
 
-<h3>24.16 Defect lifecycle states (full)</h3>
+<h3>33.16 Defect lifecycle states (full)</h3>
 <pre data-lang="bash">New → Assigned → In Progress → Fixed → Retest → Verified/Closed
               ↓                       ↓        ↓
           Rejected               Reopened   (back to In Progress if fix fails)
               ↓
           Duplicate / Won't Fix / Cannot Reproduce</pre>
 
-<h3>24.17 Testing pyramid in numbers</h3>
+<h3>33.17 Testing pyramid in numbers</h3>
 <ul>
 <li>~70% unit (devs own; fast, isolated)</li>
 <li>~20% integration / contract / API (SDET owns mostly)</li>

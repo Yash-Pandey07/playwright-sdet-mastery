@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>XPath Deep-Dive Practice | Playwright SDET Mastery</title>
   <meta name="description" content="Learn XPath Deep-Dive Practice — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, xpath, testing, automation, playwright xpath deep dive practice">
@@ -478,7 +479,7 @@ a.active .search-snippet {
 
 <div class="tip"><b>Practice ground</b>Open <code class="inline">https://selectorshub.com/xpath-practice-page/</code> in your browser. Press F12 → Elements → Ctrl+F → paste any XPath below. The highlighted element shows what matches.</div>
 
-<h3>42.1 Input fields</h3>
+<h3>50.1 Input fields</h3>
 
 <h4>By <code class="inline">id</code></h4>
 <pre data-lang="xpath">//input[@id='userId']
@@ -491,13 +492,13 @@ a.active .search-snippet {
 //label[normalize-space()='Mobile Number']/following::input[1]</pre>
 <p><b>Concepts:</b> Attribute-based XPath · Label-based XPath · <code class="inline">following</code> axis · <code class="inline">normalize-space()</code></p>
 
-<h3>42.2 Buttons</h3>
+<h3>50.2 Buttons</h3>
 <pre data-lang="xpath">//button[normalize-space()='Submit']
 //input[@type='submit']
 //*[self::button or self::input][normalize-space()='Submit' or @value='Submit']</pre>
 <p><b>Concepts:</b> <code class="inline">button</code> vs <code class="inline">input[type=submit]</code> · <code class="inline">self::</code> axis · text-based XPath</p>
 
-<h3>42.3 Links</h3>
+<h3>50.3 Links</h3>
 <pre data-lang="xpath">// Exact text
 //a[normalize-space()='DownLoad Link']
 //a[normalize-space()='SHub Youtube Channel']
@@ -512,7 +513,7 @@ a.active .search-snippet {
 //a[@href]</pre>
 <p><b>Concepts:</b> link text · partial link text · <code class="inline">contains()</code> · <code class="inline">normalize-space()</code></p>
 
-<h3>42.4 Dropdowns (native &lt;select&gt;)</h3>
+<h3>50.4 Dropdowns (native &lt;select&gt;)</h3>
 <pre data-lang="xpath">// The dropdown
 //select[@id='cars']
 //select[@name='cars']
@@ -531,7 +532,7 @@ select.selectByVisibleText("Audi");
 select.selectByValue("volvo");
 select.selectByIndex(2);</pre>
 
-<h3>42.5 Tables — dynamic row/column access</h3>
+<h3>50.5 Tables — dynamic row/column access</h3>
 <pre data-lang="xpath">// Whole table / rows / headers / cells
 //table
 //table//tr
@@ -547,7 +548,7 @@ select.selectByIndex(2);</pre>
 //a[normalize-space()='Kevin.Mathews']/ancestor::tr/td[2]</pre>
 <p><b>Concepts:</b> dynamic table handling · <code class="inline">ancestor</code> axis · row-based + column-based XPath. <em>This pattern is almost always asked.</em></p>
 
-<h3>42.6 XPath axes — full list</h3>
+<h3>50.6 XPath axes — full list</h3>
 <table>
 <tr><th>Axis</th><th>Selects</th><th>Example</th></tr>
 <tr><td><code class="inline">self</code></td><td>The current node</td><td><code class="inline">//div[self::div]</code></td></tr>
@@ -564,7 +565,7 @@ select.selectByIndex(2);</pre>
 <tr><td><code class="inline">attribute</code></td><td>Attributes</td><td><code class="inline">//input/attribute::id</code></td></tr>
 </table>
 
-<h3>42.7 Indexing repeated elements</h3>
+<h3>50.7 Indexing repeated elements</h3>
 <pre data-lang="xpath">// First "Company" field
 (//label[normalize-space()='Company']/following::input[1])[1]
 
@@ -574,7 +575,7 @@ select.selectByIndex(2);</pre>
 // All Company-related inputs
 //label[normalize-space()='Company']/following::input</pre>
 
-<h3>42.8 Disabled, hidden, non-interactable elements</h3>
+<h3>50.8 Disabled, hidden, non-interactable elements</h3>
 <pre data-lang="xpath">// All disabled
 //*[@disabled]
 //input[@disabled]
@@ -590,7 +591,7 @@ select.selectByIndex(2);</pre>
 //*[contains(@style,'visibility:hidden')]</pre>
 <p>In Selenium, XPath can find a disabled element, but <code class="inline">sendKeys()</code> on it throws <em>ElementNotInteractableException</em>.</p>
 
-<h3>42.9 Alerts, prompts, modals</h3>
+<h3>50.9 Alerts, prompts, modals</h3>
 <pre data-lang="xpath">// Buttons that trigger alerts
 //*[normalize-space()='Click To Open Window Alert']
 //*[normalize-space()='Click To Open Window Prompt Alert']
@@ -607,7 +608,7 @@ alert.accept();   // OK
 // alert.dismiss();  // Cancel
 // alert.sendKeys("answer"); alert.accept();  // for prompt</pre>
 
-<h3>42.10 Downloads &amp; uploads</h3>
+<h3>50.10 Downloads &amp; uploads</h3>
 <pre data-lang="xpath">// Download link
 //a[normalize-space()='Click to Download PNG File']
 //a[contains(normalize-space(),'Download PNG')]
@@ -619,7 +620,7 @@ alert.accept();   // OK
 driver.findElement(By.xpath("//input[@type='file']"))
       .sendKeys("C:\\Users\\Yash\\Desktop\\file.png");</pre>
 
-<h3>42.11 Payment form (label-based)</h3>
+<h3>50.11 Payment form (label-based)</h3>
 <pre data-lang="xpath">//*[normalize-space()='Name on Card']/following::input[1]
 //*[normalize-space()='Card Number']/following::input[1]
 //*[normalize-space()='Expiry Date']/following::input[1]
@@ -628,7 +629,7 @@ driver.findElement(By.xpath("//input[@type='file']"))
 //*[normalize-space()='Pay ₹999']
 //*[contains(normalize-space(),'Pay')]</pre>
 
-<h3>42.12 contains() and starts-with() — dynamic matching</h3>
+<h3>50.12 contains() and starts-with() — dynamic matching</h3>
 <pre data-lang="xpath">// contains — partial text/attribute
 //a[contains(normalize-space(),'Youtube')]
 //*[contains(normalize-space(),'Payment')]
@@ -639,7 +640,7 @@ driver.findElement(By.xpath("//input[@type='file']"))
 //*[starts-with(normalize-space(),'Click')]
 //a[starts-with(normalize-space(),'SHub')]</pre>
 
-<h3>42.13 and / or / not</h3>
+<h3>50.13 and / or / not</h3>
 <pre data-lang="xpath">// AND
 //input[@id='userId' and @type='email']
 //select[@id='cars' and @name='cars']
@@ -653,7 +654,7 @@ driver.findElement(By.xpath("//input[@type='file']"))
 //a[not(contains(@href,'youtube'))]
 //select[@id='cars']/option[not(@value='volvo')]</pre>
 
-<h3>42.14 text() vs . vs normalize-space()</h3>
+<h3>50.14 text() vs . vs normalize-space()</h3>
 <pre data-lang="xpath">// Exact direct text only
 //*[text()='Checkout here']
 
@@ -669,7 +670,7 @@ driver.findElement(By.xpath("//input[@type='file']"))
 <tr><td><code class="inline">normalize-space()</code></td><td>String value with collapsed whitespace</td></tr>
 </table>
 
-<h3>42.15 Empty / junk-space links</h3>
+<h3>50.15 Empty / junk-space links</h3>
 <pre data-lang="xpath">// Link without text
 //a[not(normalize-space())]
 //a[@href and not(normalize-space())]
@@ -678,12 +679,12 @@ driver.findElement(By.xpath("//input[@type='file']"))
 //a[normalize-space()='SHub Youtube Channel']    // works
 //a[text()='SHub Youtube Channel']               // fails if leading/trailing spaces</pre>
 
-<h3>42.16 Broken link XPath</h3>
+<h3>50.16 Broken link XPath</h3>
 <pre data-lang="xpath">//a[normalize-space()='This is a broken link']
 //a[contains(normalize-space(),'broken link')]</pre>
 <p>To validate broken, GET the <code class="inline">href</code> and check the HTTP status &gt;= 400.</p>
 
-<h3>42.17 iframes</h3>
+<h3>50.17 iframes</h3>
 <pre data-lang="xpath">// Locate iframe
 //iframe
 (//iframe)[1]
@@ -698,7 +699,7 @@ driver.switchTo().defaultContent();   // return to main</pre>
 
 <p><strong>Playwright</strong> avoids the switch entirely: <code class="inline">page.frameLocator('iframe').getByRole('button').click()</code></p>
 
-<h3>42.18 Shadow DOM</h3>
+<h3>50.18 Shadow DOM</h3>
 <p>Normal XPath does <strong>not</strong> pierce Shadow DOM. Selenium 4 exposes shadow roots via <code class="inline">getShadowRoot()</code>; inside, use CSS selectors (XPath isn't supported on shadow roots).</p>
 <pre data-lang="java">WebElement host = driver.findElement(By.cssSelector("shadow-host"));
 SearchContext root = host.getShadowRoot();
@@ -707,7 +708,7 @@ inside.sendKeys("hi");</pre>
 
 <p>Playwright pierces shadow DOM transparently — <code class="inline">getByRole</code> and CSS work across shadow boundaries.</p>
 
-<h3>42.19 SVG elements — use local-name()</h3>
+<h3>50.19 SVG elements — use local-name()</h3>
 <pre data-lang="xpath">// Plain //svg often fails because of namespaces
 //svg                  // unreliable
 
@@ -716,27 +717,27 @@ inside.sendKeys("hi");</pre>
 //*[local-name()='svg']//*[local-name()='path']
 //*[local-name()='svg' and @iconid='editon']</pre>
 
-<h3>42.20 Multilingual text</h3>
+<h3>50.20 Multilingual text</h3>
 <pre data-lang="xpath">//*[normalize-space()='করোনা সংক্রমণ বাড়াচ্ছে']
 //*[normalize-space()='也支持中文']</pre>
 
-<h3>42.21 Modal popups</h3>
+<h3>50.21 Modal popups</h3>
 <pre data-lang="xpath">//*[normalize-space()='Open Modal']
 //*[normalize-space()='Bottom Modal']
 //*[normalize-space()='×']</pre>
 
-<h3>42.22 Pseudo-elements (::before / ::after)</h3>
+<h3>50.22 Pseudo-elements (::before / ::after)</h3>
 <p>XPath cannot locate CSS pseudo-elements. Read computed style via JS:</p>
 <pre data-lang="java">JavascriptExecutor js = (JavascriptExecutor) driver;
 String content = (String) js.executeScript(
   "return window.getComputedStyle(arguments[0], '::before').getPropertyValue('content');",
   element);</pre>
 
-<h3>42.23 Canvas</h3>
+<h3>50.23 Canvas</h3>
 <pre data-lang="xpath">//canvas</pre>
 <p>XPath can find the canvas element, but cannot locate shapes/text drawn inside it. Interact by coordinates; visually assert with screenshots.</p>
 
-<h3>42.24 Spinner / loader (wait until it disappears)</h3>
+<h3>50.24 Spinner / loader (wait until it disappears)</h3>
 <pre data-lang="xpath">//*[contains(@class,'loader')]
 //*[contains(@class,'spinner')]</pre>
 
@@ -744,7 +745,7 @@ String content = (String) js.executeScript(
 wait.until(ExpectedConditions.invisibilityOfElementLocated(
   By.xpath("//*[contains(@class,'loader') or contains(@class,'spinner')]")));</pre>
 
-<h3>42.25 Invalid XPath — fix the common mistakes</h3>
+<h3>50.25 Invalid XPath — fix the common mistakes</h3>
 <table>
 <tr><th>Wrong</th><th>Correct / fix</th></tr>
 <tr><td><code class="inline">//label[..]//following:input[..]</code> (typo, smart quote)</td><td><code class="inline">//label[..]/following::input[..]</code></td></tr>
@@ -757,7 +758,7 @@ wait.until(ExpectedConditions.invisibilityOfElementLocated(
 
 <div class="warn"><b>Selenium uses XPath 1.0</b>Functions like <code class="inline">ends-with()</code>, <code class="inline">matches()</code> (regex), <code class="inline">lower-case()</code> are XPath 2.0 — not available. Use <code class="inline">contains()</code> + <code class="inline">normalize-space()</code> as workarounds.</div>
 
-<h3>42.26 Practice order for interviews</h3>
+<h3>50.26 Practice order for interviews</h3>
 <ol>
 <li>Basic XPath by id / name / type</li>
 <li>Text-based XPath</li>
@@ -781,7 +782,7 @@ wait.until(ExpectedConditions.invisibilityOfElementLocated(
 <li>Dynamic loader waits</li>
 </ol>
 
-<h3>42.27 The top 10 XPaths to memorise</h3>
+<h3>50.27 The top 10 XPaths to memorise</h3>
 <pre data-lang="xpath">//input[@id='userId']
 //label[normalize-space()='User Email']/following::input[1]
 //a[contains(normalize-space(),'Youtube')]

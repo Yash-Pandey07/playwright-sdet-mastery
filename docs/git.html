@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Git for SDETs | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Git for SDETs — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, git, testing, automation, playwright git for sdets">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>41.1 Mental model</h3>
+<h3>25.1 Mental model</h3>
 <div class="diagram">
 <svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -510,7 +511,7 @@ a.active .search-snippet {
 <div class="caption">Figure 17 — Working tree → staging → local commit → remote.</div>
 </div>
 
-<h3>41.2 Daily workflow commands</h3>
+<h3>25.2 Daily workflow commands</h3>
 <pre data-lang="bash"># Status / inspection
 git status              # what's changed / staged / untracked
 git diff                # unstaged changes
@@ -535,7 +536,7 @@ git fetch origin
 git rebase origin/main                     # bring your branch up to date
 # (or: git merge origin/main — see "rebase vs merge" below)</pre>
 
-<h3>41.3 Rebase vs Merge</h3>
+<h3>25.3 Rebase vs Merge</h3>
 <div class="cmp">
 <div class="col">
 <h5>Merge</h5>
@@ -563,7 +564,7 @@ git rebase main</pre>
 
 <div class="tip"><b>Pragmatic rule</b>Rebase your local feature branch onto main before pushing. Use merge for integrating completed PRs into main. Never <code class="inline">git push --force</code> to shared branches without coordinating.</div>
 
-<h3>41.4 The PR workflow</h3>
+<h3>25.4 The PR workflow</h3>
 <pre data-lang="bash"># 1. Update main + branch off
 git checkout main &amp;&amp; git pull
 git checkout -b feature/locator-rewrite
@@ -586,7 +587,7 @@ git push --force-with-lease
 # 6. Squash on merge (or set repo policy)
 # (done in GitHub UI)</pre>
 
-<h3>41.5 Stash — temporary work-in-progress shelf</h3>
+<h3>25.5 Stash — temporary work-in-progress shelf</h3>
 <pre data-lang="bash">git stash             # shove changes aside
 git stash list        # see all stashes
 git stash pop         # apply latest stash + drop it
@@ -594,12 +595,12 @@ git stash apply 1     # apply specific stash, keep it
 git stash drop 1      # drop without applying
 git stash push -m "WIP login fix" -- tests/login.spec.ts    # partial stash</pre>
 
-<h3>41.6 Cherry-pick — bring a commit to another branch</h3>
+<h3>25.6 Cherry-pick — bring a commit to another branch</h3>
 <pre data-lang="bash">git checkout release/v2.3
 git cherry-pick abc1234        # apply commit abc1234 to current branch
 git cherry-pick abc1234..def5678   # range</pre>
 
-<h3>41.7 Revert vs Reset vs Restore</h3>
+<h3>25.7 Revert vs Reset vs Restore</h3>
 <table>
 <tr><th>Command</th><th>What it does</th><th>Safe on public history?</th></tr>
 <tr><td><code class="inline">git revert abc1234</code></td><td>Creates a NEW commit that undoes abc1234</td><td>Yes</td></tr>
@@ -612,7 +613,7 @@ git cherry-pick abc1234..def5678   # range</pre>
 
 <div class="warn"><b>Never reset published commits</b>If you've pushed, use revert (creates a new commit) — reset rewrites history and confuses collaborators.</div>
 
-<h3>41.8 Bisect — find the commit that broke a test</h3>
+<h3>25.8 Bisect — find the commit that broke a test</h3>
 <pre data-lang="bash">git bisect start
 git bisect bad                           # current is broken
 git bisect good v1.5.0                   # last known good
@@ -625,7 +626,7 @@ git bisect reset                         # back to HEAD when done
 # Or automate
 git bisect run npx playwright test tests/login.spec.ts</pre>
 
-<h3>41.9 Hooks</h3>
+<h3>25.9 Hooks</h3>
 <pre data-lang="bash">.git/hooks/pre-commit       # runs before each commit (lint, type-check, test)
 .git/hooks/pre-push         # runs before push (full test suite, build)
 .git/hooks/commit-msg       # validate message format (e.g. Conventional Commits)</pre>
@@ -641,7 +642,7 @@ npx lint-staged
   "*.{ts,tsx}": ["eslint --fix", "prettier --write"]
 }</pre>
 
-<h3>41.10 Common SDET scenarios</h3>
+<h3>25.10 Common SDET scenarios</h3>
 
 <h4>"I accidentally committed to main"</h4>
 <pre data-lang="bash">git branch feature/oops    # save current state to a branch
@@ -666,7 +667,7 @@ git commit --amend --no-edit
 git checkout abc1234  # the SHA before the push
 git branch recover    # save it</pre>
 
-<h3>41.11 .gitignore for SDET projects</h3>
+<h3>25.11 .gitignore for SDET projects</h3>
 <pre data-lang="bash">node_modules/
 dist/
 build/

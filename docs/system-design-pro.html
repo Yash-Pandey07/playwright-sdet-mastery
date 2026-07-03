@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>System Design Pro (complete) | Playwright SDET Mastery</title>
   <meta name="description" content="Learn System Design Pro (complete) — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, system-design-pro, testing, automation, playwright system design pro complete ">
@@ -479,7 +480,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>68.1 Interview framework</h3>
+<h3>66.1 Interview framework</h3>
 <ol>
 <li><strong>Clarify</strong> (5 min): users, scale, primary use cases, SLA, regions, mobile vs web, read/write ratio</li>
 <li><strong>Capacity estimate</strong> (5 min): DAU → QPS, storage, bandwidth. Use orders of magnitude.</li>
@@ -491,7 +492,7 @@ a.active .search-snippet {
 <li><strong>Trade-offs throughout</strong>: SQL vs NoSQL, push vs pull, sync vs async, strong vs eventual</li>
 </ol>
 
-<h3>68.2 Capacity math (memorise)</h3>
+<h3>66.2 Capacity math (memorise)</h3>
 <table>
 <tr><th>Conversion</th><th>Value</th></tr>
 <tr><td>DAU → avg QPS</td><td>DAU × actions/user/day ÷ 86,400</td></tr>
@@ -523,7 +524,7 @@ a.active .search-snippet {
 <tr><td>Round trip CA → Netherlands</td><td>150 ms</td></tr>
 </table>
 
-<h3>68.3 Building blocks (each deep)</h3>
+<h3>66.3 Building blocks (each deep)</h3>
 
 <h4>Load Balancer</h4>
 <ul>
@@ -604,7 +605,7 @@ a.active .search-snippet {
 <li><strong>Event triggers</strong>: S3 → Lambda → process new files.</li>
 </ul>
 
-<h3>68.4 Database internals (deep)</h3>
+<h3>66.4 Database internals (deep)</h3>
 
 <h4>B-tree (Postgres, MySQL default)</h4>
 <ul>
@@ -660,7 +661,7 @@ a.active .search-snippet {
 <li>Cross-shard queries are expensive — design schema to fit access patterns.</li>
 </ul>
 
-<h3>68.5 Distributed systems (deep)</h3>
+<h3>66.5 Distributed systems (deep)</h3>
 
 <h4>CAP theorem (revisited)</h4>
 <p>In a partition, choose Consistency or Availability. Partition is unavoidable in real systems → effectively choose CP or AP.</p>
@@ -747,7 +748,7 @@ a.active .search-snippet {
 <li><strong>Choreography</strong>: services react to events; no central coord.</li>
 </ul>
 
-<h3>68.6 Networking deep</h3>
+<h3>66.6 Networking deep</h3>
 
 <h4>TCP</h4>
 <ul>
@@ -804,7 +805,7 @@ a.active .search-snippet {
 <li>DNS-based failover for GSLB.</li>
 </ul>
 
-<h3>68.7 Failure handling toolkit</h3>
+<h3>66.7 Failure handling toolkit</h3>
 <ul>
 <li><strong>Timeout</strong>: every external call; pick based on p99 + buffer; cascade them downward.</li>
 <li><strong>Retry</strong>: exponential backoff + jitter; only idempotent ops; max attempts.</li>
@@ -818,7 +819,7 @@ a.active .search-snippet {
 <li><strong>Chaos testing</strong>: prove all of the above actually work.</li>
 </ul>
 
-<h3>68.8 Worked end-to-end designs (15+)</h3>
+<h3>66.8 Worked end-to-end designs (15+)</h3>
 
 <h4>(1) URL shortener (e.g. bit.ly)</h4>
 <p><strong>Scale</strong>: 100M URLs created/year → 3 URLs/sec. Reads dominate writes ~100:1.</p>
@@ -995,7 +996,7 @@ a.active .search-snippet {
 <li>Dashboard queries served from precomputed cubes.</li>
 </ul>
 
-<h3>68.9 Architectural styles</h3>
+<h3>66.9 Architectural styles</h3>
 <table>
 <tr><th>Style</th><th>When fits</th><th>Trade-offs</th></tr>
 <tr><td>Monolith</td><td>Small team, single domain, simple ops</td><td>Easier to build/operate; harder to scale teams; single deploy</td></tr>
@@ -1007,7 +1008,7 @@ a.active .search-snippet {
 <tr><td>Cell-based</td><td>Massive scale; blast-radius isolation</td><td>Cross-cell routing; rebalancing</td></tr>
 </table>
 
-<h3>68.10 Anti-patterns + scaling pitfalls</h3>
+<h3>66.10 Anti-patterns + scaling pitfalls</h3>
 <ul>
 <li><strong>Distributed monolith</strong>: microservices that must deploy together. Worst of both worlds.</li>
 <li><strong>Shared database across services</strong>: tight coupling, can't evolve schema independently. Anti-microservice.</li>
@@ -1023,7 +1024,7 @@ a.active .search-snippet {
 <li><strong>Premature microservices</strong>: split a monolith you don't yet understand → split wrong.</li>
 </ul>
 
-<h3>68.11 Real-world case-study takeaways</h3>
+<h3>66.11 Real-world case-study takeaways</h3>
 
 <h4>Netflix</h4>
 <ul>
@@ -1207,7 +1208,7 @@ a.active .search-snippet {
 <div class="answer">"Clarify ruthlessly, estimate roughly, sketch clearly, justify trade-offs, and dive deep into one piece rather than half-cover five."</div></details>
 </div>
 
-<h3>68.X Worked Designs — Code Reference</h3>
+<h3>66.X Worked Designs — Code Reference</h3>
 
 <h4>URL Shortener — Base62 + FastAPI</h4>
 <pre data-lang="python">

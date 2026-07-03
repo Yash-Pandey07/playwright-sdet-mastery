@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Vitest | Playwright SDET Mastery</title>
   <meta name="description" content="Learn Vitest — comprehensive guide for SDETs and QA engineers. Covers Playwright testing, automation patterns, and real-world interview scenarios.">
   <meta name="keywords" content="playwright, sdet, vitest, testing, automation, playwright vitest">
@@ -477,7 +478,7 @@ a.active .search-snippet {
 </ul>
 </div>
 
-<h3>57.1 Why Vitest</h3>
+<h3>48.1 Why Vitest</h3>
 <ul>
 <li>ESM-native, super-fast (powered by Vite)</li>
 <li>Jest-compatible API — easy migration</li>
@@ -488,7 +489,7 @@ a.active .search-snippet {
 
 <pre data-lang="bash">npm i -D vitest @vitest/coverage-v8 @vitest/ui</pre>
 
-<h3>57.2 First test</h3>
+<h3>48.2 First test</h3>
 <pre data-lang="ts">// src/sum.test.ts
 import { describe, it, expect } from 'vitest';
 import { sum } from './sum';
@@ -507,7 +508,7 @@ npx vitest run            # single run (CI)
 npx vitest --ui           # interactive UI in browser
 npx vitest --coverage     # with coverage</pre>
 
-<h3>57.3 Expect API (Jest-compatible)</h3>
+<h3>48.3 Expect API (Jest-compatible)</h3>
 <pre data-lang="ts">expect(value).toBe(x);                    // ===
 expect(obj).toEqual({ a: 1 });            // deep equal
 expect(obj).toMatchObject({ a: 1 });      // subset
@@ -526,7 +527,7 @@ expect(str).toMatch(/regex/);
 await expect(promise).resolves.toBe(42);
 await expect(promise).rejects.toThrow();</pre>
 
-<h3>57.4 Mocks &amp; spies</h3>
+<h3>48.4 Mocks &amp; spies</h3>
 <pre data-lang="ts">import { vi, expect, it } from 'vitest';
 
 // Spy on an existing object
@@ -548,7 +549,7 @@ vi.mock('node:fs', () =&gt; ({
 // Reset between tests
 beforeEach(() =&gt; vi.clearAllMocks());</pre>
 
-<h3>57.5 Fake timers</h3>
+<h3>48.5 Fake timers</h3>
 <pre data-lang="ts">it('debounce fires once', () =&gt; {
   vi.useFakeTimers();
   const fn = vi.fn();
@@ -561,7 +562,7 @@ beforeEach(() =&gt; vi.clearAllMocks());</pre>
   vi.useRealTimers();
 });</pre>
 
-<h3>57.6 Snapshots</h3>
+<h3>48.6 Snapshots</h3>
 <pre data-lang="ts">it('renders user card', () =&gt; {
   const html = render(&lt;UserCard name="Alice" /&gt;).container.innerHTML;
   expect(html).toMatchSnapshot();
@@ -574,7 +575,7 @@ expect(value).toMatchInlineSnapshot(`
 
 <p>Run <code class="inline">npx vitest -u</code> to update snapshots when output changes intentionally.</p>
 
-<h3>57.7 React component testing</h3>
+<h3>48.7 React component testing</h3>
 <pre data-lang="ts">// vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
@@ -594,7 +595,7 @@ it('fires onClick', async () =&gt; {
   expect(onClick).toHaveBeenCalledOnce();
 });</pre>
 
-<h3>57.8 Vitest vs Jest</h3>
+<h3>48.8 Vitest vs Jest</h3>
 <table>
 <tr><th>Aspect</th><th>Vitest</th><th>Jest</th></tr>
 <tr><td>ESM</td><td>Native</td><td>Workarounds needed</td></tr>
